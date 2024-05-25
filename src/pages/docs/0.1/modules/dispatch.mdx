@@ -1,0 +1,52 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/dispatch'
+description: 'Dispatch global and local events easily.'
+---
+
+## Installation
+The `dispatch` module is in the Signalize core.
+
+```js
+import Signalize from 'signalizejs';
+
+const { dispatch, customEvent } = new Signalize();
+```
+
+## Api
+
+### dispatch
+Creates and dispatches [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent) to target element.
+
+```js
+const { dispatch } = signalize;
+
+// Dispatch event to the configured root element
+dispatch('my-event');
+
+// Dispatch event with custom data
+dispatch('my-event', data)
+
+// Dispatch event to selected element.
+dispatch('my-event', data, element)
+```
+
+### customEvent
+Creates a new [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent).
+
+```js
+// Create event to the configured root element
+customEvent('my-event');
+
+// Create event with custom data
+customEvent('my-event', data);
+
+// Create event with custom data and options
+customEvent('my-event', data, {
+	// default false
+	cancellable: true,
+	// default false
+	bubbles: true
+});
+```

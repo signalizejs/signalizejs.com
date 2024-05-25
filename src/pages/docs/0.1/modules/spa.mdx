@@ -1,0 +1,60 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/spa'
+description: 'Turn any website to SPA.'
+---
+
+## Installation
+The `spa` plugin comes with the Signalize default installation. You just need to import it.
+
+```js
+import Signalize from 'signalizejs';
+import spaPlugin from 'signalizejs/spa';
+
+const { visit } = new Signalize({
+	plugins: [ spaPlugin() ]
+});
+```
+
+## The term "Visit"
+The term `visit` in the case of Signalize is the entire process of clicking on a link, sending an ajax request to retrieve data of the target page, changing url state, synchronizing snippets from the request response and scrolling element into the view if a hashtag was found in the url.
+
+## API
+
+### visit
+
+The visit method can be used to manually trigger visit of some page:
+
+```js
+const { visit } = signalize;
+
+const result = await visit({
+	url: 'string',
+	stateAction: 'push' | 'replace' | undefined
+});
+```
+
+## Attribute Directives
+- `data-spa-url`: Is a fallback attribute checked for url for spa module if `href` attribute was not found on a link or element.
+- `data-spa-ignore` (empty): This tells spa to ignore the link with this attribute
+
+## Meta Tags
+- `<meta name="spa-cache-control" content="no-cache">`: This informs SPA module to not cache the result of requested page.
+- `<meta name="spa-app-version" content="...">`: This informs SPA module about the current version of the app.
+
+## Response Headers
+- `X-Spa-Cache-Control` (string): This header can be used to tell SPA module to not cache the requested page. The acceptable value right now is only `no-cache`;
+- `X-Spa-App-Version` (string): This header can be used to tell SPA module the current version of the APP. It can be used to inform the user, that the app version change and it might be better to refresh the page.
+
+## Dispatched Events
+Events dispatched by SPA module:
+- `spa:navigation:start`: This event is triggered when a visit starts
+- `spa:navigation:end`: This event is triggered when a visit ends
+- `spa:page:ready`: Triggers on `dom:ready` and after successfull navigation
+- `spa:request:start`: This event is triggered when the target page is not cached yet and the ajax request starts.
+- `spa:request:end`: This event triggered when the ajax request for a page ends
+- `spa:scroll:start`: This event is triggered after the requested page is synchronized with current DOM. It scrolls element, that matches url hash into the view. This event can be stopped by calling `event.preventDefault()` within the listener.
+- `spa:app-version:changed`: This sevent is triggered when the meta tag or request header of app version is changed within the received data of the requested page. It can be used to inform user that a new version of the application has been released and he might want to reload the page.
+- `spa:popstate`: This event is triggered on any window popstate event
+- `spa:clicked`: This event is triggered when a user clicks on a link that can be processed by SPA module

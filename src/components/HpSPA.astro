@@ -1,0 +1,34 @@
+---
+import CodeMirror from '@components/CodeMirror.astro';
+
+const code = `
+<a href="/path">Link</a>
+
+<script type="module">
+	import Signalize from 'signalizejs'
+	import fetch from 'signalizejs/fetch'
+	import snippets from 'signalizejs/snippets'
+	import spa from 'signalizejs/spa'
+
+	const { on, visit } = new Signalize({
+		// Init plugins
+		plugins: [ fetch(), snippets(), spa() ]
+	});
+
+	// Or send custom visit request
+	visit({
+		url: '/path',
+		// Optional
+		scrollX: number,
+		scrollY: number,
+		// 'push' or 'replace'
+		stateAction: 'push'
+	})
+
+	on('spa:navigation:start', () => { // Visit start });
+	on('spa:navigation:end', () => { // Visit end });
+</script>
+`;
+---
+
+<CodeMirror code={code} readonly />

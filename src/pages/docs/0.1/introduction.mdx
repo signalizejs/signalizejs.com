@@ -1,0 +1,99 @@
+---
+layout: '@docsLayout'
+title: 'Introduction'
+description: ''
+---
+
+Signalize in a nutshell:
+- Signalize is a client-side, dependency-less JavaScript framework.
+- There is a small 1 Kb core that contains an ESM modules loader.
+- You always import `signalizejs` first and then all additional functionality you want through the loader
+
+The goal of this framework is to provide similar functionality frameworks like Vue, Svelte, Angular, Solid, React has, but with minimum javascript, smallest possible learning curve, simple codebase, without dependencies and without the need of JavaScript backend.
+
+## Installation
+
+The easiest way to try Signalize is in the playgrounds provided here in docs or on the [playground](/playground) page.
+
+### NPM, Yarn, PNPM
+
+To install Signalize locally, use NPM, Yarn or PNPM:
+```bash
+npm i signalizejs
+
+yarn add signalizejs
+
+pnpm i signalizejs
+```
+
+### CDN
+Signalize can also be used through CDN as a module. There is no IIFE or UMD export because ESM modules are supported in almost all major browsers.
+- For the production purpose, you might want to use exact version instead of the `latest` keyword
+- I also recommend to downlod and host the script on your own, to prevent CDN connection errors
+
+```html
+<script type="module">
+	import Signalize from "https://cdn.jsdelivr.net/npm/signalizejs@latest/+esm"
+</script>
+```
+
+## Initialization
+Signalize initialization is the same for browser import and imports in bundles. Signalize can be initialized multiple times on the same page. This allows you to have different instances of different versions with different configuration or use it only for a widget and etc.
+```js
+// global.js
+import Signalize from 'signalizejs';
+
+const signalize = new Signalize({
+	// Optional
+	root: document,
+	attributeSeparator: '',
+	attributePrefix: '',
+	globals: {}
+});
+
+window.signalize = signalize;
+
+// Or :)
+window.$ = signalize;
+```
+
+Usage:
+```js
+// page.js
+const { on, signal, bind } = signalize;
+
+// Or
+signalize.on();
+signalize.bind();
+// ...
+```
+
+If you use ESM, you might want to do this instead:
+
+```js
+// global.js
+import Signalize from 'signalizejs';
+
+export const signalize = new Signalize({ /* ... */ });
+```
+
+Usage:
+```js
+// page.js
+import { signalize } from 'path/to/global.js';
+
+const { on, signal, bind } = signalize;
+
+// Or
+signalize.on();
+signalize.bind();
+// ...
+```
+
+
+| Option                 | Info                                                                                                                                                                                                                                            |   |   |   |
+|------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|---|---|
+| **root**               | Optional. HTML Element \| Document. The root for which Signalize will be initialized.                                                                                                                                                           |   |   |   |
+| **attributeSeparator** | Optional. String. The separator used within all "attribute" selectors provided by modules. By default, the separator is `-` (dash). So you write for example `data-dialog`. If you set the separator to `:`, you will write `data:dialog`.      |   |   |   |
+| **attributePrefix**    | Optional. String. The prefix before all "attribute" selectors provided by modules. By default you write `scope=""`. If you want `data-` prefix, set the prefix and write `data-scope=""`. This can be used to have valid attribute selectors.   |   |   |   |
+| **globals**            | Optional. Object. Global variables. This is here, for variables you want have available within the Signalize instance. They are for example directly injected into directives by directives plugin.                                            |   |   |   |

@@ -1,0 +1,85 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/dialog'
+description: 'Wrapper around native javascript dialog functionality.'
+---
+
+import Editor from '@codeEditor';
+import { cdnUrl } from '@config/config';
+
+## Installation
+The `dialog` plugin comes with the Signalize default installation. You just need to import it.
+
+```js
+import Signalize from 'signalizejs';
+import dialogPlugin from 'signalizejs/dialog';
+
+// Use the dialog plugin
+const {
+	openDialog,
+	closeDialog,
+	dialog
+} = new Signalize({ plugins: [ dialogPlugin() ] });
+```
+
+## API
+
+### dialog
+```js
+dialog('my-dialog');
+```
+- Get dialog element by id => `dialog="my-dialog"`
+
+### openDialog
+```js
+openDialog('my-dialog');
+```
+- Open dialog by id => `dialog="my-dialog"`
+
+```js
+openDialog('my-dialog', true)
+```
+- Open dialog modelessly by id => `dialog="my-dialog"`
+- Calls [show](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/show) instead of [showModal](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal)
+
+### closeDialog
+```js
+closeDialog('my-dialog');
+```
+- Close dialog by id => `dialog="my-dialog"`
+
+## Directives
+
+The Dialog module comes with the Signalize default installation. You just need to import it.
+
+<Editor code={`
+<dialog dialog="my-dialog">
+	Hello World!<br><br>
+	<button dialog-close="my-dialog">Close</button>
+</dialog>
+
+<button dialog-open="my-dialog">Open Dialog</button>
+
+<script type="module">
+	import Signalize from '${cdnUrl()}';
+	import dialogPlugin from '${cdnUrl('dialog')}';
+
+	// Use the dialog plugin
+	new Signalize({ plugins: [ dialogPlugin() ] });
+</script>
+`} />
+
+**Available Directives**
+- `dialog`: Is used as an id for dialog
+- `dialog-close`: Is used to close dialog after click `dialog-close="dialog-id"`
+- `dialog-open`: Is used to open dialog after click `dialog-open="dialog-id"`
+- `dialog-modeless`: If this attribute is set, it will open [modeless dialog](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement#instance_methods)
+
+## Dispatched Events
+- `dialog:closed`: Dispatched when a dialog is closed
+- `dialog:opened`: Dispatched when a dialog is opened
+
+## URL hash
+- Dialog module watches url hash for changes
+- If a dialog was found with the given url hash like `example.com#my-dialog`, it will be automatically opened.

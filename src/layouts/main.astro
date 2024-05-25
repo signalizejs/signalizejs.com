@@ -1,0 +1,163 @@
+---
+import { Image } from 'astro:assets';
+import { base64Symbol, siteUrl, githubLink, twitterLink, discordLink, apiLinks } from '@config/config.mjs';
+import { path } from '@services/router.mjs';
+
+const url = Astro.url;
+let {
+	pageTitle = 'Modulable JavaScript Framework.',
+	headerVisible = true,
+	pageRobots = 'index, follow',
+	pageDescription = 'Signalize is a client-side, module based, dependecy-less javascript framework designed for swift web development with minimum javascript. Web Components, Reactivity, Directives, SPA, and a lot more. A client-side JavaScript framework for everything.'
+} = Astro.props
+
+pageTitle = pageTitle + ' | SignalizeJS';
+const pageUrl = `${siteUrl}${url.pathname.replace(/\/+$/, '')}`;
+const pageImage = `${siteUrl}/assets/images/og-image.png`;
+
+const getStartedLinks = [
+	{ label: 'Introduction', link: path('docs', { slug: 'introduction' })},
+	{ label: 'Creating a Module', link: path('docs', { slug: 'creating-a-module' })},
+	{ label: 'Tips for writting JavaScript', link: path('docs', { slug: 'tips-for-writting-javascript' })},
+];
+
+const modulesLinks = [];
+
+---
+
+<html lang="en">
+	<head snippet="head">
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
+		<link rel="icon" href={base64Symbol} sizes="any" type="image/png">
+		<link rel="manifest" href="/site.webmanifest">
+		<link rel="mask-icon" href="/assets/images/favicon/safari-pinned-tab.svg" color="#121212">
+		<meta name="msapplication-TileColor" content="#121212">
+		<meta name="theme-color" content="#121212">
+
+		<meta name="description" content={pageDescription}>
+
+		<meta name="title" content={pageTitle} />
+		<meta name="description" content={pageDescription} />
+		<meta name="canonical" content={pageUrl} />
+
+		<meta name="robots" content={pageRobots} />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={pageUrl} />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={pageDescription} />
+		<meta property="og:image" content={pageImage} />
+
+		<!-- Twitter / X -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:url" content={pageUrl} />
+		<meta property="twitter:title" content={pageTitle} />
+		<meta property="twitter:description" content={pageDescription} />
+		<meta property="twitter:image" content={pageImage} />
+
+		<title>{pageTitle}</title>
+		<style is:global>
+			@import 'normalize.css';
+			@import '@assets/css/stylify.css';
+			@import '@assets/fonts/icons/style.css';
+			@import '@assets/css/prism.css';
+		</style>
+	</head>
+	<body>
+		<spa-loader class="width:100% overflow:hidden height:4px pointer-events:none position:fixed left:0 top:0 z-index:4 pointer-events:none" hidden>
+			<div ref="indicator" class="width:0 height:100% background:linear-gradient(to_right,$red,$red)"></div>
+		</spa-loader>
+
+		<div snippet="content">
+			{headerVisible && (
+				<header class="container display:grid grid-template-columns:1fr_2fr_1fr align-items:center">
+					<div>
+						<a href={path('homepage')}>
+							<Image src={'/images/logo-light.svg'} width="200" height="100" alt="" />
+						</a>
+					</div>
+					<nav class="justify-content:center display:flex gap:24px [a]{color:$grey;hover:color:$red;text-decoration:none}">
+						<a href={path('playground')}>Playground</a>
+					</nav>
+					<div class="display:flex gap:24px align-items:center">
+						<a href={path('docs')} class="button button--outline text-transform:uppercase">Documentation</a>
+						<div class="[a]{color:#000;text-decoration:none;font-size:32px;hover:color:$red} display:flex align-items:center gap:12px">
+							<a href={githubLink} aria-label="Github" target="_blank" rel="noopener" class="with-icon">
+								<i class="icon-github"></i>
+							</a>
+							<a href={discordLink} aria-label="Discord" target="_blank" rel="noopener" class="with-icon">
+								<i class="icon-discord"></i>
+							</a>
+							<a href={twitterLink} aria-label="X" target="_blank" rel="noopener" class="with-icon">
+								<i class="icon-x"></i>
+							</a>
+						</div>
+					</div>
+				</header>
+			)}
+			<main>
+				<slot />
+			</main>
+		</div>
+
+		<footer class="margin-top:200px margin-bottom:32px container color:$grey [a]{text-decoration:none;color:$grey;hover:color:$primary} font-size:14px">
+			<div class="border-bottom:1px_solid_$border padding-bottom:24px margin-bottom:24px display:flex gap:24px tolg:flex-direction:column lg:gap:100px">
+				<div class="max-width:380px">
+					<Image src={'/images/symbol.svg'} width="100" height="100" alt="" />
+					<p>Signalize is a client-side, module based, dependecy-less javascript framework designed for swift web development with minimum javascript.</p>
+					<div class="[a]{font-size:24px} display:flex gap:8px margin-top:12px">
+						<a href={githubLink} aria-label="Github" target="_blank" rel="noopener" class="with-icon">
+							<i class="icon-github"></i>
+						</a>
+						<a href={discordLink} aria-label="Discord" target="_blank" rel="noopener" class="with-icon">
+							<i class="icon-discord"></i>
+						</a>
+						<a href={twitterLink} aria-label="X" target="_blank" rel="noopener" class="with-icon">
+							<i class="icon-x"></i>
+						</a>
+					</div>
+				</div>
+				<div class="
+					display:flex gap:64px lg:gap:120px tolg:flex-wrap:wrap
+					[section_nav]{display:flex;flex-direction:column;gap:8px}
+					[h3]{text-transform:uppercase;margin-top:0}
+				">
+					<section>
+						<h3>Get Started</h3>
+						<nav>
+							{getStartedLinks.map(({ link, label }) => (
+								<a href={link}>{label}</a>
+							))}
+						</nav>
+					</section>
+
+					<section>
+						<h3>Modules</h3>
+						<nav>
+							{modulesLinks.map(({ link, label }) => (
+								<a href={link}>{label}</a>
+							))}
+						</nav>
+					</section>
+
+					<section>
+						<h3>Api</h3>
+						<nav>
+							{apiLinks.map(({ slug, label, anchor }) => (
+								<a href={`${path('docs', { slug: slug })}${anchor ? `#${anchor}` : ''}`}>{label}</a>
+							))}
+						</nav>
+					</section>
+				</div>
+			</div>
+			<div>
+				Signalizejs is released under the MIT License.<br>
+				Copyright © 2024 - today Vladimír Macháček
+			</div>
+		</footer>
+	</body>
+</html>

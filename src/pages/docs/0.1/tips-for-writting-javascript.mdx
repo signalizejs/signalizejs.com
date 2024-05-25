@@ -1,0 +1,124 @@
+---
+layout: '@docsLayout'
+title: 'Tips for writting and loading Javascript'
+description: ''
+---
+
+Because we live in the era of frameworks like Vue.js, Next.js, Svelte, Solid and Qwik we got used to write and split the code in a completely different way (components, pages, api, different file suffixes) than it was done with client-side only javascript frameworks (jQuery) or with vanilla js.
+
+However, if you don't use component based framework, you will probably need to find your own way for loading and spliting code.
+
+Tips mentioned in this section are focused to help you write maintainable javascript in the "old school way". They are universal so you can use them even if you don't use Signalize.
+
+## Selectors
+Selectors we add to elements should describe, what they are used for.
+
+Let's start with prefixes. Prefixes are good to separate "logical and state selectors" from "styling only" or "descriptive" selectors,
+- `js-`: use this prefix for selectors that will be used within javascript => `js-toggle-button`. These selectors should be only in templates and in javascript files.
+- `s-`: use this prefix for setting some state of an element aka `s-active`, `s-toggled`. These classes can be styled within css and can be set by javascript.
+
+To improve searching for selectors in the project and to instantly see which classes are together, it's better to keep the naming in "sequence":
+- Let's say we have a `js-tabs` component.
+- Our class for a single tab will be: `js-tabs-tab`.
+- The class for the toggle button will be `js-tabs-tab-toggle` not `js-toggle-tab`.
+- Now, if we search for `js-tabs` we instantly see, which selectors works together in which files.
+
+Directives such as `data-` can be used to "keep a state" on a dom and in the same time to for example select an element:
+- `data-js-`: can be used to define for example `data-js-tab="first"`, `data-js-tab-toggle="first"`. It's easy to understand what these directives do. Thanks to the `js` prefix we know it's going to be used by javascript and that the button toggles a tab with given id.
+- `data-s`: this directive can be used to maintain a state on an element, such as `data-s-tab-toggled="false"`. This directive can also be used within css for styling toggled or hidden element.
+
+## Splitting Code
+Spliting assets is always a pain.
+
+There are various ways for loading js and css. The following tips works for me so I have decided to share them.
+
+The rule of thumb is to keep the amount of request low. So the amount of JS and CSS assets on your page could look like this:
+- Layout CSS and JS
+- Page CSS and JS
+- Lazyloaded chunks after an event - dialogs, dropdowns, cart
+
+Individual logic should be split into files. Do not place all logic into one file. You can use one of the following tips to split the code:
+
+Directory Structure 1. Keep CSS and JS in separated dirs:
+- assets
+	- js
+		- components
+			- layout
+				navigation.js
+			- dropdown.js
+		- layout.js
+		- index.js
+		- blog.js
+	- css
+		- ...
+
+Directory Structure 2. Keep CSS and JS together.
+- assets
+	- ui
+		- components
+			- layout
+				- navigation.js
+				- navigation.css
+			- dropdown.js
+			- dropdown.css
+		- layout.js
+		- layout.css
+		- index.js
+		- index.css
+
+## Loading Code
+
+The "basic goal" to write optimized javascript is, to delay it's loading and execution until it's really necessary and load only what is necessary.
+
+For example, if you have multiple carousels on your page you might want to load the script for them after click on a button to slide left or right using [asset loader](/modules/signalizejs-asset-loader). When the script is loaded, it should only initialize those carousels, that are currently in the viewport by checking visibility using [intersection observer](/modules/signalizejs-intersection-observer).
+This can be applied to any other scripts and logic => dialogs, content loaded within dropdowns and filters, and etc.
+
+Harry Roberts had a nice talk [Get Your Head Straight](https://www.smashingmagazine.com/2021/09/css-head-tag/) (slides are [here](https://speakerdeck.com/csswizardry/get-your-head-straight)) where he was talking about the order of elements within the head tag and how to load scripts and styles.
+To make it short, Javascript and CSS should be split into 3 locations:
+- `Head start CSS`: Right after title element. For example for Critical CSS, Layout and Page css
+- `Body after priority content JS`: For example before before footer or after last product list. Any high priority JS. Navigation, filter or analytics like GTM and FB.
+- `Body end`: Low priority js. Those that user will probably not be used immediately after the page loads. Dialogs, dropdowns, js for content in togggable sections and etc.
+
+```html
+<html>
+	<head>
+		<!-- Set charset -->
+		<meta charset="utf-8" />
+		<!-- Set viewport to prevent loading of unnecessary assets -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<!-- Base64 favicon, so the user sees, that something is loading -->
+		<link rel="icon" href="data:image/png:base64,.." sizes="any" type="image/png">
+		<title>...</title>
+		<!-- CSS -->
+		<!-- Custom head content -->
+	</head>
+	<body>
+		<!-- Page content -->
+		<!-- Js after priority content -->
+		<!-- Other content -->
+		<!-- Low priority JS at the body end -->
+	</body>
+</html>
+```
+
+Lazyloaded chunks, that are loaded for example after click by [asset loader](/modules/signalizejs-asset-loader), can go into the head element.
+
+## Use the Web Platform
+
+Modern browsers provides a lot of native functionality, that you might want to check and consider, before creating your own solution:
+- [Dialog element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog) - Good for dialogs and all kinds of notifications.
+- [Details element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details) - Dropdowns or toggable navigations.
+- [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) - Side menu, mobile menu or additional info messages.
+- [View Transitions meta tag](https://developer.chrome.com/blog/spa-view-transitions-land/#transitions-across-documents) - This one meta tag (I hope) will be able to deprecate any "SPA library" one day.
+- [CSS toggles](https://tabatkins.github.io/css-toggle/#introduction) - Use CSS to toggle things instead of javascript.
+- [CSS scroll snap](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll_snap) - Use CSS to create carousels, galeries and etc.
+- [Form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation) - Native form validation attributes
+- [Lazyload attribute](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) - Native lazyloading instead of custom JS
+
+## YAGNI & KISS principles
+You Aren't Gonna Need It + Keep It Simple Stupid.
+
+Think what your clients/customers want and if the script you write is really necessary. A few examples:
+- Does the form need to be reactive or can it be validated only before it is send?
+- Do I need super cool carousel with ninja animations or am I fine with native scroll snap?
+- Is there any need for "SPA" besides it just "looks cool"? Does any customer need that?

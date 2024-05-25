@@ -1,0 +1,39 @@
+---
+const { modules } = Astro.props;
+---
+
+<div class="display:grid grid-template-columns:repeat(auto-fit,minmax(250px,1fr)) gap:24px">
+	{modules.map((module) => {
+		const categories = [];
+
+		if (module?.official === true) {
+			categories.push('official');
+		}
+
+		if (module?.inCore === true) {
+			categories.push('in-core');
+		}
+
+		return (
+			<a href={module.url} ref="modules-list-item" data-categories={categories.join(' ')} class="text-decoration:none background:darken($background,10) padding:12px min-height:180px border-radius:8px [&[hidden]]{display:none!important} display:inline-flex flex-direction:column">
+				<div>
+					<div class="margin-bottom:4px">
+						{module?.base64Icon === undefined
+							? <i class="icon-box color:#fff background:darken($background,20) display:flex align-items:center justify-content:center height:50px width:50px font-size:24px border-radius:50px"></i>
+							: <img src={module?.base64Icon ?? ''} alt={module.title} decoding="async" width="50" height="50" />
+						}
+					</div>
+					<div class="font-weight:bold color:$text">{ module.title }</div>
+					<div class="color:$text">{ module.description }</div>
+				</div>
+				<div class="display:flex flex-direction:row flex:1 align-items:flex-end margin-top:8px">
+					<div class="display:flex align-items:center justify-content:space-between width:100%">
+						<div class="color:$text">{module?.official === true && 'Official'}</div>
+						<div class="color:$text">{module?.inCore === true && 'In Core'}</div>
+						<img src={`https://img.shields.io/npm/v/${module.packageName}?color=green&style=for-the-badge`} loading="lazy" fetchpriority="low" width="116" height="28" alt={`${module.title} - version`}  decoding="async" />
+					</div>
+				</div>
+			</a>
+		)
+	})}
+</div>

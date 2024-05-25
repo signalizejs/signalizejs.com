@@ -1,0 +1,96 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/on'
+description: 'Add event listener to an element or listen to global events.'
+---
+
+## Installation
+The `on` module is in the Signalize core.
+
+```js
+import Signalize from 'signalizejs';
+
+const { on, off, customEventListener } = new Signalize();
+```
+
+## API
+
+### on
+
+```js
+import Signalize from 'signalizejs';
+
+const { on } = new Signalize();
+
+// Listen to globally dispatched event on the root element
+on('custom:event', () => {});
+
+// Binds listener directly to existing element
+on('click', document.querySelector('#element'), () => {});
+
+// Binds listener globally, works on dynamically added elements
+on('click', '.element', () => {});
+
+// Binds two events to already existing elements
+on('click mouseover', document.querySelectorAll('.element'), () => {});
+
+// Binds two events to already existing elements
+on('click mouseover', document.querySelectorAll('.element'), () => {}, {
+	// Default false
+	passive: true,
+	// Default false
+	once: true
+});
+```
+
+### off
+Remove event listener or listeners from one or more elements.
+
+```js
+import Signalize from 'signalizejs';
+
+const { off } = new Signalize();
+
+// Binds listener directly to existing element
+const handler = () => alert('Hello World!');
+const element = document.querySelector('#element');
+
+// Remove handler from existing element
+off('click', element, handler);
+
+// Remove handler from all elements globally
+off('click', '.element', handler);
+
+// Remove two event listeners from already existing elements
+off('click mouseover', [element], handler);
+```
+
+### customEventListener
+Create a custom event listener.
+
+```js
+const { customEventListener } = new Signalize();
+
+customEventListener('clickOutside', () => {
+	return {
+		on: ({ listener, target, options }) => {},
+		off: ({ listener, target, options }) => {}
+	}
+});
+
+/*
+ Before "listener" callback is attached to a custom event listener event as argument,
+ there is a check, if the event should be triggered only once (once: true).
+
+ If so, the "off" callback of custom event listener is called automatically
+ after the first call if it is defined. You don't have to programe it by yourself.
+
+ This keeps the behavior similar to the native once: true option.
+ You should always consider the possibility to remove event listener.
+*/
+on('clickOutside', element, () => {
+	// This will be triggered only once and automatically removed
+}, { once: true })
+
+```

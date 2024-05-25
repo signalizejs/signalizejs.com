@@ -1,0 +1,70 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/h'
+description: 'Hyperscript: create html elements easily with reactive data and attributes.'
+---
+
+import Editor from '@codeEditor';
+import { cdnUrl } from '@config/config';
+
+## Installation
+The `h` plugin comes with the Signalize default installation. You just need to import it.
+```js
+import Signalize from 'signalizejs';
+import hyperscript from 'signalizejs/h';
+
+const { h } = new Signalize({
+	plugins: [ hyperscript() ]
+});
+```
+
+## API
+
+### h
+
+```js
+const { h } = signalize;
+
+// Only a tag
+const template = h('div');
+
+// Tag and a string
+const template = h('div', 'Content');
+
+// Tag, attributes, content
+const template = h('div', { class: 'example' }, 'Hello', 'World', '!');
+
+const template = h('div', { class: 'example' },
+	h('p', 'Hello World!'),
+	h('p', 'Another Paragraph!')
+);
+
+// Replacing existing element
+document.querySelector('#app').replaceWith(template);
+```
+
+An example with signals:
+<Editor code={`
+<div id="app"></div>
+
+<script type="module">
+	import Signalize from '${cdnUrl()}';
+	import hyperscript from '${cdnUrl('h')}'
+
+	const { h, signal } = new Signalize({
+		plugins: [ hyperscript() ]
+	});
+	// Create text signal
+	const text = signal('Hello World!');
+
+	document.querySelector('#app').replaceWith(
+		// Create elements
+		h('div', { id: 'app' },
+			// Bind text signal to element attributes
+			h('input', { value: text }),
+			h('div', text)
+		)
+	);
+</script>
+`} />

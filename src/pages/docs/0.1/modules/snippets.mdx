@@ -1,0 +1,86 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/snippets'
+description: 'Redraw the current DOM elements based on string input.'
+---
+
+import Editor from '@codeEditor';
+import { cdnUrl } from '@config/config';
+
+The redraw method provided by Snippets plugin can be used to manually redraw snippets in the actual DOM. It can redraw multiple snippets at once.
+
+## Installation
+The `snippets` plugin comes with the Signalize default installation. You just need to import it.
+
+```js
+import Signalize from 'signalizejs';
+import snippetsPlugin from 'signalizejs/snippets';
+
+const { redrawSnippet } = new Signalize({
+	plugins: [ snippeetsPlugin() ]
+});
+```
+
+## API
+
+### redrawSnippet
+Redraw snippets in the current DOM on string input
+
+<Editor code={`
+<div snippet="snippet-1">Hello ...</div>
+<div snippet="snippet-2"></div>
+
+<button id="button">Redraw</button>
+
+<script type="module">
+	import Signalize from '${cdnUrl()}';
+	import snippets from '${cdnUrl('snippets')}';
+	const { on, redrawSnippet } = new Signalize({ plugins: [ snippets() ]});
+
+	on('click', '#button', () => {
+		// Redraw snippets based on HTML input
+		redrawSnippet(\`
+			<div snippet="snippet-1">Hello World!</div>
+			<div snippet="snippet-2">Clicked</div>
+		\`)
+	});
+</script>
+`} />
+
+The default snippet action is replace. But you can also append/prepend children. This is good for carousels and products list.
+
+<Editor code={`
+
+<ul snippet="list" snippet-action="append-children">
+	<li>Item</li>
+</ul>
+
+<button id="button">Redraw</button>
+
+<script type="module">
+	import Signalize from '${cdnUrl()}';
+	import snippets from '${cdnUrl('snippets')}';
+	const { on, redrawSnippet } = new Signalize({ plugins: [ snippets() ]});
+
+	on('click', '#button', () => {
+		// Redraw snippets based on HTML input
+		redrawSnippet(\`
+			<ul snippet="list" snippet-action="append-children">
+				<li>Item - added</li>
+			</ul>
+		\`)
+	});
+</script>
+`} />
+
+## Attribute Directives
+- `snippet`: This attribute is used to define a snippet. All elements with snippet from passed argument are synchronized with those in the page.
+- `snippet-action`: This attribute tells snippets module how the snippet should be synchronized:
+	- `replace`: This is going to replace the actuall snippet with a new one.
+	- `append-children`: This is going to take children of a new snippet and append them on the end of the actual snippet.
+	- `prepend-children`: This is going to take children of a new snippet and add them at the start of the actual snippet.
+
+## Dispatched Events
+- `snippets:redraw:start`: This event is triggered when the synchronization of created DOM from data argument starts.
+- `snippets:redraw:end`: This event is triggered when the synchronization ends.

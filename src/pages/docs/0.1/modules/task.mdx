@@ -1,0 +1,49 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/task'
+description: 'Schedule task to be executed only if there is no pending user input. Serves for breaking long task to small ones.'
+---
+
+The provided `task` function can be used to break long running task into multiple small ones which can improve INP.
+The task schedules a queue of passed tasks and executes them in the order they were passed but doesn't execute them, if there is any `pending input` from the user.
+It gives the task lower priority than user input so the user input is processed before the task.
+
+Signalize use it for example to trigger DOM ready events. In future, it will be probably used on more places.
+
+Resources:
+- [Improve interaction to next paint](https://nitropack.io/blog/post/improve-interaction-to-next-paint-inp)
+- [Optimize long tasks](https://web.dev/optimize-long-tasks)
+
+## Installation
+The `tash` plugin comes with the Signalize default installation. You just need to import it.
+
+```js
+import Signalize from 'signalizejs';
+import taskPlugin from 'signalizejs/task';
+
+const { task } = new Signalize({
+	plugins: [ taskPlugin() ]
+});
+```
+
+## Api
+
+### task
+Call a function provided as argument only if there is no user input
+```js
+const { task } = signalize
+
+let i = 100;
+// Long running while
+// Imagine some DOM operations
+// like appending loaded products/articles
+while(i--) {
+	// Schedule multiple tasks
+	// Execute them instantly
+	// or wait on the user interaction to finish
+	task(() => {
+		// Do something
+	})
+}
+```

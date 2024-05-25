@@ -1,0 +1,28 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/is-visible'
+description: 'Get info if element is visible.'
+---
+
+## Installation
+The `is-visible` plugin comes with the Signalize default installation. You just need to import it.
+
+```js
+import Signalize from 'signalizejs';
+import isVisiblePlugin from 'signalizejs/offset';
+
+const { isVisible } = new Signalize({
+	plugins: [ isVisiblePlugin() ]
+});
+```
+
+## API
+
+### isVisible
+Check if element is visible. Method returns true or false.
+```js
+const { isVisible } = signalize;
+
+isVisible(document.querySelector('#element'));
+```

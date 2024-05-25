@@ -1,0 +1,40 @@
+---
+import Editor from '@components/Editor.astro';
+import { cdnUrl } from '@config/config.mjs';
+const code = `
+<text-field>
+	<input ref="text" required>
+	<button ref="btn">Submit first</button>
+	<div ref="output"></div>
+</text-field>
+
+<script type="module">
+	import Signalize from "${cdnUrl()}"
+	const { component, bind, signal } = new Signalize();
+	// Define text-field web component
+	component('text-field', {
+		props: { /* key: default value */ },
+		setup({ $el, $refs }) {
+			// Init signal
+			const text = signal('');
+
+			// Bind signal
+			// Use ref() to get direct component child element
+			bind($refs.text, { value: text });
+			bind($refs.output, { html: text });
+
+			// Handle form submit
+			$refs.btn.onclick = (event) => {
+				event.preventDefault();
+				alert(text());
+			}
+
+			// Return public data
+			return { /* key: value */ }
+		}
+	});
+</script>
+`.trim();
+---
+
+<Editor code={code} />

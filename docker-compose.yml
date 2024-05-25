@@ -1,0 +1,15 @@
+services:
+    server:
+        container_name: signalize-web
+        build: .
+        working_dir: /var/www
+        volumes:
+            - ./.:/var/www:delegated
+        ports:
+            - 4321:4321
+            # Vite Dev Server
+            - 3000:3000
+            - 5000:5000
+        environment:
+            ENV: dev
+        tty: true

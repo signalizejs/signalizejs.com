@@ -1,0 +1,44 @@
+---
+import Editor from '@components/Editor.astro';
+import { cdnUrl } from '@config/config.mjs';
+
+const code = `
+<input id="input" placeholder="Type something...">
+<div id="output"></div>
+
+<script type="module">
+	import Signalize from '${cdnUrl()}'
+	// Create a Signalize instance
+	const { bind, signal } = new Signalize();
+	// Create a signal
+	const text = signal('');
+	// Bind the signal to the input value attribute
+	bind(document.querySelector('#input'), {value: text});
+	// Bind the signal to the output element to innerHTML
+	bind(document.querySelector('#output'), { text });
+
+	// Watch the signal for changes
+	text.watch(({ newValue, oldValue }) => {
+		console.log('New value:', newValue);
+		console.log('Old value:', oldValue);
+	});
+	// Watch signal before it is set
+	// This way we can perform checks, validation,
+	// modify values or stop the setter completely
+	text.watch(({ newValue, oldValue }) => {
+		/*
+			Uncomment the return, if you want to trigger
+			signal modifier before the signal value is set.
+		*/
+		/*
+		return {
+			settable: newValue.length < 10,
+			value: newValue.toUpperCase()
+		}
+		*/
+	}, { execution: 'beforeSet' });
+</script>
+`.trim();
+---
+
+<Editor code={code} />

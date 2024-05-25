@@ -1,0 +1,30 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/off'
+description: 'Get element coordinates.'
+---
+
+Off plugin is included within the Signalize core, so you don't have to import it.
+
+## Installation
+The `offset` plugin comes with the Signalize default installation. You just need to import it.
+
+```js
+import Signalize from 'signalizejs';
+import offsetPlugin from 'signalizejs/offset';
+
+const { offset } = new Signalize({
+	plugins: [ offsetPlugin() ]
+});
+```
+
+## API
+
+### offset
+Get element coordinates.
+```js
+const { offset } = signalize;
+
+const { top, left, right, bottom } = offset(document.querySelector('#element'));
+```

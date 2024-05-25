@@ -1,0 +1,35 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/intersection-observer'
+description: "Observe changes in the element intersection with an ancestor element or with document's viewport."
+---
+
+## Installation
+The `intersection-observer` plugin comes with the Signalize default installation. You just need to import it.
+
+```js
+import Signalize from 'signalizejs';
+import intersectionObserverPlugin from 'signalizejs/intersection-observer';
+
+const { observeIntersection } = new Signalize({
+	plugins: [ intersectionObserverPlugin() ]
+});
+```
+
+## API
+
+### observeIntersection
+Observe an element intersection and call a callback.
+- **options**: For modifying [intersection observer options](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#creating_an_intersection_observer).
+
+```js
+const { observeIntersection } = signalize;
+
+// Optional options
+const options = {};
+
+const observer = observeIntersection(document.querySelector('#element'), () => {
+	// Do something
+}, options);
+```

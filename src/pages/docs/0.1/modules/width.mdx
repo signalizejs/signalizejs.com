@@ -1,0 +1,29 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/width'
+description: 'Get element computed widht.'
+---
+
+## Installation
+The `width` plugin comes with the Signalize default installation. You just need to import it.
+
+```js
+import Signalize from 'signalizejs';
+import widthPlugin from 'signalizejs/width';
+
+const { width } = new Signalize({
+	plugins: [ widthPlugin() ]
+});
+```
+
+## API
+
+### width
+Return a width of an element or document
+
+```js
+const { width } = signalize;
+
+width(document.querySelector('#element'));
+```

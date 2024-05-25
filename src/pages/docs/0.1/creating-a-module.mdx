@@ -1,0 +1,52 @@
+---
+layout: '@docsLayout'
+title: 'Creating and using modules'
+description: ''
+---
+
+If you want to extend the Signalize core, you need to create a simple function and pass it during Signalize initialization:
+
+Empty plugin function looks like this:
+```js
+// The pluginOptions argument is optional
+// Plugin can be without options
+const myPlugin = (pluginOptions) => {
+	// This is executed during user configuration
+	return (signalize) {
+		// This is executed during plugin initialization
+		// Use and extend Signalize instance
+		signalize.myMethod = () => { /* ... */ }
+	}
+}
+```
+
+The usage of this plugin is this:
+```js
+import Signalize from 'signalizejs';
+import myPlugin from 'path/to/my/plugin';
+
+// Usage
+const { myMethod } = new Signalize({
+	modules: [
+		myPlugin({ /* Options */ })
+	]
+});
+```
+
+Signalize also provides a `use` method. This method can initialize plugin after Signalize is inited. This can be used to init plugin from additional scripts (like pages, when some plugin should be used only on that exact page).
+```js
+const { use } = signalize;
+
+use(MyPlugin({ /* Options */ }));
+
+```
+
+Each plugin is initialized only once. So if you have an SPA, plugin will not be initialized twice.
+
+This makes the `use` method great for initializing scripts for pages and components. For example to prevent reinitialization in SPA.
+
+```js
+use((signalize) => {
+	// My page logic
+});
+```

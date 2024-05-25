@@ -1,0 +1,109 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/signal'
+description: 'Reactive primitive that can be watched, used to create stores or binded to element properties and attributes.'
+---
+
+import Editor from '@codeEditor';
+import { cdnUrl } from '@config/config';
+
+## Installation
+The `signal` module is in the Signalize core.
+```js
+import Signalize from 'signalizejs';
+
+const {
+	signal,
+	Signal,
+	observeSignals
+} = new Signalize();
+```
+
+## API
+
+### signal
+`signal` is a function that will create a new instance of the Signal with the default value you pass as argument.
+Signal is basically just a wrapper, that triggers handlers when the value changes. It removes some boilerplate code, you would normally write, let's you trigger callbacks, redraw some DOM elements and etc.
+
+Signals can be watched for the following events:
+- on every get - to track signal dependencies
+- before it is set - usefull to check the new value
+- after it is set - trigger some callback
+
+Signals often works with the [bind method](/plugins/signalizejs-bind).
+
+Bellow is an example in which are two number inputs:
+- Signals are connected to elements using the [bind method](/plugins/signalizejs-bind).
+- Signals are watched using `.watch()` methods.
+- When any signal changes, it's gonna update the output under input elements.
+- `numberB` cannot be lower than `numberA`. It's always +1 higher than `numberA`.
+
+<Editor code={`
+A: <input id="numberA" type="number"><br>
+B: <input id="numberB" type="number"><br>
+<span id="output"></span>
+
+<script type="module">
+	import Signalize from '${cdnUrl()}'
+	const { signal, bind } = new Signalize();
+
+	// 1. Init Signals
+	const numberA = signal(0);
+	const numberB = signal(1);
+
+	// 2. Bind signals to inputs
+	bind(document.querySelector('#numberA'), { value: numberA });
+	bind(document.querySelector('#numberB'), { value: numberB });
+
+	// 3. Bind signal to output.
+	bind(document.querySelector('#output'), {
+		// 4. In case we need to pass more than just a Signal into the bind function,
+		// we need to tell the function which signals to watch.
+		// The array contains signals to watch and the listener goes last [...signals, listener]
+		html: [numberA, numberB, () => \`Outpout is: \${numberA + numberB}\`]
+	})
+
+	// 5. Watch numberA, execute watcher immediatelly {immediate: true }
+	numberA.watch(({ newValue }) => {
+		// 6. When number A is set, automatically increase
+		// numberB if it is smaller than A
+		if (newValue > numberB()) {
+			numberB(newValue + 1);
+		}
+	}, { immediate: true });
+
+	// 7. Watch number B, execute it before it is set
+	numberB.watch(({ newValue, oldValue }) => {
+		// 8. When number B is set, but is smaller than number A,
+		// return the old value and block setting the value
+		if (newValue < numberA()) {
+			return {
+				value: oldValue,
+				settable: false
+			}
+		}
+	}, { execution: 'beforeSet' });
+</script>
+`} />
+
+## Extending Signal
+Because Signal is a class, it can be easily extended for additional functionality.
+This way we can make a specific Signal, that can be reused within the application.
+
+Let's make a signal that will contain `increase` and `decrease` methods.
+
+```js
+import Signalize from 'signalizejs';
+
+const { Signal } = new Signalize();
+
+class Number extends Signal {
+	increment() {
+		this.set(this.get() + 1);
+	}
+}
+const number = new Number(0);
+number.increment();
+console.log(number()) // 1
+```

@@ -1,0 +1,24 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/height'
+description: 'Get element computed height.'
+---
+
+## Installation
+```js
+import Signalize from 'signalizejs';
+import heightPlugin from 'signalizejs/height';
+
+const { height } = new Signalize({ heightPlugin() });
+```
+
+## API
+
+### height
+Get height of an element or document
+```js
+const { height } = signalize;
+
+height(document.querySelector('#element'));
+```

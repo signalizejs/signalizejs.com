@@ -1,0 +1,22 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/dom-ready'
+description: 'DOM ready listener.'
+---
+
+## Installation
+The `dom-ready` module is in the Signalize core.
+
+## Usage
+This plugin ads a `dom:ready` event, you can listen to through the [on](/plugins/signalizejs-on) function.
+
+```js
+import Signalize from 'signalizejs';
+
+const { on } = new Signalize();
+
+on('dom:ready', () => {
+	// Do something
+});
+```

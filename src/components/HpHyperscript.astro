@@ -1,0 +1,30 @@
+---
+import Editor from '@components/Editor.astro';
+import { cdnUrl } from '@config/config.mjs';
+
+const code = `
+<div id="app"></div>
+
+<script type="module">
+	import Signalize from '${cdnUrl()}';
+	import hyperscript from '${cdnUrl('h')}'
+
+	const { h, signal } = new Signalize({
+		plugins: [ hyperscript() ]
+	});
+	// Create text signal
+	const text = signal('Hello World!');
+
+	document.querySelector('#app').replaceWith(
+		// Create elements
+		h('div', { id: 'app' },
+			// Bind text signal to element attributes
+			h('input', { value: text }),
+			h('div', text)
+		)
+	);
+</script>
+`.trim();
+---
+
+<Editor code={code} />

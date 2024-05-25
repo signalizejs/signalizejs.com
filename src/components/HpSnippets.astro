@@ -1,0 +1,27 @@
+---
+import Editor from '@components/Editor.astro';
+import { cdnUrl } from '@config/config.mjs';
+
+const code = `
+<div snippet="snippet-1">Hello ...</div>
+<div snippet="snippet-2"></div>
+
+<button id="button">Redraw</button>
+
+<script type="module">
+	import Signalize from '${cdnUrl()}';
+	import snippets from '${cdnUrl('snippets')}';
+	const { on, redrawSnippet } = new Signalize({ plugins: [ snippets() ]});
+
+	on('click', '#button', () => {
+		// Redraw snippets based on HTML input
+		redrawSnippet(\&#96;
+			<div snippet="snippet-1">Hello World!</div>
+			<div snippet="snippet-2">Clicked</div>
+		\&#96;)
+	});
+</script>
+`.replaceAll('&#96;', '`').trim();
+---
+
+<Editor code={code} />

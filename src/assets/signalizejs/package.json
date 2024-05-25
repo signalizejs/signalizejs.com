@@ -1,0 +1,77 @@
+{
+	"name": "signalizejs",
+	"version": "0.1.0",
+	"description": "A microframework inspired by SolidJS and Svelte, designed to easily create optimized and interactive websites with minimal JavaScript.",
+	"keywords": [
+		"signalize",
+		"signalizejs",
+		"performance",
+		"components",
+		"reactive",
+		"signalize",
+		"ui",
+		"reactive",
+		"components",
+		"performance",
+		"front-end",
+		"framework",
+		"web"
+	],
+
+	"type": "module",
+	"sideEffects": false,
+	"author": "Vladimír Macháček",
+	"files": [
+		"dist",
+		"package.json",
+		"LICENSE",
+		"README.md"
+	],
+	"exports": {
+		".": {
+			"import": "./src/index.js"
+		},
+		"./Signalize": {
+			"import": "./src/Signalize.js"
+		},
+		"./fetch": {
+			"import": "./src/plugins/fetch.js"
+		},
+		"./dialog": {
+			"import": "./src/plugins/dialog.js"
+		},
+		"./directives": {
+			"import": "./src/plugins/directives.js"
+		},
+		"./directives/for": {
+			"import": "./src/plugins/directives/for.js"
+		},
+		"./directives/if": {
+			"import": "./src/plugins/directives/if.js"
+		},
+		"./evaluator": {
+			"import": "./src/plugins/evaluator.js"
+		},
+		"./h": {
+			"import": "./src/plugins/h.js"
+		},
+		"./asset-loader": {
+			"import": "./src/plugins/asset-loader.js"
+		},
+		"./snippets": {
+			"import": "./src/plugins/snippets.js"
+		},
+		"./spa": {
+			"import": "./src/plugins/spa.js"
+		},
+		"./traverse-dom": {
+			"import": "./src/plugins/traverse-dom.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "src/index.js",
+	"jsdelivr": "src/index.js",
+	"unpkg": "src/index.js",
+	"module": "src/index.js",
+	"license": "MIT"
+}

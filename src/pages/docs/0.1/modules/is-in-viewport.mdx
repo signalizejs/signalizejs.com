@@ -1,0 +1,45 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/is-in-viewport'
+description: 'Get element info against the current viewport.'
+---
+
+## Installation
+The `is-in-viewport` plugin comes with the Signalize default installation. You just need to import it.
+
+```js
+import Signalize from 'signalizejs';
+import widthPlugin from 'signalizejs/width';
+import heightPlugin from 'signalizejs/height';
+import offsetPlugin from 'signalizejs/offset';
+import isInViewportPlugin from 'signalizejs/is-in-viewport';
+
+const { isInViewport } = new Signalize({
+	plugins: [
+		// Dependencies
+		widthPlugin(),
+		heightPlugin(),
+		offsetPlugin(),
+		// Viewport plugin
+		isInViewportPlugin()
+	]
+});
+```
+
+## API
+
+### isInViewport
+Get info about element position against the viewport.
+
+```js
+import Signalize from 'signalizejs';
+import widthPlugin from 'signalizejs/width';
+import heightPlugin from 'signalizejs/height';
+import offsetPlugin from 'signalizejs/offset';
+import isInViewportPlugin from 'signalizejs/is-in-viewport';
+
+const { isInViewport } = signalize;
+
+const { top, bottom, whole } = isInViewport(document.querySelector('#carousel'));
+```

@@ -1,0 +1,49 @@
+---
+import Editor from '@components/Editor.astro';
+import { cdnUrl } from '@config/config.mjs';
+
+const code = `
+<custom-list>
+	<button @click="count(count() + 1)">+<span :text="count">3</span></button>
+	<button @click="count(count() - 1)">-<span :text="count">3</span></button>
+	<ul>
+		<template :for="i of count">
+			<li :text="'Rendered - ' + i"></li>
+		</template>
+		<!-- prerendered -->
+			<li>Prerendered - 0</li>
+			<li>Prerendered - 1</li>
+			<li>Prerendered - 2</li>
+		<!-- /prerendered -->
+	</ul>
+</custom-list>
+<script type="module">
+	import Signalize from '${cdnUrl()}';
+	// Import directives core
+	import directives from '${cdnUrl('directives')}';
+	// Import evaluator
+	import domTraverser from '${cdnUrl('traverse-dom')}';
+	// Import evaluator
+	import evaluator from '${cdnUrl('evaluate')}';
+	// Import only those directives, you use
+	import forDirective from '${cdnUrl('directives/for')}';
+
+	// Use the directives plugin
+	const { component, signal } = new Signalize({
+		plugins: [
+			evaluator(),
+			domTraverser(),
+			directives(),
+			forDirective()
+		]
+	});
+	component('custom-list', {
+		construct: () => ({
+			count: signal(3)
+		})
+	});
+</script>
+`.trim();
+---
+
+<Editor code={code} />

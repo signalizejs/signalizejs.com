@@ -1,0 +1,162 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/bind'
+description: 'Bind signals and values to element attributes and properties.'
+---
+
+import Editor from '@codeEditor';
+import { cdnUrl } from '@config/config';
+
+## Installation
+The `bind` module is in the Signalize core.
+
+```js
+import Signalize from 'signalizejs';
+
+const { bind } = new Signalize();
+```
+
+## API
+
+### bind
+- The bind method is used to bind a signal to element attributes and properties.
+- It automatically converts string to number on input with type number and range.
+- If any signal is binded to reactive attribute like value, selected, it automatically sets binded signal value on the `input` event as in the example bellow.
+
+<Editor code={`
+<p>
+	<input id="text-input">
+	<span id="text-output"></span>
+</p>
+
+<p>
+	<label>
+		<input type="checkbox" id="checked-input">
+		<span id="checked-output"></span>
+	</label>
+</p>
+
+<div id="output"></div>
+<script type="module">
+import Signalize from '${cdnUrl()}';
+const { bind, signal } = new Signalize();
+
+const value = signal('');
+bind(document.querySelector('#text-input'), { value });
+bind(document.querySelector('#text-output'), { text: value });
+
+const checked = signal(false);
+bind(document.querySelector('#checked-input'), { checked });
+bind(document.querySelector('#checked-output'), { text: checked });
+</script>
+`} />
+
+If we need to modify the the binded value, like composing it from two signals or something else, we can tell the bind method which signals to watch and pass a callback as a getter.
+<Editor code={`
+<input id="firstName">
+<input id="lastName">
+
+<div id="output"></div>
+<script type="module">
+import Signalize from '${cdnUrl()}';
+const { bind, signal } = new Signalize();
+
+const firstName = signal('');
+const lastName = signal('');
+
+bind(document.querySelector('#firstName'), { value: firstName });
+bind(document.querySelector('#lastName'), { value: lastName });
+bind(document.querySelector('#output'), {
+	html: [
+		firstName,
+		lastName,
+		() => \`First name: \${firstName()}<br>Last name: \${lastName()}\`
+	],
+	style: [
+		firstName,
+		lastName,
+		() => \`color:\${firstName().length > lastName().length ? 'red' : 'blue'}\`
+	]
+});
+</script>
+`} />
+
+
+Binding also allows us to set different setter and getter.
+This can be used to watch one or multiple signals and call different methods to set or get values.
+
+It's usefull, when we want to bind a signal it's data is an object or entity.
+The setter is used only on attributes that can be listened for some input as value and checked.
+
+<Editor code={`
+<input id="title-input" placeholder="Add Title">
+<input id="content-input" placeholder="Add Content">
+
+<div id="output"></div>
+
+<script type="module">
+import Signalize from '${cdnUrl()}';
+
+const { Signal, bind } = new Signalize();
+
+// 1. Create article signal
+const article = new Signal({
+	title: 'Hello World!',
+	content: 'Lorem Ipsum'
+});
+
+// 2. Bind article signal to title input
+bind(document.querySelector('#title-input'), {
+	// 2.1 Watch article signal
+	value: [article, {
+		// 2.2 Setter for title proerty
+		set: (title) => article({ ...article(), title }),
+		// 2.3 Getter for title property
+		get: () => article().title
+	}]
+});
+
+// 3. Bind article signal to content input
+bind(document.querySelector('#content-input'), {
+	// 3.1 Watch article signal
+	value: [article, {
+		// 3.2 Setter for content property
+		set: (content) => article({ ...article(), content }),
+		// 3.3 Getter for content property
+		get: () => article().content
+	}]
+})
+
+// 4. Bind output
+bind(document.querySelector('#output'), {
+	html: [
+		article,
+		() => \`Title: \${article().title}\<br>Description: \${article().content}\`
+	]
+})
+</script>
+`} />
+
+
+The separated `setter` and `getter` options allows us to minimize the above example to the following code.
+This can minimize the boilerplate for binding multiple values from a signal to multiple elements.
+
+```js
+// Iterate over keys in article signal
+for (const key in article()) {
+	bind(select(`#${key}-input`), {
+		// Watch article signal
+		value: [article, {
+			// Setter for dynamic key
+			set: (value) => article.set({ ...article(), [key]: value }),
+			// Getter for dynamic key
+			get: () => article()[key]
+		}]
+	});
+}
+```
+
+#### Aliases for attributes
+- `text`: Element `textContent` property
+- `html`: Element `innerHTML` property

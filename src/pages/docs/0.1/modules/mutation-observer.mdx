@@ -1,0 +1,48 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/mutation-observer'
+description: 'Watch for hanges being made on the DOM tree of the selected element.'
+---
+
+Signalize core starts mutation observer automatically for each instance and watches the configured root for `childList` and `subtree` changes.
+
+## Installation
+The `mutation-observer` module is in the Signalize core.
+
+```js
+import Signalize from 'signalizejs';
+
+const { observeMutations } = new Signalize();
+```
+
+## API
+
+### observeMutations
+Observe mutations and provide callback and options
+- [initOptions](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/observe#parameters) are identical to mutation observer options
+- `callback`: function that receives a list of mutations based on configuration
+
+```js
+import Signalize from 'signalizejs';
+
+const { observeMutations } = new Signalize();
+
+const element = document.querySelector('#element');
+
+// Observe mutation for element, dispatch event to configured Signalize root.
+const observer = observeMutations(element);
+
+// Observe mutation for element, do not dispatch event, call callback instead.
+const observer = observeMutations(element, (mutations) => {
+	// Do something, when there is a mutation on selected element
+});
+```
+
+## Dispatched events
+Events are dispatched to root only if no callback is provided
+
+- `dom:mutation` - This event is fired on every dom mutation
+- `dom:mutation:node:added` - This event is fired when any node is added
+- `dom:mutation:node:moved` - This event is fired when any node was moved in the dom
+- `dom:mutation:node:removed` - This event is fired when any node is removed

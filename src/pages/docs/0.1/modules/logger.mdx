@@ -1,0 +1,28 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/logger'
+description: 'Wrapper around console (log, info, warning, error) for sending JS logs info to server.'
+---
+
+## Installation
+The `logger` plugin comes with the Signalize default installation. You just need to import it.
+
+- After the plugin setup, logger will automatically start sending requests to the configured endpoint.
+- The default level that is send is `error` only.
+- You can change it by passing `levels` during the initialization.
+
+```js
+import Signalize from 'signalizejs';
+import loggerPlugin from 'signalizejs/width';
+
+new Signalize({
+	plugins: [
+		loggerPlugin({
+			url: 'https://example.com/api/log-client-error',
+			// Optional
+			levels: ['log', 'warning', 'error']
+		})
+	]
+});
+```

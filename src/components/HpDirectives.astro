@@ -1,0 +1,63 @@
+---
+import Editor from '@components/Editor.astro';
+import { cdnUrl } from '@config/config.mjs';
+
+const code = `
+<words-list>
+	<form @submit="submit">
+		<!-- Shortcuts for attribute binding -->
+		<input {value} required>
+		<button>Add</button>
+		<br>
+		<!-- Native for of/in loops -->
+		<template :for="item of items">
+			<!-- Iterator feature: count, first, last, odd, even -->
+			<span
+				:text="item + (iterator().last ? '' : ', ')"
+				:style="iterator().odd ? 'color:red': 'color:blue'"
+			></span>
+		</template>
+	</form>
+</words-list>
+<script type="module">
+	import Signalize from '${cdnUrl()}';
+	// Import directives core
+	import directives from '${cdnUrl('directives')}';
+	// Import evaluator
+	import domTraverser from '${cdnUrl('traverse-dom')}';
+	// Import evaluator
+	import evaluator from '${cdnUrl('evaluate')}';
+	// Import only those directives, you use
+	import forDirective from '${cdnUrl('directives/for')}';
+
+	// Use the directives plugin
+	const { component, signal } = new Signalize({
+		plugins: [
+			evaluator(),
+			domTraverser(),
+			directives(),
+			forDirective()
+		]
+	});
+
+	component('words-list', {
+		construct: () => {
+			const value = signal('');
+			const items = signal([]);
+
+			return {
+				submit: (event) => {
+					event.preventDefault();
+					items([...items(), value().trim()]);
+					value('');
+				},
+				items,
+				value
+			}
+		}
+	});
+</script>
+`.trim();
+---
+
+<Editor code={code} />
