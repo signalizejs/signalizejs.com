@@ -1,6 +1,6 @@
 ---
 import MainLayout from '@layouts/main.astro';
-import { apiLinks, discordLink, githubLink, twitterLink } from "@config/config.mjs";
+import { apiLinks, discordLink, githubLink, modules, twitterLink } from "@config/config.mjs";
 import { path } from '@services/router.mjs';
 import { Image } from 'astro:assets';
 
@@ -33,15 +33,19 @@ if (sections.length === 0) {
 				}
 			]
 		},
-		{
-			name: 'API',
-			links: apiLinks.map((apiLink) => {
-				return {
-					...apiLink,
-					link: path('docs', { slug: apiLink.slug, version })
-				}
-			})
-		}
+		...modules.map(({ name, icon, color, api }) => {
+			return {
+				name,
+				icon,
+				color,
+				links: api.map(({ label, slug }) => {
+					return {
+						label,
+						link: path('docs', { slug: slug, version })
+					}
+				})
+			}
+		})
 	]
 }
 ---
@@ -70,9 +74,14 @@ if (sections.length === 0) {
 					</a>
 				</div>
 
-				{sections.map(({ name, links }) => (
+				{sections.map(({ name, icon, color, links }) => (
 					<div>
-						<strong>{ name }</strong>
+						<strong>
+							{icon && (
+								<i class={`icon-${icon} color:#fff padding:2px display:inline-flex border-radius:2px`} style={`background-color:${color}`}></i>
+							)}
+							{ name }
+						</strong>
 						<nav class="
 							display:flex flex-direction:column
 							[a]{margin-top:12px;padding-left:12px;color:inherit;transition:transform_.3s;text-decoration:none;hover:transform:translateX(8px)}
@@ -86,7 +95,7 @@ if (sections.length === 0) {
 				))}
 			</aside>
 		</div>
-		<div class="max-width:800px padding:32px_96px">
+		<div class="max-width:900px padding:32px_96px">
 			<h1>{frontmatter.title}</h1>
 			<nav class="display:flex flex-direction:column gap:8px margin-bottom:48px">
 				{headings.map((heading) => (

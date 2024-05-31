@@ -5,17 +5,45 @@ description: ''
 ---
 
 Signalize in a nutshell:
-- Signalize is a client-side, dependency-less JavaScript framework.
-- There is a small 1 Kb core that contains an ESM modules loader.
-- You always import `signalizejs` first and then all additional functionality you want through the loader
+- Signalize is a client-side, JavaScript framework.
+- There is a small 2 KB gzipped core, that contains an ES modules loader.
+- This loader leaverages modern [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap).
+- To use Signalize, setup the import map and initiate a new instance of Signalize.
+- Every time, you need some functionality, import it through the loader using `resolve` function.
 
-The goal of this framework is to provide similar functionality frameworks like Vue, Svelte, Angular, Solid, React has, but with minimum javascript, smallest possible learning curve, simple codebase, without dependencies and without the need of JavaScript backend.
+The goal of this framework is to provide similar functionality frameworks like Vue, Svelte, Angular, Solid, React andd Qwik has, but with minimum javascript, smallest possible learning curve, simple codebase, without dependencies and without the need of JavaScript backend.
 
-## Installation
+## Setup
 
 The easiest way to try Signalize is in the playgrounds provided here in docs or on the [playground](/playground) page.
 
-### NPM, Yarn, PNPM
+In the simplified example bellow you can see full initialization. Check it out / copy it and then go through each step bellow to understand, what this snippet does.
+```html
+<!-- 1. Configure importmap -->
+<script type="importmap">
+	{
+		"imports": {
+			"signalizejs": "https://cdn.jsdelivr.net/npm/signalizejs@latest/+esm",
+			"signalizejs/event": "https://cdn.jsdelivr.net/npm/signalizejs@latest/+esm/event"
+		}
+	}
+</script>
+<script>
+	// 2. Import Signalize
+	import Signalize from 'signalizejs';
+	// 3. Create a new Signalize instance
+	const signalize = new Signalize();
+	// 4. Import the event module, because we need the "on" function
+	const { on } = await signalize.resolve('event');
+	// 5. Use the on function
+	on('dom:ready', () => alert('Hello World!'));
+</script>
+```
+
+
+### 1. Install Signalize
+
+#### NPM, Yarn, PNPM
 
 To install Signalize locally, use NPM, Yarn or PNPM:
 ```bash
@@ -26,10 +54,10 @@ yarn add signalizejs
 pnpm i signalizejs
 ```
 
-### CDN
-Signalize can also be used through CDN as a module. There is no IIFE or UMD export because ESM modules are supported in almost all major browsers.
+#### CDN
+Signalize can also be used through CDN as a module. There is no IIFE or UMD export because ES modules are supported in all major browsers.
 - For the production purpose, you might want to use exact version instead of the `latest` keyword
-- I also recommend to downlod and host the script on your own, to prevent CDN connection errors
+- It is also recommended to downlod and host the script on your own, to prevent CDN connection errors
 
 ```html
 <script type="module">
@@ -37,8 +65,33 @@ Signalize can also be used through CDN as a module. There is no IIFE or UMD expo
 </script>
 ```
 
-## Initialization
-Signalize initialization is the same for browser import and imports in bundles. Signalize can be initialized multiple times on the same page. This allows you to have different instances of different versions with different configuration or use it only for a widget and etc.
+### 2. Configure an Import Map
+Signalize loader needs [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) to be configured, before it is used.
+
+Import map script must always be placed before any javascript ES module import is triggerd.
+
+You need to configure path for every module you or Signalize needs:
+- Official Signalize modules can be resolved using shortcuts like `event` and `signal`.
+- However, during the request, the prefix `signalizejs` is added to prevent naming collisions so the requested module name is `signalizejs/event` and `signalizejs/signal`.
+- Because of this, you always need to configure `signalizejs` modules like `signalizejs/some-module`: `public path to module file`.
+
+```html
+<script type="importmap">
+	{
+		"imports": {
+			"signalizejs/some-module": "public path to module"
+		}
+	}
+</script>
+```
+
+### 3. Create a Signalize instance
+There can be several instances of Signalize on the same page. This can be usefull to have for example widgets configured differently than the rest of the page:
+- Just keep in mind, they must be using different root and they cannot be nested.
+- This means, if you have a global Signalize instance that is attached to `document element`, you cannot create another instance for the nested elements.
+- You can however create another instance of Signalize for example for shadow root elements (Custom Web Components) like widgets and such.
+- Be aware, that global modules, like `SPA` for example, cannot be inited twice as there would be collision in the functionality.
+
 ```js
 // global.js
 import Signalize from 'signalizejs';
@@ -46,54 +99,69 @@ import Signalize from 'signalizejs';
 const signalize = new Signalize({
 	// Optional
 	root: document,
-	attributeSeparator: '',
-	attributePrefix: '',
+	params: {
+		attributeSeparator: '',
+		attributePrefix: '',
+	},
 	globals: {}
 });
 
+// If you want global variable
 window.signalize = signalize;
-
 // Or :)
 window.$ = signalize;
+
+// Or if you prefer exports
+export default signalize;
 ```
 
-Usage:
+#### Configuration options
+| Option                 | Info                                                                                                                                                                                                                                            |
+|------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **root**               | Optional. HTML Element \| Document. The root for which Signalize will be initialized.                                                                                                                                                           |
+| **params**             | Optional. Used for configuration purposes. Values are accessed for example during module initialization. If `module name` exists as a `key` within the `params` then the value of the key is passed as a configuration to the module.             |
+| **globals**            | Optional. Object. Global variables. This is here, for variables you want have available within the Signalize instance. They are for example directly injected into directives by directives plugin.                                             |
+
+#### Default params
+| Key                    | Info                                                                                                                                                                                                                                                                                      |
+|------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **attributeSeparator** | Optional. String. The separator used within all `attribute` selectors provided by modules. By default, the separator is `-` (dash). So you write for example `data-attribute`. If you set the separator to `:`, you will write `data:attribute`.                                          |
+| **attributePrefix**    | Optional. String. The prefix before all "attribute" selectors provided by modules. By default you write `attribute=""`. If you want `data-` preefix (to have valid HTML for example), set the prefix and write `data-attribute=""`. This can be used to have valid attribute selectors.   |
+
+
+### 4. Import What You Need
+As mentioned in the import map section, official Signalize modules, can be imported without `signalizejs` prefix.
+The naming of all additional modules you create or want to be use is up to you.
+
+If you set signalize as global variable:
 ```js
 // page.js
-const { on, signal, bind } = signalize;
+const { on } = await signalize.resolve('event');
 
-// Or
-signalize.on();
-signalize.bind();
-// ...
+on('dom:ready', () => alert('Hello World!'));
 ```
 
-If you use ESM, you might want to do this instead:
-
-```js
-// global.js
-import Signalize from 'signalizejs';
-
-export const signalize = new Signalize({ /* ... */ });
-```
-
-Usage:
+If you use ES modules:
 ```js
 // page.js
-import { signalize } from 'path/to/global.js';
+import signalize from '/path/to/global.js';
 
-const { on, signal, bind } = signalize;
+const { on } = await signalize.resolve('event');
 
-// Or
-signalize.on();
-signalize.bind();
-// ...
+on('dom:ready', () => alert('Hello World!'));
 ```
 
+#### List of official Signalize Modules
 
-| Option                 | Info                                                                                                                                                                                                                                            |   |   |   |
-|------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---|---|---|
-| **root**               | Optional. HTML Element \| Document. The root for which Signalize will be initialized.                                                                                                                                                           |   |   |   |
-| **attributeSeparator** | Optional. String. The separator used within all "attribute" selectors provided by modules. By default, the separator is `-` (dash). So you write for example `data-dialog`. If you set the separator to `:`, you will write `data:dialog`.      |   |   |   |
-| **attributePrefix**    | Optional. String. The prefix before all "attribute" selectors provided by modules. By default you write `scope=""`. If you want `data-` prefix, set the prefix and write `data-scope=""`. This can be used to have valid attribute selectors.   |   |   |   |
-| **globals**            | Optional. Object. Global variables. This is here, for variables you want have available within the Signalize instance. They are for example directly injected into directives by directives plugin.                                            |   |   |   |
+- bind
+- component
+- dash-case, dialog, dom-ready, directives
+- fetch
+- height, hyperscript
+- intersection-observer, is-visible
+- mutation-observer
+- scope, signal, snippets, spa
+- task, traverse-dom
+- viewport
+
+## Advanced Usage

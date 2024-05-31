@@ -3,17 +3,17 @@
 	--shadow: 0 1px 3px 0 rgba(0,0,0,.18);
 	--grey: #565454;
 	--border: #dddddd;
-	--background: #fbfaf8;
+	--background: #fff;
 	--darken-red-20: #eb102a;
-	--darken-background-10: #f1f0ee;
-	--darken-background-20: #e7e6e4;
-	--darken-border-50: #ababab;
-	--lighten-grey-30: #747272;
+	--darken-background-10: #f5f5f5;
+	--darken-background-20: #ebebeb;
 	--colorToRgb-red-0-10: rgba(255,36,62,0.1);
 	--darken-red-50: #cd000c;
 	--lighten-red-20: #ff3852;
 	--darken-fff-50: #cdcdcd;
 	--lighten-fff-50: #ffffff;
+	--darken-border-50: #ababab;
+	--lighten-grey-30: #747272;
 }
 .button,
 .button__icon,
@@ -36,6 +36,9 @@ table thead{
 }
 ::selection{
 	background: var(--darken-red-20)
+}
+body{
+	background: var(--background)
 }
 dialog{
 	background: #fff
@@ -118,14 +121,14 @@ hr{
 .border\:1px_solid_\#1e2431{
 	border: 1px solid #1e2431
 }
-.border\:1px_solid_\$border{
-	border: 1px solid var(--border)
-}
 .button{
 	border: 2px solid transparent
 }
 .button.button--outline.button--disabled{
 	border: #e4e0e3
+}
+.border\:1px_solid_\$border{
+	border: 1px solid var(--border)
 }
 table td,
 table  th{
@@ -137,11 +140,11 @@ table tr:last-of-type td{
 .border-bottom\:1px_solid_\$border{
 	border-bottom: 1px solid var(--border)
 }
-.hover\:border-color\:darken\(\$border\,50\):hover{
-	border-color: var(--darken-border-50)
-}
 .button.button--outline{
 	border-color: var(--red)
+}
+.hover\:border-color\:darken\(\$border\,50\):hover{
+	border-color: var(--darken-border-50)
 }
 .\[pre\]\{margin\:0\;border-radius\:8px\;height\:auto\;max-height\:70vh\;overflow\:auto\;width\:100\%\} pre,
 .\[\.cm-editor\]\{min-height\:100\%\;border-radius\:8px\} .cm-editor,
@@ -150,6 +153,9 @@ table tr:last-of-type td{
 }
 .border-radius\:50px{
 	border-radius: 50px
+}
+.border-radius\:2px{
+	border-radius: 2px
 }
 .\[a\.s-active\:\:before\]\{width\:8px\;height\:8px\;background\:\#ff2c21\;border-radius\:4px\;position\:absolute\;top\:50\%\;transform\:translateY\(-50\%\)\;left\:0\} a.s-active::before,
 .border-radius\:4px{
@@ -177,10 +183,10 @@ body,
 	color: #222
 }
 a,
-.\[a\:hover\,a\.s-active\]\{color\:\$red\} a:hover,
-.\[a\:hover\,a\.s-active\]\{color\:\$red\} a.s-active,
 .button,
 .button.button--outline,
+.\[a\:hover\,a\.s-active\]\{color\:\$red\} a:hover,
+.\[a\:hover\,a\.s-active\]\{color\:\$red\} a.s-active,
 .color\:\$red{
 	color: var(--red)
 }
@@ -221,8 +227,8 @@ article  h6:hover a{
 .\[a\]\{color\:\#000\;text-decoration\:none\;font-size\:32px\;hover\:color\:\$red\} a:hover{
 	color: var(--red)
 }
-.\[a\]\{text-decoration\:none\;color\:\$grey\;hover\:color\:\$primary\} a,
 .\[a\]\{color\:\$grey\;hover\:color\:\$red\;text-decoration\:none\} a,
+.\[a\]\{text-decoration\:none\;color\:\$grey\;hover\:color\:\$primary\} a,
 .color\:\$grey{
 	color: var(--grey)
 }
@@ -332,11 +338,16 @@ article  note *,
 }
 .\[a\]\{font-size\:24px\;color\:inherit\;text-decoration\:none\;hover\:color\:\$red\} a,
 .\[a\]\{font-size\:24px\} a,
-.\[a\]\{font-size\:24px\;text-decoration\:none\;color\:inherit\} a,
 .button__icon,
+.\[a\]\{font-size\:24px\;text-decoration\:none\;color\:inherit\} a,
 .font-size\:24px{
 	font-size: 2.4rem;
 	line-height: 4.08rem
+}
+.\[a\]\{color\:\#000\;text-decoration\:none\;font-size\:32px\;hover\:color\:\$red\} a,
+.font-size\:32px{
+	font-size: 3.2rem;
+	line-height: 3.84rem
 }
 .font-size\:48px{
 	font-size: 4.8rem;
@@ -355,19 +366,18 @@ article  note *,
 	font-size: 2.2rem;
 	line-height: 3.74rem
 }
-.\[a\]\{color\:\#000\;text-decoration\:none\;font-size\:32px\;hover\:color\:\$red\} a{
-	font-size: 3.2rem;
-	line-height: 3.84rem
+.font-size\:24px\;text-decoration\:none\;color\:inherit{
+	font-size: 24px;text-decoration:none;color:inherit
 }
 .\[a\]\{color\:\$text\;font-size\:20px\;md\:font-size\:32px\;font-weight\:bold\;transition\:color_\.3s\} a,
 .font-weight\:bold{
 	font-weight: bold
 }
-.font-weight\:400{
-	font-weight: 400
-}
 .button{
 	font-weight: 700
+}
+.font-weight\:400{
+	font-weight: 400
 }
 .gap\:24px{
 	gap: 24px
@@ -432,11 +442,11 @@ table thead,
 .left\:0{
 	left: 0
 }
-.letter-spacing\:-2px{
-	letter-spacing: -2px
-}
 .button{
 	letter-spacing: 0.1px
+}
+.letter-spacing\:-2px{
+	letter-spacing: -2px
 }
 .button{
 	line-height: 1
@@ -445,31 +455,29 @@ table thead,
 	line-height: 20px
 }
 body,
-.\[pre\]\{margin\:0\;border-radius\:8px\;height\:auto\;max-height\:70vh\;overflow\:auto\;width\:100\%\} pre,
-.margin\:0{
+.\[pre\]\{margin\:0\;border-radius\:8px\;height\:auto\;max-height\:70vh\;overflow\:auto\;width\:100\%\} pre{
 	margin: 0
 }
 article .note{
 	margin: 16px 0
 }
-article .example-editor,
-.margin\:24px_0{
+article .example-editor{
 	margin: 24px 0
 }
 .margin\:0_-8px{
 	margin: 0 -8px
 }
+.margin\:12px_0{
+	margin: 12px 0
+}
 .margin\:0_auto{
 	margin: 0 auto
 }
+.margin\:0_auto_24px_auto{
+	margin: 0 auto 24px auto
+}
 .margin\:0_0_4px_0{
 	margin: 0 0 4px 0
-}
-.margin\:32px_0{
-	margin: 32px 0
-}
-.margin\:12px_0{
-	margin: 12px 0
 }
 li p:last-of-type,
 article h2,
@@ -568,8 +576,8 @@ article img{
 .max-width\:520px{
 	max-width: 520px
 }
-.max-width\:800px{
-	max-width: 800px
+.max-width\:900px{
+	max-width: 900px
 }
 .max-width\:380px{
 	max-width: 380px
@@ -589,8 +597,8 @@ article img{
 .max-width\:1000px{
 	max-width: 1000px
 }
-.max-width\:900px{
-	max-width: 900px
+.max-width\:800px{
+	max-width: 800px
 }
 .\[\.cm-editor\]\{min-height\:100\%\;border-radius\:8px\} .cm-editor{
 	min-height: 100%
@@ -655,23 +663,20 @@ table th,
 .padding\:32px_64px{
 	padding: 32px 64px
 }
-.padding\:0_96px{
-	padding: 0 96px
+.padding\:32px_96px{
+	padding: 32px 96px
 }
-.padding\:24px_24px_0_24px{
-	padding: 24px 24px 0 24px
-}
-.padding\:16px{
-	padding: 16px
+.padding\:2px{
+	padding: 2px
 }
 .button{
 	padding: 8px 12px
 }
-.padding\:32_96px{
-	padding: 32 96px
+.padding\:16px{
+	padding: 16px
 }
-.padding\:32px_96px{
-	padding: 32px 96px
+.padding\:24px_24px_0_24px{
+	padding: 24px 24px 0 24px
 }
 .padding-bottom\:24px{
 	padding-bottom: 24px
@@ -732,13 +737,16 @@ h5 a,
 h6 a,
 .\[a\]\{font-size\:24px\;color\:inherit\;text-decoration\:none\;hover\:color\:\$red\} a,
 .\[a\]\{margin-top\:12px\;padding-left\:12px\;color\:inherit\;transition\:transform_\.3s\;text-decoration\:none\;hover\:transform\:translateX\(8px\)\} a,
-.\[a\]\{text-decoration\:none\;color\:\$grey\;hover\:color\:\$primary\} a,
 .\[a\]\{color\:\$grey\;hover\:color\:\$red\;text-decoration\:none\} a,
 .\[a\]\{color\:\#000\;text-decoration\:none\;font-size\:32px\;hover\:color\:\$red\} a,
-.\[a\]\{font-size\:24px\;text-decoration\:none\;color\:inherit\} a,
+.\[a\]\{text-decoration\:none\;color\:\$grey\;hover\:color\:\$primary\} a,
 .button,
+.\[a\]\{font-size\:24px\;text-decoration\:none\;color\:inherit\} a,
 .text-decoration\:none{
 	text-decoration: none
+}
+.text-shadow\:0_1px_1px_rgba\(0\,0\,0\,0\.2\){
+	text-shadow: 0 1px 1px rgba(0,0,0,0.2)
 }
 .\[h3\]\{text-transform\:uppercase\;margin-top\:0\} h3,
 .text-transform\:uppercase{
@@ -766,11 +774,11 @@ table thead,
 .\[a\]\{margin-top\:12px\;padding-left\:12px\;color\:inherit\;transition\:transform_\.3s\;text-decoration\:none\;hover\:transform\:translateX\(8px\)\} a{
 	transition: transform .3s
 }
-.\[a\]\{color\:\$text\;font-size\:20px\;md\:font-size\:32px\;font-weight\:bold\;transition\:color_\.3s\} a{
-	transition: color .3s
-}
 .button{
 	transition: background 0.3s
+}
+.\[a\]\{color\:\$text\;font-size\:20px\;md\:font-size\:32px\;font-weight\:bold\;transition\:color_\.3s\} a{
+	transition: color .3s
 }
 .button{
 	-webkit-user-select: none;
@@ -793,11 +801,11 @@ table thead,
 .width\:0{
 	width: 0
 }
-.width\:200px{
-	width: 200px
-}
 .button__icon{
 	width: 20px
+}
+.width\:200px{
+	width: 200px
 }
 .will-change\:opacity{
 	will-change: opacity
@@ -835,11 +843,6 @@ article h1{
 	font-size: 2rem;
 	line-height: 3.4rem
 }
-.md\:\{font-size\:24px\;padding\:24px\;line-height\:1\},
-.md\:font-size\:24px{
-	font-size: 2.4rem;
-	line-height: 4.08rem
-}
 .md\:font-size\:48px{
 	font-size: 4.8rem;
 	line-height: 5.76rem
@@ -851,6 +854,10 @@ article h1{
 .md\:\{font-size\:18px\;padding\:12px\;line-height\:1\}{
 	font-size: 1.8rem;
 	line-height: 3.06rem
+}
+.md\:\{font-size\:24px\;padding\:24px\;line-height\:1\}{
+	font-size: 2.4rem;
+	line-height: 4.08rem
 }
 .md\:grid-template-columns\:50\%_50\%{
 	grid-template-columns: 50% 50%
@@ -866,14 +873,14 @@ table td,
 table  th{
 	padding: 8px 12px
 }
+.button{
+	padding: 12px 24px
+}
 .md\:\{font-size\:18px\;padding\:12px\;line-height\:1\}{
 	padding: 12px
 }
 .md\:\{font-size\:24px\;padding\:24px\;line-height\:1\}{
 	padding: 24px
-}
-.button{
-	padding: 12px 24px
 }
 .container{
 	padding-left: 12px

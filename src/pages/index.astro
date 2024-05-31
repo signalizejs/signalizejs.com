@@ -7,7 +7,7 @@ import HpPrerenderedState from '@components/HpPrerenderedState.astro';
 import HpSignals from '@components/HpSignals.astro';
 import HpSnippets from '@components/HpSnippets.astro';
 import HpSPA from '@components/HpSPA.astro';
-import { discordLink, githubLink, twitterLink, apiLinks } from '@config/config.mjs';
+import { discordLink, githubLink, twitterLink, modules } from '@config/config.mjs';
 import MainLayout from '@layouts/main.astro';
 import { Image } from 'astro:assets';
 import { path } from 'src/services/router.mjs';
@@ -19,11 +19,38 @@ import { path } from 'src/services/router.mjs';
 			<span class="font-size:64px">A client-side JavaScript framework</span><br>
 			<span class="color:$red display:inline-flex max-width:800px">designed for swift web development with minimum JavaScript</span>
 		</h1>
-		<p class="text-align:center font-size:18px md:font-size:24px margin-bottom:24px">
-			Small learning curve. Modern features. 4 KB gzipped Core size.
-		</p>
+		<div class="text-align:center font-size:18px margin:0_auto_24px_auto max-width:800px text-wrap:balance">
+			<p>
+				Signalize leverages modern ES modules and import maps.<br>
+				It has a small core and allows you to load modules asynchronously only when needed.<br>
+				This makes the framework small, scalable and flexible.
+			</p>
+			<p>
+				Small learning curve. Modern features. 4 kb core gzip size.
+			</p>
+		</div>
 		<div class="display:flex justify-content:center gap:24px margin-bottom:24px text-transform:uppercase">
 			<a href={path('docs')} class="button button--solid md:{font-size:18px;padding:12px;line-height:1}">Get Started</a>
+		</div>
+	</section>
+
+	<section id="modules" class="container margin-bottom:180px">
+		<h2 class="font-size:48px">Ecosystem</h2>
+		<p class="max-width:800px font-size:18px">
+			Signalize functions are split into small modules and you decide what to import and when.
+		</p>
+		<div class="display:grid gap:24px gap grid-template-columns:repeat(auto-fill,minmax(350px,1fr))">
+			{modules.map(({ slug, name, color, icon, description }) => (
+				<div href={slug} class="gap:16px text-decoration:none color:$grey padding:16px border:1px_solid_$border display:inline-flex hover:border-color:darken($border,50)">
+					<div class="flex-shrink:0 width:50px height:50px border-radius:4px background-image:linear-gradient(rgba(255,255,255,.2),rgba(255,255,255,0)) display:flex align-items:center justify-content:center" style={`background-color:${color};`}>
+						<i class={`icon-${icon} font-size:32px text-shadow:0_1px_1px_rgba(0,0,0,0.2) color:#fff`}></i>
+					</div>
+					<div>
+						<h4 class="margin:0_0_4px_0">{name}</h4>
+						<div>{description}</div>
+					</div>
+				</div>
+			))}
 		</div>
 	</section>
 
@@ -140,21 +167,6 @@ import { path } from 'src/services/router.mjs';
 					</span>
 				</div>
 			</div>
-		</div>
-	</section>
-
-	<section id="api" class="container margin-bottom:180px">
-		<h2 class="font-size:48px">API</h2>
-		<div class="display:grid gap:24px gap grid-template-columns:repeat(auto-fill,minmax(350px,1fr))">
-			{apiLinks.map(({ slug, name, color, description }) => (
-				<a href={slug} class="gap:16px text-decoration:none color:$grey padding:16px border:1px_solid_$border display:inline-flex hover:border-color:darken($border,50)">
-					<div class="flex-shrink:0 width:50px height:50px border-radius:4px background-image:linear-gradient(rgba(255,255,255,.2),rgba(255,255,255,0))" style={`background-color:${color};`}></div>
-					<div>
-						<h4 class="margin:0_0_4px_0">{name}</h4>
-						<div>{description}</div>
-					</div>
-				</a>
-			))}
 		</div>
 	</section>
 
