@@ -1,14 +1,7 @@
-/* declare module '..' {
-	interface Signalize {
-		scope: (node: Node, init?: ScopeInitFunction) => ScopeInterface
-	}
-}
- */
-
 /**
  * Interface representing the scope with essential properties and methods.
  *
- * @interface
+ * @typedef
  * @property {Element} $el - The root element associated with the scope.
  * @property {(callback?: CallableFunction) => void} $cleanup - Performs cleanup operations, optionally executing a callback.
  */
@@ -21,13 +14,12 @@
  * @returns {void}
  */
 
-/**
- * @param {import('../Signalize').Signalize} $
- * @returns {void}
- */
-export default ($) => {
+/** @type {import('../Signalize').SignalizeModule} */
+export default async ($) => {
+	const { params, resolve } = $;
+	const { on, observeMutations } = await resolve('event', 'mutation-observer');
 	const scopeKey = '__signalizeScope';
-	const refAttribute = `${$.attributePrefix}ref`;
+	const refAttribute = `${params.attributePrefix}ref`;
 
 	class Scope {
 		/**
@@ -161,7 +153,7 @@ export default ($) => {
 
 	/**
 	 * @param {Node} node
-	 * @param {ScopeInitFunction} init
+	 * @param {ScopeInitFunction} [init]
 	 * @returns {Scope|undefined}
 	 */
 	const scope = (node, init) => {
@@ -172,9 +164,11 @@ export default ($) => {
 		return node[scopeKey] ?? undefined;
 	};
 
-	$.on('dom:mutation:node:removed', (event) => {
-		scope(event.detail)?.$cleanup();
+	observeMutations(({ removedNodes }) => {
+		for (const removedNode of removedNodes) {
+			scope(removedNode)?.$cleanup();
+		}
 	});
 
-	$.scope = scope;
+	return { scope };
 };

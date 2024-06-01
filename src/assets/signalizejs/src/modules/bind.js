@@ -1,15 +1,19 @@
-/* declare module '..' {
-	interface Signalize {
-		bind: (target: EventTarget, attributes: Record<string, any>) => void
-	}
-} */
+/**
+ * @typedef AttributeConfig
+ * @property {CallableFunction} [set]
+ * @property {CallableFunction} [get]
+ */
 
 /**
- * @param {import('../Signalize').Signalize} $
+ * @callback bind
+ * @param {HTMLElement} element
+ * @param {Record<string, AttributeConfig|import('./signal.js').Signal>} attributes
  * @returns {void}
  */
-export default ($) => {
-	const { on, Signal, scope } = $;
+
+/** @type {import('../Signalize').SignalizeModule} */
+export default async ({ resolve }) => {
+	const { on, off, Signal, scope } = await resolve('event', 'signal', 'scope');
 
 	const reactiveInputAttributes = ['value', 'checked'];
 	const numericInputAttributes = ['range', 'number'];
@@ -34,10 +38,10 @@ export default ($) => {
 		html: 'innerHTML'
 	};
 
-	$.bind = (element, attributes) => {
+	/** @type {bind} */
+	const bind = (element, attributes) => {
 		let componentScope = null;
 		const tagName = element.tagName.toLowerCase();
-		const webComponentIsDefined = customElements.get(tagName) !== undefined;
 
 		const bind = () => {
 			/** @type {CallableFunction[]} */
@@ -66,7 +70,7 @@ export default ($) => {
 				 */
 				const setAttribute = async (attribute, value) => {
 					value = value instanceof Promise ? await value : value;
-					value = value instanceof $.Signal ? value() : value;
+					value = value instanceof Signal ? value() : value;
 
 					if (attributeInited && previousValue === value) {
 						return;
@@ -171,11 +175,11 @@ export default ($) => {
 					};
 
 					on('input', element, inputListener, { passive: true });
-					cleanups.push(() => $.off('input', element, inputListener));
+					cleanups.push(() => off('input', element, inputListener));
 				}
 			}
 
-			$.scope(element, ({ $cleanup }) => {
+			scope(element, ({ $cleanup }) => {
 				$cleanup(() => {
 					for (const cleanup of cleanups) {
 						cleanup();
@@ -202,4 +206,6 @@ export default ($) => {
 
 		bind();
 	};
+
+	return { bind };
 };

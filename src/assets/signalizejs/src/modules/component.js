@@ -1,33 +1,19 @@
-/* declare module '..' {
-	interface Signalize {
-		component: (name: string, init: ComponentOptions) => typeof HTMLElement
-	}
-
-	interface CustomEventListeners {
-		'component:constructed': CustomEventListener
-		'component:connected': CustomEventListener
-		'component:disconnected': CustomEventListener
-		'component:adopted': CustomEventListener
-	}
-} */
-
 /**
  * Options for configuring a component.
  *
- * @interface ComponentOptions
+ * @typedef ComponentOptions
  * @property {Record<string, any> | string[]} [props] - Props to be used by the component (optional).
  * @property {() => void | Promise<void>} [setup] - Function for setting up the component (optional).
  * @property {ShadowRootInit} [shadow] - Configuration options for the shadow DOM (optional).
  */
 
-/**
- * @param {import('../Signalize').Signalize} $
- * @returns {void}
- */
-export default ($) => {
-	const { signal, dispatch, scope } = $;
+/** @type {import('../Signalize').SignalizeModule} */
+export default async ({ resolve, params }, config) => {
+	const { componentPrefix = '' } = config;
+	const { attributePrefix } = params;
+	const { signal, dispatch, scope } = await resolve('signal', 'event', 'scope', 'dash-case');
 
-	const cloakAttribute = `${$.attributePrefix}cloak`;
+	const cloakAttribute = `${attributePrefix}cloak`;
 
 	/**
 	 * Creates a custom Web Component with the specified name and options
@@ -48,7 +34,7 @@ export default ($) => {
 			setup = options?.setup;
 		}
 
-		let componentName = `${$.componentPrefix}${name}`;
+		let componentName = `${componentPrefix}${name}`;
 
 		if (customElements.get(componentName) !== undefined) {
 			console.warn(`Custom element "${componentName}" already defined. Skipping.`);
@@ -75,7 +61,7 @@ export default ($) => {
 		const attributesPropertiesMap = {};
 
 		for (const propertyName of propertyKeys) {
-			attributesPropertiesMap[$.dashCase(propertyName)] = propertyName;
+			attributesPropertiesMap[dashCase(propertyName)] = propertyName;
 		}
 
 		const observableAttributes = Object.keys(attributesPropertiesMap);
@@ -282,5 +268,5 @@ root
 		return Component;
 	};
 
-	$.component = component;
+	return { component };
 };

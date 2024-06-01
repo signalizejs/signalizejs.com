@@ -2,32 +2,29 @@
 // https://web.dev/optimize-long-tasks/
 
 /**
- * @returns {import('../Signalize').SignalizePlugin}
+ * @callback task
+ * @param {Function} callback
  */
+
+/** @type {import('../Signalize').SignalizeModule} */
 export default () => {
+	const deadlineInterval = 50;
+
+	/** @type {CallableFunction[]} */
+	const tasks = [];
+
 	/**
-	 * @param {import('../Signalize').Signalize} $
+	 * @returns {Promise<void>}
 	 */
-	return ($) => {
-		const deadlineInterval = 50;
+	const yieldToMain = async () => {
+		await new Promise((resolve) => window.setTimeout(resolve, 0));
+	};
 
-		/** @type {CallableFunction[]} */
-		const tasks = [];
+	let processing = false;
 
-		/**
-		 * @returns {Promise<void>}
-		 */
-		const yieldToMain = async () => {
-			await new Promise((resolve) => window.setTimeout(resolve, 0));
-		};
-
-		let processing = false;
-
-		/**
-		 * @param {CallableFunction} callback
-		 * @returns {void}
-		 */
-		$.task = (callback) => {
+	return {
+		/** @type {task} */
+		task: (callback) => {
 			tasks.push(callback);
 
 			if (processing) {
@@ -48,11 +45,15 @@ export default () => {
 					}
 
 					const callback = tasks.shift();
+
+					if (typeof callback !== 'function') {
+						throw new Error('Task must be a callable function.');
+					}
+
 					callback();
 				}
 				processing = false;
 			})();
-		};
+		}
 	};
-
 };
