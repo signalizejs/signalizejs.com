@@ -12,7 +12,7 @@ const code = `
 
 	const { on, visit } = new Signalize({
 		// Init plugins
-		plugins: [ fetch(), snippets(), spa() ]
+		plugins: [ ajax(), snippets(), spa() ]
 	});
 
 	// Or send custom visit request

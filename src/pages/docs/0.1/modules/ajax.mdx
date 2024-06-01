@@ -1,0 +1,51 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/ajax'
+description: 'Wrapper around native javascript fetch.'
+---
+
+It does the following:
+- Improves error handling
+- By default it sets method to `POST` if the body argument is passed and no method was added
+- If body argument is passed, it's not a string, number or FormData, it automatically converts it using `JSON.stringify()` and sets `application/json` header
+- It ads `X-Requested-With` header to the request, so you can detect if the request is ajax or not on the server
+
+## Installation
+
+Required import map keys:
+- `signalizejs/mutation-observer`
+- `signalizejs/event`
+- `signalizejs/ajax`
+
+```js
+const { ajax } = await signalize.resolve('ajax');
+```
+
+## API
+
+### ajax
+- Send fetch request to the server
+- The arguments are the same like for [native fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
+- Returns an object with the fetch response and error
+
+```js
+const {
+	// Fetch response
+	response,
+	// Error info or null
+	error
+} = await ajax(url, options);
+
+if (error === null) {
+	const json = response.json();
+	// Do something ...
+}
+```
+
+## Dispatched Events
+You can listen to the following events through the [on](/docs/0.1/modules/event#on) function:
+- `ajax:request:start` - Dispatched, when the requests starts
+- `ajax:request:success` - Dispatched, when the requests ends and is without an error
+- `ajax:request:error` - Dispatched, when the requests ends and contains errors
+- `ajax:request:end` - Dispatched, when the requests ends (even with an error).

@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { base64Symbol, siteUrl, githubLink, twitterLink, discordLink, apiLinks } from '@config/config.mjs';
 import { path } from '@services/router.mjs';
+import signalizeUrl from '@assets/signalizejs/src/Signalize?url';
 
 const url = Astro.url;
 let {
@@ -22,6 +23,11 @@ const getStartedLinks = [
 ];
 
 const modulesLinks = [];
+const importmap = JSON.stringify({
+	imports: {
+		signalizejs: signalizeUrl,
+	}
+});
 
 ---
 
@@ -60,6 +66,10 @@ const modulesLinks = [];
 		<meta property="twitter:image" content={pageImage} />
 
 		<title>{pageTitle}</title>
+		<script type="importmap" :html={importmap}></script>
+		<script>
+			import '@assets/global';
+		</script>
 		<style is:global>
 			@import 'normalize.css';
 			@import '@assets/css/stylify.css';

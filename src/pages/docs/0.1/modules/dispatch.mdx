@@ -1,17 +1,17 @@
 ---
 order: 2
 layout: '@docsLayout'
-title: 'signalizejs/dispatch'
+title: 'signalizejs/event'
 description: 'Dispatch global and local events easily.'
 ---
 
 ## Installation
-The `dispatch` module is in the Signalize core.
+Add a public path for `signalizejs/event` into your import map.
+
+Then you can resolve it.
 
 ```js
-import Signalize from 'signalizejs';
-
-const { dispatch, customEvent } = new Signalize();
+const { dispatch } = await signalize.resolve('event');
 ```
 
 ## Api

@@ -6,15 +6,13 @@ description: 'Get element computed widht.'
 ---
 
 ## Installation
-The `width` plugin comes with the Signalize default installation. You just need to import it.
+
+Add a public path for `signalizejs/width` into your import map.
+
+Then you can resolve it.
 
 ```js
-import Signalize from 'signalizejs';
-import widthPlugin from 'signalizejs/width';
-
-const { width } = new Signalize({
-	plugins: [ widthPlugin() ]
-});
+const { width } = await signalize.resolve('width');
 ```
 
 ## API

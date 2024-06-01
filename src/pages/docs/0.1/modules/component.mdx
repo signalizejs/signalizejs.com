@@ -9,12 +9,11 @@ import Editor from '@codeEditor';
 import { cdnUrl } from '@config/config';
 
 ## Installation
-The `component` module is in the Signalize core.
+
+Required import map keys: `signalizejs/component`
 
 ```js
-import Signalize from 'signalizejs';
-
-const { component } = new Signalize();
+const { component } = await signalize.resolve('component');
 ```
 
 ## API

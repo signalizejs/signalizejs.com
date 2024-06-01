@@ -40,14 +40,23 @@ import { path } from 'src/services/router.mjs';
 			Signalize functions are split into small modules and you decide what to import and when.
 		</p>
 		<div class="display:grid gap:24px gap grid-template-columns:repeat(auto-fill,minmax(350px,1fr))">
-			{modules.map(({ slug, name, color, icon, description }) => (
-				<div href={slug} class="gap:16px text-decoration:none color:$grey padding:16px border:1px_solid_$border display:inline-flex hover:border-color:darken($border,50)">
-					<div class="flex-shrink:0 width:50px height:50px border-radius:4px background-image:linear-gradient(rgba(255,255,255,.2),rgba(255,255,255,0)) display:flex align-items:center justify-content:center" style={`background-color:${color};`}>
-						<i class={`icon-${icon} font-size:32px text-shadow:0_1px_1px_rgba(0,0,0,0.2) color:#fff`}></i>
-					</div>
-					<div>
-						<h4 class="margin:0_0_4px_0">{name}</h4>
-						<div>{description}</div>
+			{modules.map(({ name, color, icon, description, api }) => (
+				<div class="text-decoration:none color:$grey padding:16px border:1px_solid_$border">
+					<div class="gap:16px display:inline-flex">
+						<div class="flex-shrink:0 width:50px height:50px border-radius:4px background-image:linear-gradient(rgba(255,255,255,.2),rgba(255,255,255,0)) display:flex align-items:center justify-content:center" style={`background-color:${color};`}>
+							<i class={`icon-${icon} font-size:32px text-shadow:0_1px_1px_rgba(0,0,0,0.2) color:#fff`}></i>
+						</div>
+						<div>
+							<h4 class="margin:0_0_4px_0">{name}</h4>
+							<div>{description}</div>
+							<div class="margin-top:8px display:flex flex-wrap:wrap gap:4px">
+								{api.map(({ label, slug }) => (
+									<a href={path('docs', {slug })} class="button padding:4px!important font-size:12px!important">
+										{label}
+									</a>
+								))}
+							</div>
+						</div>
 					</div>
 				</div>
 			))}

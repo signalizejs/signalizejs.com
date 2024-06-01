@@ -9,12 +9,9 @@ import Editor from '@codeEditor';
 import { cdnUrl } from '@config/config';
 
 ## Installation
-The `bind` module is in the Signalize core.
 
 ```js
-import Signalize from 'signalizejs';
-
-const { bind } = new Signalize();
+const { bind } = await signalize.resolve('bind');
 ```
 
 ## API

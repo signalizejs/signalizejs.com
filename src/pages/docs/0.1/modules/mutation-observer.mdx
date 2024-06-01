@@ -8,12 +8,16 @@ description: 'Watch for hanges being made on the DOM tree of the selected elemen
 Signalize core starts mutation observer automatically for each instance and watches the configured root for `childList` and `subtree` changes.
 
 ## Installation
-The `mutation-observer` module is in the Signalize core.
+
+Add a public path for `signalizejs/mutation-observer` into your import map.
+
+Then you can resolve it.
 
 ```js
-import Signalize from 'signalizejs';
-
-const { observeMutations } = new Signalize();
+const {
+	observeMutations,
+	createMutationObserver
+} = await signalize.resolve('mutation-observer');
 ```
 
 ## API
@@ -40,8 +44,7 @@ const observer = observeMutations(element, (mutations) => {
 ```
 
 ## Dispatched events
-Events are dispatched to root only if no callback is provided
-
+You can listen to the following events through the [on](/docs/0.1/modules/event#on) function:
 - `dom:mutation` - This event is fired on every dom mutation
 - `dom:mutation:node:added` - This event is fired when any node is added
 - `dom:mutation:node:moved` - This event is fired when any node was moved in the dom

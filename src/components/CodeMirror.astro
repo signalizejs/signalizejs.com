@@ -16,9 +16,9 @@ const prepareCode = (code) => {
 ---
 
 <script>
-import { signalize } from '@assets/global';
+import { $ } from '@assets/global';
 
-const { component } = signalize
+const { component } = await $.resolve('component')
 
 component('code-mirror', {
 	props: {

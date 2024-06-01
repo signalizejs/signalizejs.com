@@ -12,7 +12,6 @@
 	--lighten-red-20: #ff3852;
 	--darken-fff-50: #cdcdcd;
 	--lighten-fff-50: #ffffff;
-	--darken-border-50: #ababab;
 	--lighten-grey-30: #747272;
 }
 .button,
@@ -142,9 +141,6 @@ table tr:last-of-type td{
 }
 .button.button--outline{
 	border-color: var(--red)
-}
-.hover\:border-color\:darken\(\$border\,50\):hover{
-	border-color: var(--darken-border-50)
 }
 .\[pre\]\{margin\:0\;border-radius\:8px\;height\:auto\;max-height\:70vh\;overflow\:auto\;width\:100\%\} pre,
 .\[\.cm-editor\]\{min-height\:100\%\;border-radius\:8px\} .cm-editor,
@@ -362,6 +358,9 @@ article  note *,
 	font-size: 1.8rem;
 	line-height: 3.06rem
 }
+.font-size\:12px\!important{
+	font-size: 12px!important
+}
 .font-size\:22px{
 	font-size: 2.2rem;
 	line-height: 3.74rem
@@ -394,6 +393,9 @@ article  note *,
 }
 .gap\:16px{
 	gap: 16px
+}
+.gap\:4px{
+	gap: 4px
 }
 .grid-template-columns\:repeat\(auto-fit\,minmax\(250px\,1fr\)\){
 	grid-template-columns: repeat(auto-fit,minmax(250px,1fr))
@@ -536,11 +538,17 @@ article pre,
 .margin-top\:0{
 	margin-top: 0
 }
-article h2{
-	margin-top: 48px
-}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 article h3{
 	margin-top: 32px
+}
+article h2{
+	margin-top: 48px
 }
 article h4,
 .margin-top\:24px{
@@ -674,6 +682,9 @@ table th,
 }
 .padding\:16px{
 	padding: 16px
+}
+.padding\:4px\!important{
+	padding: 4px!important
 }
 .padding\:24px_24px_0_24px{
 	padding: 24px 24px 0 24px

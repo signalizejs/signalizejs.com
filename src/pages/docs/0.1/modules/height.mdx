@@ -6,11 +6,13 @@ description: 'Get element computed height.'
 ---
 
 ## Installation
-```js
-import Signalize from 'signalizejs';
-import heightPlugin from 'signalizejs/height';
 
-const { height } = new Signalize({ heightPlugin() });
+Add a public path for `signalizejs/height` into your import map.
+
+Then you can resolve it.
+
+```js
+const { height } = await signalize.resolve('height');
 ```
 
 ## API
@@ -18,7 +20,5 @@ const { height } = new Signalize({ heightPlugin() });
 ### height
 Get height of an element or document
 ```js
-const { height } = signalize;
-
 height(document.querySelector('#element'));
 ```

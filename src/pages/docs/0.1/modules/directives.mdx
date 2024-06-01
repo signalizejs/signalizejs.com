@@ -11,30 +11,20 @@ Directives are synchronous.
 Directives can be used only within [web components](/plugins/signalizejs-components) and are initialized on dom ready and after component is constructed.
 
 ## Installation
-The `directives` plugin comes with the Signalize default installation. You just need to import it.
+
+Add a public path to the following dependencies into your importmap:
+- `signalizejs/evaluate`
+- `signalizejs/traverse-dom`
+- `signalizejs/directives`
+
+Then you can resolve it.
 
 ```js
-import Signalize from 'signalizejs';
-import directives from 'signalizejs/evaluator';
-import domTraverser from 'signalizejs/traverse-dom';
-
 const {
 	directive,
 	getPrerenderedNodes,
 	processDirectives
-} = new Signalize({
-	plugins: [
-		// Dependencies
-		evaluator(),
-		domTraverser(),
-		// Initialization
-		directives({
-			// Optional
-			prerenderedBlockStart: '',
-			prerenderedBlockEnd: ''
-		})
-	]
-});
+ } = await signalize.resolve('directives');
 ```
 
 ## API

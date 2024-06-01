@@ -66,8 +66,7 @@
 
 /** @type {import('../Signalize').SignalizeModule} */
 export default async ({ params, resolve, root }, options) => {
-	const { dispatch, fetch, redrawSnippet, on, customEventListener, customEvent } = await resolve('event', 'fetch', 'snippets');
-
+	const { dispatch, ajax, redrawSnippet, on, customEventListener, customEvent } = await resolve('event', 'fetch', 'snippets');
 	const spaAttribute = `${params.attributePrefix}spa`;
 	const spaUrlAttribute = `${spaAttribute}${params.attributeSeparator}url`;
 	const spaIgnoreAttribute = `${spaAttribute}${params.attributeSeparator}ignore`;
@@ -135,6 +134,8 @@ export default async ({ params, resolve, root }, options) => {
 	 * @returns {Promise<SpaDispatchEventData>}
 	 */
 	const navigate = async (data) => {
+		updateCurrentState();
+
 		firstNavigationTriggered = true;
 		/**
 		 * @type {SpaDispatchEventData}
@@ -155,7 +156,7 @@ export default async ({ params, resolve, root }, options) => {
 		const { url, stateAction = 'push' } = data;
 		const urlString = url instanceof URL ? url.toString() : url;
 
-		/** @type {import('./fetch.js').FetchReturn} */
+		/** @type {import('./ajax.js').FetchReturn} */
 		let navigationResponse;
 		/** @type {string|null} */
 		let responseData = null;
@@ -167,7 +168,7 @@ export default async ({ params, resolve, root }, options) => {
 		} else {
 			dispatch('spa:request:start', { ...dispatchEventData });
 
-			navigationResponse = await fetch(urlString, {
+			navigationResponse = await ajax(urlString, {
 				signal: abortNavigationController.signal
 			});
 			const requestIsWithoutErroor = navigationResponse.error === null;
@@ -267,7 +268,9 @@ export default async ({ params, resolve, root }, options) => {
 						});
 					}
 				} else {
-					window.scrollTo(data.scrollX ?? 0, data.scrollY ?? 0);
+					queueMicrotask(() => {
+						window.scrollTo(data.scrollX ?? 0, data.scrollY ?? 0);
+					});
 				}
 			}
 		}
@@ -383,7 +386,7 @@ export default async ({ params, resolve, root }, options) => {
 		});
 	};
 
-	on('dom:ready', () => {
+	const updateCurrentState = () => {
 		currentState = {
 			spa: true,
 			url: window.location.pathname,
@@ -391,9 +394,11 @@ export default async ({ params, resolve, root }, options) => {
 			scrollY: window.scrollY
 		};
 
-		if (window.history.state === null) {
-			window.history.replaceState(currentState, '', window.location.href);
-		}
+		window.history.replaceState(currentState, '', window.location.href);
+	}
+
+	on('dom:ready', () => {
+		updateCurrentState();
 
 		dispatch('spa:page:ready', currentState);
 

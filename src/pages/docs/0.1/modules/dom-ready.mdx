@@ -6,17 +6,21 @@ description: 'DOM ready listener.'
 ---
 
 ## Installation
-The `dom-ready` module is in the Signalize core.
+Add a public path for `signalizejs/dom-ready` into your import map.
+
+This module doesn't expose any functionality. It only triggers `dom:ready` event. See bellow.
 
 ## Usage
 This plugin ads a `dom:ready` event, you can listen to through the [on](/plugins/signalizejs-on) function.
 
 ```js
-import Signalize from 'signalizejs';
-
-const { on } = new Signalize();
+const { on } = await signalize.resolve('event');
 
 on('dom:ready', () => {
 	// Do something
 });
 ```
+
+## Dispatched events
+You can listen to these events through the [on](/plugins/signalizejs-on) function.
+`dom:ready`: Triggered when the DOM is [ready](https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event).

@@ -10,8 +10,8 @@ const code = `
 <button dialog-open="hello-world">Open Dialog</button>
 
 <script type="module">
-	import Signalize from '/src/assets/signalizejs/dist/signalize.js';
-	import dialog from '/src/assets/signalizejs/dist/modules/dialog.js';
+	import Signalize from 'signalizejs';
+	import dialog from 'signalizejs/dialog';
 
 	// Use the dialog plugin
 	new Signalize({ plugins: [ dialog() ] })

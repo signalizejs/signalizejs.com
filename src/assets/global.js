@@ -1,24 +1,39 @@
-import Signalize from './signalizejs/src/Signalize.js';
-import evaluator from './signalizejs/src/plugins/evaluator.js';
-import domTraverser from './signalizejs/src/plugins/traverse-dom.js';
-import directives from './signalizejs/src/plugins/directives.js';
-import fetch from './signalizejs/src/plugins/fetch.js';
-import snippets from './signalizejs/src/plugins/snippets.js';
-import spa from './signalizejs/src/plugins/spa.js';
+import Signalize from 'signalizejs';
+import componentModule from 'signalizejs/component';
+import evaluateModule from 'signalizejs/evaluate';
+import traverserDomModule from 'signalizejs/traverse-dom';
+import directivesModule from 'signalizejs/directives';
+import mutationObserverModule from 'signalizejs/mutation-observer';
+import scopeModule from 'signalizejs/scope';
+import bindModule from 'signalizejs/bind';
+import eventModule from 'signalizejs/event';
+import fetchModule from 'signalizejs/fetch';
+import snippetsModule from 'signalizejs/snippets';
+import spaModule from 'signalizejs/spa';
+import signalModule from 'signalizejs/signal';
+import dashCaseModule from 'signalizejs/dash-case';
+import domReadyModule from 'signalizejs/dom-ready';
 
-export const signalize = new Signalize({
-	componentPrefix: '',
-	plugins: [
-		evaluator(),
-		domTraverser(),
-		directives(),
-		fetch(),
-		snippets(),
-		spa()
+export const $ = new Signalize({
+	modules: [
+		['event', eventModule],
+		['dom-ready', domReadyModule],
+		['signal', signalModule],
+		['scope', scopeModule],
+		['bind', bindModule],
+		['mutation-observer', mutationObserverModule],
+		['dash-case', dashCaseModule],
+		['evaluate', evaluateModule],
+		['traverse-dom', traverserDomModule],
+		['directives', directivesModule],
+		['fetch', fetchModule],
+		['snippets', snippetsModule],
+		['spa', spaModule],
+		['component', componentModule]
 	]
 });
 
-const { on, component, signal, bind} = signalize;
+const { on, component, signal, bind } = await $.resolve('event', 'component', 'signal', 'bind');
 
 component('header-navigation', {
 	construct: () => ({

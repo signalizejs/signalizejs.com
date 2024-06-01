@@ -20,7 +20,7 @@ export default async ($) => {
 	const { on, observeMutations } = await resolve('event', 'mutation-observer');
 	const scopeKey = '__signalizeScope';
 	const refAttribute = `${params.attributePrefix}ref`;
-
+	console.log(refAttribute, params);
 	class Scope {
 		/**
 		 * @readonly

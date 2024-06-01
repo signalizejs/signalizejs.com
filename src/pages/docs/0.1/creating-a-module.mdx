@@ -1,52 +1,67 @@
 ---
 layout: '@docsLayout'
-title: 'Creating and using modules'
-description: ''
+title: 'Creating Custom Modules'
+description: 'Learn how to define a custom ES module for the Signalize JavaScript Framework. Create a new set of functions, define a new page with lazy initialization and etc.'
 ---
 
-If you want to extend the Signalize core, you need to create a simple function and pass it during Signalize initialization:
+Modules in Signalize doesn't have to be only some set of functions. It can be even an entire page like `homepage` or `articles` or some sections like galeries and such.
 
+No matter what you plan to create, the definition is always the same.
+
+## Definition
 Empty plugin function looks like this:
 ```js
-// The pluginOptions argument is optional
-// Plugin can be without options
-const myPlugin = (pluginOptions) => {
-	// This is executed during user configuration
-	return (signalize) {
-		// This is executed during plugin initialization
-		// Use and extend Signalize instance
-		signalize.myMethod = () => { /* ... */ }
-	}
+// Plugin can be without config
+export default async (signalizeInstance, pluginConfig) => {
+	const myMethod = () =>  alert('Hello World!');
+
+	// You can return several functions
+	// or nothing at all
+	return { myMethod };
 }
 ```
 
-The usage of this plugin is this:
+## Usage
+
+### Instant Initialization
+The instant initialization is done directly during creating a new Signalize instance:
 ```js
 import Signalize from 'signalizejs';
-import myPlugin from 'path/to/my/plugin';
+import myModule from 'path/to/my-module.js';
 
-// Usage
 const { myMethod } = new Signalize({
 	modules: [
-		myPlugin({ /* Options */ })
-	]
+		['my-module', myModule, {/* Direct Config - optional */}]
+	],
+	params: {
+		'my-module': { /* Params Config - optional */}
+	}
 });
 ```
 
-Signalize also provides a `use` method. This method can initialize plugin after Signalize is inited. This can be used to init plugin from additional scripts (like pages, when some plugin should be used only on that exact page).
-```js
-const { use } = signalize;
+### Lazy Initialization
+When defining a new module, you need to first configure the import map and then import the module:
+```html
+<script type="importmap">
+	{
+		"imports": {
+			"my-module": "/path/to/my-module.js"
+		}
+	}
+</script>
+<script type="module">
+	import Signalize from 'signalizejs';
 
-use(MyPlugin({ /* Options */ }));
+	const signalize = new Signalize({
+		params: {
+			'my-module': {/* Params Config - optional */}
+		}
+	});
 
-```
+	const { myMethod } = await signalize.resolve('my-module');
 
-Each plugin is initialized only once. So if you have an SPA, plugin will not be initialized twice.
-
-This makes the `use` method great for initializing scripts for pages and components. For example to prevent reinitialization in SPA.
-
-```js
-use((signalize) => {
-	// My page logic
-});
-```
+	// Or with direct config for a new separated instance
+	const { myMethod } = await signalize.resolve([
+		'my-module', { /* Direct Config */}
+	]);
+</script>

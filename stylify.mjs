@@ -67,7 +67,8 @@ const stylifyConfig = defineConfig({
 				}
 			`,
 			'h1,h2,h3,h4,h5,h6': `
-				scroll-margin-top:100px
+				scroll-margin-top:50px
+				margin-top:32px
 				a { text-decoration:none }
 			`,
 			'input::placeholder': 'opacity:1',

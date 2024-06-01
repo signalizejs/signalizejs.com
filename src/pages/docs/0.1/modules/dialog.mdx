@@ -9,18 +9,18 @@ import Editor from '@codeEditor';
 import { cdnUrl } from '@config/config';
 
 ## Installation
-The `dialog` plugin comes with the Signalize default installation. You just need to import it.
+
+Required import map keys:
+- `signalizejs/mutation-observer`
+- `signalizejs/event`
+- `signalizejs/dialog`
 
 ```js
-import Signalize from 'signalizejs';
-import dialogPlugin from 'signalizejs/dialog';
-
-// Use the dialog plugin
 const {
+	dialog,
 	openDialog,
 	closeDialog,
-	dialog
-} = new Signalize({ plugins: [ dialogPlugin() ] });
+ } = await signalize.resolve('dialog');
 ```
 
 ## API
@@ -77,6 +77,7 @@ The Dialog module comes with the Signalize default installation. You just need t
 - `dialog-modeless`: If this attribute is set, it will open [modeless dialog](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement#instance_methods)
 
 ## Dispatched Events
+You can listen to the following events through the [on](/docs/0.1/modules/event#on) function:
 - `dialog:closed`: Dispatched when a dialog is closed
 - `dialog:opened`: Dispatched when a dialog is opened
 

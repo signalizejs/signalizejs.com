@@ -8,7 +8,7 @@ export const cdnUrl = (packageName) => {
 	}
 
 	return process.env.ENV === 'dev'
-		? `/src/assets/signalizejs/src/plugins/${packageName}.js`
+		? `/src/assets/signalizejs/src/modules/${packageName}.js`
 		: `https://cdn.jsdelivr.net/npm/signalizejs@latest${packageName}/+esm`;
 }
 
@@ -144,6 +144,10 @@ export const modules = [
 		slug: 'bind',
 		api: [
 			{
+				label: 'ajax',
+				slug: 'modules/ajax'
+			},
+			{
 				label: 'customEvent',
 				slug: 'modules/custom-event'
 			},
@@ -152,16 +156,16 @@ export const modules = [
 				slug: 'modules/event'
 			},
 			{
-				label: 'fetch',
-				slug: 'modules/fetch'
-			},
-			{
 				label: 'h',
 				slug: 'modules/h'
 			},
 			{
 				label: 'height',
 				slug: 'modules/height'
+			},
+			{
+				label: 'isDomReady',
+				slug: 'modules/is-visible'
 			},
 			{
 				label: 'isInViewport',

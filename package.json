@@ -28,6 +28,7 @@
     "codemirror": "^6.0",
     "concurrently": "^8.2.2",
     "normalize.css": "^8.0",
-    "sharp": "^0.33"
+    "sharp": "^0.33",
+    "signalizejs": "file:./src/assets/signalizejs"
   }
 }

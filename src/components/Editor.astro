@@ -51,8 +51,8 @@ if (hasDefaultCode || hasDefaultSlot) {
 }
 ---
 <script>
-	import { signalize } from "@assets/global";
-	const { component, on } = signalize;
+	import { $ } from "@assets/global";
+	const { component, on } = await $.resolve('component', 'event');
 
 	component('code-editor', {
 		props: ['code'],
