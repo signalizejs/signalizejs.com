@@ -144,8 +144,8 @@ const modules = {
 	signal: {
 		name: 'signal',
 		api: [
-			{ label: 'Signal', anchor: 'signal-1' },
-			{ label: 'signal', anchor: 'signal' }
+			{ label: 'signal', anchor: 'signal' },
+			{ label: 'Signal', anchor: 'signal-1' }
 		]
 	},
 	snippets: {
@@ -177,7 +177,7 @@ const modules = {
 		name: 'viewport',
 		dependencies: ['height', 'offset'],
 		api: [
-			{ label: 'viewport' }
+			{ label: 'isInViewport' }
 		]
 	},
 	width: {
@@ -274,9 +274,16 @@ export const modulesSections = [
 	},
 ];
 
-export const apiLinks = Object.values(modules).map((module) => module.api).flat().sort((a, b) => {
-	return (a.label < b.label) ? -1 : (a.label > b.label) ? 1 : 0;
-});
+export const apiLinks = Object
+	.values(modules)
+	.map((module) => {
+		return module.api.map(({ label, anchor }) => ({
+			label,
+			slug: `modules/${module.name}${anchor ? `#${anchor}` : ''}`
+		}))
+	})
+	.flat()
+	.sort((a, b) => (a.label < b.label) ? -1 : (a.label > b.label) ? 1 : 0);
 
 export const getModuleDependencies = (moduleName) => {
 	const dependencies = [];
@@ -303,7 +310,7 @@ export const getModuleDependencies = (moduleName) => {
 		mapDependencies(module.dependencies);
 	}
 
-	return dependencies;
+	return dependencies.sort((a, b) => (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0)
 }
 
 export const base64Symbol = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABvFBMVEUAAAD/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/JD7/Iz3/ITz/OFD/b4D/LUb/KkP/qLP/+vr/m6f/Ij3/ITv/JkD/K0T/KkT/MEj/laL/9vf//Pz/pK//MUn/Ijz/MUr/eIj/tb3/xcz/xsz/w8r/8vP//f7/rbf/N0//OlH/uMH/////5Of/u8P//f3//v7/j5z/J0D/oq3/+Pn/yc//3eH/y9L/Rlz/R13/6ev/+/z/rrj/c4P/cYL/kZ7/0NX/IDv/Y3b/+vv/2t7/Hzr/usL/1Nn/S2H/X3L/4uX/RFv/ZXf/wMf/UWb/PlX/3+P/ztT/nqn/nKf/nKj/hJP/TGH/L0j/ipj/6uz/hpT/KUL/Iz7/Lkb/8PH/9/j/dob/VGj/naj/nan/oaz/2d3/z9T/M0v/v8f/ZHf/VWn/7vD/7/H/TWL/Hjn/RVv/UGX/3uH/coL/coP/vMT/2t//OVH/jpv/+fr/qbP/Mkr/wsr/xMv/r7n/boD/JT9rPthBAAAAHnRSTlMAAAQpba3a8/0DN5jg+xqK6jbD/kLZwgI46Zcq3/KEC2jLAAAAAWJLR0RA/tlc2AAAAAlwSFlzAAAsSwAALEsBpT2WqQAAAAd0SU1FB+gFHhIWFSACurEAAAILSURBVDjLhVP5XxJBHJ1RUPAAD/CGGV0UaAvRtRZRdNC1EMWbyqPLPCrttuzw6lDKLK3+YWfZmVnXH/T9wn7mPWa+3/d9XwAYYEGhzV5U7HAUF9lthQUQWAGdJaVl5X6G8rLSEudZCYQud4Xfggq3C0KTr6yq9p9DdVUlV0Do8Vo4hJH+4/UYCvr/c3xzi2QojDugq8bKB1rbglJI/6xxUQGsdQsqfEWW5avXIu3Rjk5FP3HXQgDr6hkf6rp+Q43FYmp3d7ynN6G/Ul8HgbOB8339UWIgOTCoDeXLaHCCxiYmuHmLUpqO1HCajIzmBU2NwMb8UzJjZHxicopiOk1mMtjw1Abs7ILs7TvkbmI2m52V58j8AmbHdsA9CN9LkfsPwoqi4IePFjnv9wIfr/HxEtGWV1afBJ8+W0PCFR9wiO913sTzFy9f8UOHKUCvI2+Y4u2GYgp84gal6936+83NDx8J+fQZiSfEoPDi1jamNWZ3dsneFyyK5G3ihXkyJ9M2v34bI/HvZpvMKJyZIfvTB7lcbuOHRn4esieoUYbVaHSEpIdTeaep4b94CdRqY1hoSBscSLImjn7/4QI6LGPcKNHbEz8+PlFV9eTvP4nz+rhZYJTOjmh7ZC0gy4H/YWGkHhgeuZAUbGsNmB6LyInQIqml2cqz0IrYs7SbvMdcjIsX5/LVu3x5L1r/U7bijWwrVYT7AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDI0LTA1LTMwVDE4OjIyOjIxKzAwOjAwQup04gAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyNC0wNS0zMFQxODoyMjoyMSswMDowMDO3zF4AAABXelRYdFJhdyBwcm9maWxlIHR5cGUgaXB0YwAAeJzj8gwIcVYoKMpPy8xJ5VIAAyMLLmMLEyMTS5MUAxMgRIA0w2QDI7NUIMvY1MjEzMQcxAfLgEigSi4A6hcRdPJCNZUAAAAASUVORK5CYII='

@@ -13,18 +13,21 @@ import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 ```js
 import Signalize from 'signalizejs';
 
-const { on, off, customEventListener } = new Signalize();
+const {
+	off,
+	on,
+	customEvent,
+	customEventListener
+} = new Signalize();
 ```
 
 ## API
 
 ### on
+Atach listener to elements or listen to dispatched events.
 
+Listeners are automatically attached to dynamically added elements if the second argument is a string selector.
 ```js
-import Signalize from 'signalizejs';
-
-const { on } = new Signalize();
-
 // Listen to globally dispatched event on the root element
 on('custom:event', () => {});
 
@@ -46,14 +49,18 @@ on('click mouseover', document.querySelectorAll('.element'), () => {}, {
 });
 ```
 
+The `on` function also automatically prepares function that will remove the defined listenr, so you don't have to prepare it yourself:
+```js
+const removeListener = on('click', '.selector', () => alert('Hello World'));
+
+// This will remove the defined click listener above.
+removeListener();
+```
+
 ### off
 Remove event listener or listeners from one or more elements.
 
 ```js
-import Signalize from 'signalizejs';
-
-const { off } = new Signalize();
-
 // Binds listener directly to existing element
 const handler = () => alert('Hello World!');
 const element = document.querySelector('#element');
@@ -72,8 +79,6 @@ off('click mouseover', [element], handler);
 Create a custom event listener.
 
 ```js
-const { customEventListener } = new Signalize();
-
 customEventListener('clickOutside', () => {
 	return {
 		on: ({ listener, target, options }) => {},

@@ -7,7 +7,7 @@ import HpPrerenderedState from '@components/HpPrerenderedState.astro';
 import HpSignals from '@components/HpSignals.astro';
 import HpSnippets from '@components/HpSnippets.astro';
 import HpSPA from '@components/HpSPA.astro';
-import { discordLink, githubLink, twitterLink, modulesSections } from '@config/config.mjs';
+import { modulesSections } from '@config/config.mjs';
 import MainLayout from '@layouts/main.astro';
 import { Image } from 'astro:assets';
 import { path } from 'src/services/router.mjs';
@@ -22,11 +22,8 @@ import { path } from 'src/services/router.mjs';
 		<div class="text-align:center font-size:18px margin:0_auto_24px_auto max-width:800px text-wrap:balance">
 			<p>
 				Signalize leverages modern ES modules and import maps.<br>
-				It has a small core and allows you to load modules asynchronously only when needed.<br>
+				It imports only a small 2 KB core and you decide what to import and when.<br>
 				This makes the framework small, scalable and flexible.
-			</p>
-			<p>
-				Small learning curve. Modern features. 4 kb core gzip size.
 			</p>
 		</div>
 		<div class="display:flex justify-content:center gap:24px margin-bottom:24px text-transform:uppercase">

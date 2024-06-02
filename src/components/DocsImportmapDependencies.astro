@@ -8,7 +8,7 @@ const dependencies = getModuleDependencies(module);
 
 {dependencies.length !== 0 && (
 	<div>Required <a href={path('docs', {slug: 'introduction'}) + '#2-import-map-configuration'}>import map</a> dependencies:</div>
-	<ul>
+	<ul class="margin-top:0">
 		{dependencies.map(({ name, label }) => (
 			<li>
 				<a href={path('docs', {slug: `modules/${name}`})}>{name}</a>

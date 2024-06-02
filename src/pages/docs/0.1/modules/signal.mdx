@@ -13,13 +13,10 @@ import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 <ImportMapDependencies module="signal" />
 
 ```js
-import Signalize from 'signalizejs';
-
 const {
 	signal,
-	Signal,
-	observeSignals
-} = new Signalize();
+	Signal
+} = await signalize.resolve('signal');
 ```
 
 ## API
@@ -32,13 +29,13 @@ Signals in a nutshell:
 
 Let's start with how signal can be used:
 ```js
-const { signal } = await signalize.resolve('signal');
-
 // 1. Crating a signal
 const number = signal(0);
+
 // 2. Setting a new value: from 0 => 1;
 // You need to pass a value
 number(1)
+
 // 3. Getting signal value
 // You just call the method
 const actualNumber = number(); // => 1

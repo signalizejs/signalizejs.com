@@ -32,11 +32,14 @@ In the simplified example bellow you can see Signalize initialization. Check it 
 <script>
 	// 2. Import the Signalize core
 	import Signalize from 'signalizejs';
+
 	// 3. Create a new Signalize instance
 	const signalize = new Signalize();
+
 	// 4.1 Resolve the Event module, because we need the "on" function
 	// 4.2 The Event module will automatically import the Mutation Observer module
 	const { on } = await signalize.resolve('event');
+
 	// 5. Use the on function
 	on('dom:ready', () => alert('Hello World!'));
 </script>
@@ -209,9 +212,48 @@ const {
 const { /* ... */ } = await window.signalize.resolve(/* ... */);
 ```
 
+## Typescript & JSDOC Support
+Because signalize `resolve` function can return literally anything, you need to set the return types dynamically based on what you import.
+
+If you use bundlers, like Vite, Webpack or Rollup use `import type` instead of `import` because it would cause the the Signalize to be imported into multiple bunles.
+
+### Typescript
+If you use typescript, remember to always `import type` not the library itself (unless you need to load a module during the initialization as shown above).
+
+```ts
+import type { signalize } from 'global.js';
+import type { on } from 'signalizejs/event';
+
+const { on } = await signalize.resolve<{
+	on: on
+}>('event');
+```
+
+### JSDOC
+```js
+/**
+ * @type {{
+ * on: import('signalizejs/event').on
+ * }}
+ */
+const { on } = await window.signalize.resolve('event');
+```
+
+In order to get the correct typehints for the global `signalize` variable in JSDOC, you need to define `global.d.ts` so the javascript can get correct types.
+
+```ts
+import type { Signalize } from "./packages/signalizejs/src/Signalize";
+
+declare global {
+	interface Window {
+		signalize: Signalize
+	}
+}
+```
+
 ## List of all Official Signalize Modules
 Bellow is a list of all modules signalizejs provides.
-
+ s
 - ajax
 - bind
 - component
@@ -270,3 +312,29 @@ Preload link elements must be placed before the first import map in the `head` e
 ```html
 <link rel="modulepreload" href="public module path">
 ```
+
+## Why ES modules, Import Maps and Signalize loader?
+Let's start with an example:
+- You have a website, that has a layout, in which you have scripts used on the entire website.
+- You also have a page, where you have scripts only for that particular page.
+- When user loads the page, the layout and page scripts will be loaded.
+
+The above scripts loading works fine until you encounter the following problems:
+- What if our page has a component, its rendering depends on conditions. That component also loads scripts. We can load that script conditionally but what if there is another place on the same page in some nested component, that needs the same scripts? If such component loads its own bundle with the same dependency, we can end up with duplicated javascript on the same page. We can add the script directly into the page script but this brings new problems.
+- If we have SPA architecture on our website, we can get duplicated scripts as well with the above approach.
+- Also, what if we have some asynchronously lazyloaded chunk, that needs to have it's own dependencies? Again, the above solution is useless and things start to get complicated.
+
+Problems mentioned above can be easily solved with import maps and ES modules:
+- ES modules are imported only once and cached, you don't have to bundle them
+- The dependencies problem will solve itself automatically because of imports+import map.
+- For asynchronous loading, you can use dynamic [import()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import) function and top level awaits.
+
+Now, if you decide to use ES modules and lazy load them, you will have to manually compose the entire initialization of the dependencies.
+- This is solved automatically by Signalize loader.
+- It automatically chains dependencies and initializes them with correct config.
+
+### Trade offs
+[ES modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) and [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) have good support in browsers, however nothing is without trade-offs:
+- In case, when you need to load a lot (like a hundred for example) uncached modules, it may be a bit slower than one big bundle.
+- It is caused by the requests amount (and also, your users often doesn't have that performant devices like devs)
+- You may want to test this, if this is your case

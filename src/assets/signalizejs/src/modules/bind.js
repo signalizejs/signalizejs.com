@@ -9,7 +9,7 @@
  * @param {HTMLElement} element
  * @param {Record<string, AttributeConfig|import('./signal.js').Signal>} attributes
  * @returns {void}
- */
+*/
 
 /** @type {import('../Signalize').SignalizeModule} */
 export default async ({ resolve }) => {
@@ -38,7 +38,9 @@ export default async ({ resolve }) => {
 		html: 'innerHTML'
 	};
 
-	/** @type {bind} */
+	/**
+	 * @type {bind}
+	 */
 	const bind = (element, attributes) => {
 		let componentScope = null;
 		const tagName = element.tagName.toLowerCase();

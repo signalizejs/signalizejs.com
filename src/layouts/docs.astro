@@ -1,6 +1,6 @@
 ---
 import MainLayout from '@layouts/main.astro';
-import { apiLinks, discordLink, githubLink, modulesSections, twitterLink } from "@config/config.mjs";
+import { discordLink, githubLink, modulesSections, twitterLink } from "@config/config.mjs";
 import { path } from '@services/router.mjs';
 import { Image } from 'astro:assets';
 
@@ -81,7 +81,7 @@ if (sections.length === 0) {
 				<a href={path('homepage')} aria-label="Homepage" class="display:flex">
 					<Image src="/images/logo-light.svg" alt="" width="200" height="75" class="object-fit:cover">
 				</a>
-
+				<img loading="lazy" width="80" height="20" alt="NPM Version" src="https://img.shields.io/npm/v/signalizejs?style=flat-square&color=%23ff243e">
 				<div class="margin:12px_0 [a]{font-size:24px;color:inherit;text-decoration:none;hover:color:$red} display:flex gap:8px">
 					<a href={githubLink} aria-label="Github" target="_blank" rel="noopener" class="with-icon">
 						<i class="icon-github"></i>
