@@ -7,16 +7,13 @@ description: 'Javascript evaluator without unsafe eval.'
 
 import Editor from '@codeEditor';
 import { cdnUrl } from '@config/config';
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 ## Installation
-The `evaluate` plugin comes with the Signalize default installation. You just need to import it.
-```js
-import Signalize from 'signalizejs';
-import evaluator from 'signalizejs/evaluate';
+<ImportMapDependencies module="evaluate" />
 
-const { evaluate } = new Signalize({
-	plugins: [ evaluator() ]
-});
+```js
+const { evaluate } = await signalize.resolve('evaluate');
 ```
 
 ## API
@@ -44,11 +41,23 @@ Simply put, if it doesn't work in the Evaluator, move it directly into the JS an
 Evaluate function parses string and executes it.
 It expects a function string and context (data). It cannot access anything, that wasn't passes through the context.
 
+Evaluate internally detects used signals and returns them.
+
 ```js
 const { evaluate } = signalize;
 
-evaluate('a + b', {
-	a: 1,
-	b: 2
-})
+const {
+	// Evaluated string
+	result,
+	// An array of signals whose values ware used during compilation
+	detectedSignals
+} = evaluate(
+	// String for evaluation
+	'a + b',
+	// Data
+	{
+		a: 1,
+		b: 2
+	}
+);
 ```

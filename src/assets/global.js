@@ -7,7 +7,7 @@ import mutationObserverModule from 'signalizejs/mutation-observer';
 import scopeModule from 'signalizejs/scope';
 import bindModule from 'signalizejs/bind';
 import eventModule from 'signalizejs/event';
-import fetchModule from 'signalizejs/fetch';
+import ajaxModule from 'signalizejs/ajax';
 import snippetsModule from 'signalizejs/snippets';
 import spaModule from 'signalizejs/spa';
 import signalModule from 'signalizejs/signal';
@@ -26,7 +26,7 @@ export const $ = new Signalize({
 		['evaluate', evaluateModule],
 		['traverse-dom', traverserDomModule],
 		['directives', directivesModule],
-		['fetch', fetchModule],
+		['ajax', ajaxModule],
 		['snippets', snippetsModule],
 		['spa', spaModule],
 		['component', componentModule]

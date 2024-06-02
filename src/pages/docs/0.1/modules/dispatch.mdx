@@ -4,11 +4,10 @@ layout: '@docsLayout'
 title: 'signalizejs/event'
 description: 'Dispatch global and local events easily.'
 ---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 ## Installation
-Add a public path for `signalizejs/event` into your import map.
-
-Then you can resolve it.
+<ImportMapDependencies module="dispatch" />
 
 ```js
 const { dispatch } = await signalize.resolve('event');

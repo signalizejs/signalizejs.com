@@ -7,19 +7,15 @@ description: 'Redraw the current DOM elements based on string input.'
 
 import Editor from '@codeEditor';
 import { cdnUrl } from '@config/config';
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
-The redraw method provided by Snippets plugin can be used to manually redraw snippets in the actual DOM. It can redraw multiple snippets at once.
+The redraw method provided by Snippets module can be used to manually redraw snippets in the actual DOM. It can redraw multiple snippets at once.
 
 ## Installation
-The `snippets` plugin comes with the Signalize default installation. You just need to import it.
+<ImportMapDependencies module="snippets" />
 
 ```js
-import Signalize from 'signalizejs';
-import snippetsPlugin from 'signalizejs/snippets';
-
-const { redrawSnippet } = new Signalize({
-	plugins: [ snippeetsPlugin() ]
-});
+const { redrawSnippet } = await signalize.resolve('snippets');
 ```
 
 ## API
@@ -80,8 +76,17 @@ The default snippet action is replace. But you can also append/prepend children.
 	- `replace`: This is going to replace the actuall snippet with a new one.
 	- `append-children`: This is going to take children of a new snippet and append them on the end of the actual snippet.
 	- `prepend-children`: This is going to take children of a new snippet and add them at the start of the actual snippet.
+	- `replace-children`: This is going to replace all inner children.
+	- `sync-attributes`: This will sync all attributes on the existing snippet with the new snippet.
+
+The `snippet-action` can contain several actions:
+```html
+<div snippet-action="sync-attributes replace-children"></div>
+```
 
 ## Dispatched Events
 You can listen to the following events through the [on](/docs/0.1/modules/event#on) function:
 - `snippets:redraw:start`: This event is triggered when the synchronization of created DOM from data argument starts.
 - `snippets:redraw:end`: This event is triggered when the synchronization ends.
+- `snippets:redraw:transition:start`: This event is triggered when browsr supports view transitions and the transitions starts.
+- `snippets:redraw:transition:end`: This event is triggered when the view transition ends.

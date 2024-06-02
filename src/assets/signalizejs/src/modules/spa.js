@@ -66,7 +66,7 @@
 
 /** @type {import('../Signalize').SignalizeModule} */
 export default async ({ params, resolve, root }, options) => {
-	const { dispatch, ajax, redrawSnippet, on, customEventListener, customEvent } = await resolve('event', 'fetch', 'snippets');
+	const { dispatch, ajax, redrawSnippet, on, customEventListener, customEvent } = await resolve('event', 'ajax', 'snippets');
 	const spaAttribute = `${params.attributePrefix}spa`;
 	const spaUrlAttribute = `${spaAttribute}${params.attributeSeparator}url`;
 	const spaIgnoreAttribute = `${spaAttribute}${params.attributeSeparator}ignore`;
@@ -260,7 +260,7 @@ export default async ({ params, resolve, root }, options) => {
 			if (!navigationScrollStopped) {
 				if (urlHash !== null && urlHash.trim().length > 2) {
 					urlHash = urlHash.slice(1);
-					const element = root.querySelector(`#${urlHash}`);
+					const element = root.querySelector(`[id="${urlHash}"]`);
 					if (element !== null) {
 						element.scrollIntoView({
 							block: 'start',
@@ -330,7 +330,7 @@ export default async ({ params, resolve, root }, options) => {
 		const element = event.target.closest('a');
 		const targetAttribute = element.getAttribute('target');
 
-		if (element.hasAttribute(spaIgnoreAttribute) || ![null, '_self'].includes(targetAttribute) || element.hasAttribute('download')) {
+		if (element.hasAttribute(spaIgnoreAttribute) || element.hasAttribute('download') || ![null, '_self'].includes(targetAttribute)) {
 			return;
 		}
 
@@ -350,13 +350,17 @@ export default async ({ params, resolve, root }, options) => {
 		}
 
 		const hrefUrl = createUrl(`${window.location.origin}${url}`);
-		hrefUrl.hash = '';
 		let currentLocation = getCurrentLocation();
-		currentLocation.hash = '';
 
 		if (hrefUrl === null || hrefUrl.toString() === currentLocation.toString()) {
 			event.preventDefault();
 			return;
+		} else {
+			hrefUrl.hash = '';
+			currentLocation.hash = '';
+			if (hrefUrl.toString() === currentLocation.toString()) {
+				return;
+			}
 		}
 
 		const clickCanceled = dispatch('spa:click', { element }, { cancelable: true }) === false;

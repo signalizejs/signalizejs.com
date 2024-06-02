@@ -26,7 +26,7 @@
 
 /** @type {import('../Signalize').SignalizeModule} */
 export default async ({ resolve}, options) => {
-	const { ajax, dispatch } = await resolve('fetch', 'event');
+	const { ajax, dispatch } = await resolve('ajax', 'event');
 
 	/** @type {Levels[]} */
 	const enabledLevels = options?.levels ?? ['error'];

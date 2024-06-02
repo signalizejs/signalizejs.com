@@ -4,6 +4,7 @@ layout: '@docsLayout'
 title: 'signalizejs/ajax'
 description: 'Wrapper around native javascript fetch.'
 ---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 It does the following:
 - Improves error handling
@@ -12,11 +13,7 @@ It does the following:
 - It ads `X-Requested-With` header to the request, so you can detect if the request is ajax or not on the server
 
 ## Installation
-
-Required import map keys:
-- `signalizejs/mutation-observer`
-- `signalizejs/event`
-- `signalizejs/ajax`
+<ImportMapDependencies module="ajax" />
 
 ```js
 const { ajax } = await signalize.resolve('ajax');

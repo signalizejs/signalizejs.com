@@ -59,7 +59,7 @@ if (hasDefaultCode || hasDefaultSlot) {
 		components: ['code-mirror'],
 		setup({ $refs, $props, $el }) {
 			const { code } = $props;
-			console.log($refs.codeMirror);
+
 			on('component:setuped', $refs.codeMirror, ({ detail }) => {
 				detail.code.watch(({ newValue }) => code(newValue))
 			});
@@ -72,7 +72,6 @@ if (hasDefaultCode || hasDefaultSlot) {
 				);
 				editorPreview.contentWindow.location.reload(true);
 			});
-			console.log('ready');
 
 			return {
 				code

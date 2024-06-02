@@ -7,10 +7,10 @@ description: 'Create reusable web components with minimum effort.'
 
 import Editor from '@codeEditor';
 import { cdnUrl } from '@config/config';
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 ## Installation
-
-Required import map keys: `signalizejs/component`
+<ImportMapDependencies module="component" />
 
 ```js
 const { component } = await signalize.resolve('component');
@@ -91,7 +91,7 @@ const { component } = new Signalize();
 // This defined scope will be inited twice
 // for each matched element
 component('my-form', {
-	setup({ $el, $refs, cleanup  }) {
+	setup({ $refs, cleanup  }) {
 		$refs.form.onsubmit = () => {
 			alert($refs.text.value);
 		}

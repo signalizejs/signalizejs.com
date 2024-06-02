@@ -7,7 +7,7 @@ import HpPrerenderedState from '@components/HpPrerenderedState.astro';
 import HpSignals from '@components/HpSignals.astro';
 import HpSnippets from '@components/HpSnippets.astro';
 import HpSPA from '@components/HpSPA.astro';
-import { discordLink, githubLink, twitterLink, modules } from '@config/config.mjs';
+import { discordLink, githubLink, twitterLink, modulesSections } from '@config/config.mjs';
 import MainLayout from '@layouts/main.astro';
 import { Image } from 'astro:assets';
 import { path } from 'src/services/router.mjs';
@@ -40,7 +40,7 @@ import { path } from 'src/services/router.mjs';
 			Signalize functions are split into small modules and you decide what to import and when.
 		</p>
 		<div class="display:grid gap:24px gap grid-template-columns:repeat(auto-fill,minmax(350px,1fr))">
-			{modules.map(({ name, color, icon, description, api }) => (
+			{modulesSections.map(({ name, color, icon, description, modules }) => (
 				<div class="text-decoration:none color:$grey padding:16px border:1px_solid_$border">
 					<div class="gap:16px display:inline-flex">
 						<div class="flex-shrink:0 width:50px height:50px border-radius:4px background-image:linear-gradient(rgba(255,255,255,.2),rgba(255,255,255,0)) display:flex align-items:center justify-content:center" style={`background-color:${color};`}>
@@ -50,10 +50,12 @@ import { path } from 'src/services/router.mjs';
 							<h4 class="margin:0_0_4px_0">{name}</h4>
 							<div>{description}</div>
 							<div class="margin-top:8px display:flex flex-wrap:wrap gap:4px">
-								{api.map(({ label, slug }) => (
-									<a href={path('docs', {slug })} class="button padding:4px!important font-size:12px!important">
-										{label}
-									</a>
+								{modules.map(({ name, api }) => (
+									api.map(({ label }) => (
+										<a href={path('docs', {slug: `modules/${name.toLowerCase()}` })} class="button padding:4px!important font-size:12px!important">
+											{label}
+										</a>
+									))
 								))}
 							</div>
 						</div>
@@ -151,7 +153,7 @@ import { path } from 'src/services/router.mjs';
 					Signalize is a client-side, module based, JavaScript framework. It is inspired by frameworks such as Vue.js (Directives), Svelte (Data Binding), Angular & Solid (Signals), Nette (Snippets), Hotwired Turbo (SPA) and jQuery (Utilities).
 				</p>
 				<p>
-					By default, Signalize contains only ESM modules loader. All additional functionality is split into modules and you decide, what to import and when. This makes the framework small and flexible.
+					By default, Signalize contains only ES modules loader. All additional functionality is split into modules and you decide, what to import and when. This makes the framework small and flexible.
 				</p>
 				<p>
 					Signalize is as an alternative for situations where you need similar features to those of modern frameworks, prefer something small and simple, don't want to install a ton of random packages, or have a backend written in a language other than JavaScript.

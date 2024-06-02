@@ -4,14 +4,12 @@ layout: '@docsLayout'
 title: 'signalizejs/off'
 description: 'Get element coordinates.'
 ---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 Off plugin is included within the Signalize core, so you don't have to import it.
 
 ## Installation
-
-Add a public path for `signalizejs/offset` into your import map.
-
-Then you can resolve it.
+<ImportMapDependencies module="offset" />
 
 ```js
 const { offset } = await signalize.resolve('offset');
@@ -22,5 +20,10 @@ const { offset } = await signalize.resolve('offset');
 ### offset
 Get element coordinates.
 ```js
-const { top, left, right, bottom } = offset(document.querySelector('#element'));
+const {
+	top,
+	left,
+	right,
+	bottom
+} = offset(document.querySelector('#element'));
 ```

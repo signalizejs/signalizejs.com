@@ -4,12 +4,10 @@ layout: '@docsLayout'
 title: 'signalizejs/height'
 description: 'Get element computed height.'
 ---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 ## Installation
-
-Add a public path for `signalizejs/height` into your import map.
-
-Then you can resolve it.
+<ImportMapDependencies module="height" />
 
 ```js
 const { height } = await signalize.resolve('height');

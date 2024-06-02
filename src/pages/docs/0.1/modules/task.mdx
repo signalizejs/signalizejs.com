@@ -4,6 +4,7 @@ layout: '@docsLayout'
 title: 'signalizejs/task'
 description: 'Schedule task to be executed only if there is no pending user input. Serves for breaking long task to small ones.'
 ---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 The provided `task` function can be used to break long running task into multiple small ones which can improve INP.
 The task schedules a queue of passed tasks and executes them in the order they were passed but doesn't execute them, if there is any `pending input` from the user.
@@ -16,21 +17,25 @@ Resources:
 - [Optimize long tasks](https://web.dev/optimize-long-tasks)
 
 ## Installation
-The `tash` plugin comes with the Signalize default installation. You just need to import it.
+<ImportMapDependencies module="task" />
 
 ```js
-import Signalize from 'signalizejs';
-import taskPlugin from 'signalizejs/task';
-
-const { task } = new Signalize({
-	plugins: [ taskPlugin() ]
-});
+const { task } = await signalize.resolve('task');
 ```
 
 ## Api
 
 ### task
-Call a function provided as argument only if there is no user input
+Call a function provided as argument only if there is no user input.
+
+Be aware, that the task delays the execution of each function passed as argument.
+Therefore, it is not good to wrap perfomance critical function calls into the task.
+It should be used for non critical tasks like:
+- Loading the current amount of favorite products into several processes
+- Breaking image gallery openning process
+- Sending things on background to server
+- Rendering hidden template in dropdown and such
+
 ```js
 const { task } = signalize
 

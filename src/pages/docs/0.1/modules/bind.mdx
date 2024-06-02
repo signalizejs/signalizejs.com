@@ -7,8 +7,10 @@ description: 'Bind signals and values to element attributes and properties.'
 
 import Editor from '@codeEditor';
 import { cdnUrl } from '@config/config';
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 ## Installation
+<ImportMapDependencies module="bind" />
 
 ```js
 const { bind } = await signalize.resolve('bind');

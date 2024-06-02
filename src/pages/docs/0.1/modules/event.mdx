@@ -1,12 +1,14 @@
 ---
 order: 2
 layout: '@docsLayout'
-title: 'signalizejs/on'
+title: 'signalizejs/event'
 description: 'Add event listener to an element or listen to global events.'
 ---
 
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
 ## Installation
-The `on` module is in the Signalize core.
+<ImportMapDependencies module="event" />
 
 ```js
 import Signalize from 'signalizejs';
@@ -93,4 +95,24 @@ on('clickOutside', element, () => {
 	// This will be triggered only once and automatically removed
 }, { once: true })
 
+```
+
+### customEvent
+Creates a custom event you can later dispatch.
+
+Internaly uses native [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent).
+
+```js
+const myEvent = customEvent(
+	'my-event',
+	// Optional
+	{ /* data*/ },
+	// Native custom event options - example with defaults
+	{
+		cancellable: false,
+		bubbles: false
+	}
+);
+
+document.dispatchEvent(myEvent);
 ```

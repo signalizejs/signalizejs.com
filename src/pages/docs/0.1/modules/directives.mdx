@@ -2,22 +2,14 @@
 order: 2
 layout: '@docsLayout'
 title: 'signalizejs/directives'
-description: 'Attribute Directives inspired by Vue, Svelte and Nette.'
+description: 'Attribute Directives inspired by Vue and Svelte.'
 ---
-
-Directives use [save javascript evaluator](/plugins/signalizejs-evaluator) (read about it for more info about supported syntax) to evaluate string passed into the attribute value and executes it.
-Directives are synchronous.
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 Directives can be used only within [web components](/plugins/signalizejs-components) and are initialized on dom ready and after component is constructed.
 
 ## Installation
-
-Add a public path to the following dependencies into your importmap:
-- `signalizejs/evaluate`
-- `signalizejs/traverse-dom`
-- `signalizejs/directives`
-
-Then you can resolve it.
+<ImportMapDependencies module="directives" />
 
 ```js
 const {
@@ -26,6 +18,12 @@ const {
 	processDirectives
  } = await signalize.resolve('directives');
 ```
+
+## Javascript Evaluation
+Directives use [javascript evaluator](/docs/0.1/modules/evaluate).
+- This evaluator is able to process only inline javascript.
+- There is no `unsafe eval` (eval, new Function).
+- It doesn't support full javascript syntax. Make sure to read about the supported syntax.
 
 ## API
 ### directive
@@ -127,7 +125,7 @@ Bind directive is used to bind attributes and properties to elements.
 ```
 
 #### interpolation
-Signalize doesn't support interpolation. Instead, bind `html` or `text`.
+Signalize doesn't support interpolation. Instead, use bind `html` or `text`.
 ```html
 <div :html=""></div>
 <div :text=""></div>

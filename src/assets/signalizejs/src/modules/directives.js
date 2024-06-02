@@ -328,10 +328,10 @@ export default async ($, pluginOptions) => {
 			const attributeName = isShorthand ? matches[3] : matches[1];
 			let trackedSignals = [];
 			const get = (trackSignals) => {
-				const { result, signalsToWatch } = evaluate(attributeValue, scope, trackSignals);
+				const { result, detectedSignals } = evaluate(attributeValue, scope, trackSignals);
 
 				if (trackSignals) {
-					trackedSignals = signalsToWatch;
+					trackedSignals = detectedSignals;
 				}
 
 				return result;

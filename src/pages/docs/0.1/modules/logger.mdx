@@ -4,25 +4,34 @@ layout: '@docsLayout'
 title: 'signalizejs/logger'
 description: 'Wrapper around console (log, info, warning, error) for sending JS logs info to server.'
 ---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 ## Installation
-The `logger` plugin comes with the Signalize default installation. You just need to import it.
-
-- After the plugin setup, logger will automatically start sending requests to the configured endpoint.
-- The default level that is send is `error` only.
-- You can change it by passing `levels` during the initialization.
+<ImportMapDependencies module="logger" />
 
 ```js
-import Signalize from 'signalizejs';
-import loggerPlugin from 'signalizejs/width';
+import loggerModule from 'signalizejs/logger';
 
-new Signalize({
-	plugins: [
-		loggerPlugin({
-			url: 'https://example.com/api/log-client-error',
-			// Optional
-			levels: ['log', 'warning', 'error']
-		})
+const signalize = new Signalize({
+	modules: [
+		[
+			'logger',
+			loggerModule,
+			{
+				// Url where the logs will be send
+				url: 'https://example.com/api/log-client-error',
+				// Optional
+				// What type of info should be send
+				// Default is "error" only
+				levels: ['log', 'warning', 'error']
+			}
+		]
 	]
-});
+})
 ```
+
+## Usage
+The logger plugin starts automatically and doesn't have any API:
+- After the module setup, logger will automatically start sending requests to the configured endpoint.
+- The default level that is send is `error` only.
+- You can change it by passing `levels` during the initialization.

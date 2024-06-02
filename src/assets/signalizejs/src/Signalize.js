@@ -57,7 +57,7 @@ export class Signalize {
 		'evaluate', 'event',
 		'ajax',
 		'height', 'hyperscript',
-		'intersection-observer', 'is-visible',
+		'intersection-observer', 'visibility',
 		'mutation-observer',
 		'scope', 'signal', 'snippets', 'spa',
 		'task',

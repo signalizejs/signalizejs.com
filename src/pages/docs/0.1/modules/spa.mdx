@@ -4,32 +4,23 @@ layout: '@docsLayout'
 title: 'signalizejs/spa'
 description: 'Turn any website to SPA.'
 ---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 ## Installation
-The `spa` plugin comes with the Signalize default installation. You just need to import it.
+<ImportMapDependencies module="spa" />
 
 ```js
-import Signalize from 'signalizejs';
-import spaPlugin from 'signalizejs/spa';
-
-const { visit } = new Signalize({
-	plugins: [ spaPlugin() ]
-});
+const { navigate } = await signalize.resolve('spa');
 ```
-
-## The term "Visit"
-The term `visit` in the case of Signalize is the entire process of clicking on a link, sending an ajax request to retrieve data of the target page, changing url state, synchronizing snippets from the request response and scrolling element into the view if a hashtag was found in the url.
 
 ## API
 
-### visit
+### navigate
 
 The visit method can be used to manually trigger visit of some page:
 
 ```js
-const { visit } = signalize;
-
-const result = await visit({
+const result = await navigate({
 	url: 'string',
 	stateAction: 'push' | 'replace' | undefined
 });

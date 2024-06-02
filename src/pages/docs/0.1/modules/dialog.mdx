@@ -7,13 +7,10 @@ description: 'Wrapper around native javascript dialog functionality.'
 
 import Editor from '@codeEditor';
 import { cdnUrl } from '@config/config';
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 ## Installation
-
-Required import map keys:
-- `signalizejs/mutation-observer`
-- `signalizejs/event`
-- `signalizejs/dialog`
+<ImportMapDependencies module="dialog" />
 
 ```js
 const {

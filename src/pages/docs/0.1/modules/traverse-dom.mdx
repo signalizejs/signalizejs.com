@@ -5,12 +5,13 @@ title: 'signalizejs/traverse-dom'
 description: 'Traverse DOM nodes asynchronously.'
 ---
 
-## Installation
-The `task` module is in the Signalize core.
-```js
-import Signalize from 'signalizejs';
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
-const { traverseDom } = new Signalize();
+## Installation
+<ImportMapDependencies module="traverse-dom" />
+
+```js
+const { traverseDom } = await signalize.resolve('traverse-dom');
 ```
 
 ## traverseDom

@@ -4,14 +4,12 @@ layout: '@docsLayout'
 title: 'signalizejs/mutation-observer'
 description: 'Watch for hanges being made on the DOM tree of the selected element.'
 ---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 Signalize core starts mutation observer automatically for each instance and watches the configured root for `childList` and `subtree` changes.
 
 ## Installation
-
-Add a public path for `signalizejs/mutation-observer` into your import map.
-
-Then you can resolve it.
+<ImportMapDependencies module="mutation-observer" />
 
 ```js
 const {
