@@ -4,7 +4,7 @@ import HpDialog from '@components/HpDialog.astro';
 import HpDirectives from '@components/HpDirectives.astro';
 import HpHyperscript from '@components/HpHyperscript.astro';
 import HpPrerenderedState from '@components/HpPrerenderedState.astro';
-import HpSignals from '@components/HpSignals.astro';
+import HpSignals from '@components/HpReactivity.astro';
 import HpSnippets from '@components/HpSnippets.astro';
 import HpSPA from '@components/HpSPA.astro';
 import { modulesSections } from '@config/config.mjs';
@@ -28,6 +28,16 @@ import { path } from 'src/services/router.mjs';
 		</div>
 		<div class="display:flex justify-content:center gap:24px margin-bottom:24px text-transform:uppercase">
 			<a href={path('docs')} class="button button--solid md:{font-size:18px;padding:12px;line-height:1}">Get Started</a>
+		</div>
+	</section>
+
+	<section id="modules" class="container margin-bottom:180px">
+		<h2 class="font-size:48px">Installation guides</h2>
+		<p class="max-width:800px font-size:18px">
+			Signalize functions are split into small modules and you decide what to import and when.
+		</p>
+		<div>
+			<a href=""></a>
 		</div>
 	</section>
 
@@ -74,7 +84,7 @@ import { path } from 'src/services/router.mjs';
 				display:flex flex-direction:row gap:12px
 				tolg:{flex-wrap:wrap;justify-content:center;margin-bottom:24px}
 				lg:{flex-direction:column;gap:24px}
-				[a]{color:$text;font-size:20px;md:font-size:32px;font-weight:bold;transition:color_.3s}
+				[a]{color:inherit;font-size:20px;md:font-size:32px;font-weight:bold;transition:color_.3s}
 				[a:hover,a.s-active]{color:$red}
 			">
 				<a role="button" data-tab-button="signals" class="s-active">Signals & Reactivity</a>
@@ -95,6 +105,12 @@ import { path } from 'src/services/router.mjs';
 						Signals are defined as a class, so you can easily extend them for additional functionality.<br>
 					</p>
 				</div>
+				<div data-tab="components">
+					<HpComponents />
+					<p>
+						<a href="/modules/signalizejs-component">Component plugin</a> provide an easy way to define reusable web component.
+					</p>
+				</div>
 				<div data-tab="directives">
 					<HpDirectives />
 					<p>
@@ -105,12 +121,6 @@ import { path } from 'src/services/router.mjs';
 					<HpPrerenderedState />
 					<p>
 						<a href="/modules/signalizejs-signal">Directives</a> such as <code>for</code> and <code>if</code> can work with prerendered state from the server. If these directives detects <code>prerendered</code> section after them, they will render only after some signal changes instead of on init. This way you don't have to add a <code>loader</code> or hide elements that were not rendered yet.
-					</p>
-				</div>
-				<div data-tab="components">
-					<HpComponents />
-					<p>
-						<a href="/modules/signalizejs-component">Component plugin</a> provide an easy way to define reusable web component.
 					</p>
 				</div>
 				<div data-tab="spa">
@@ -177,5 +187,24 @@ import { path } from 'src/services/router.mjs';
 			</div>
 		</div>
 	</section>
+	<script>
+		import { $ } from '@assets/global';
+		const { component, signal, bind, on } = await $.resolve('component', 'signal', 'bind', 'event');
+
+		component('playground-tabs', {
+			setup() {
+				const selectedTab = signal('signals');
+
+				document.querySelectorAll('[data-tab-button]').forEach((tabButton) => {
+					on('click', tabButton, () => selectedTab(tabButton.dataset.tabButton));
+					bind(tabButton, { class: [selectedTab, () => tabButton.dataset.tabButton === selectedTab() ? 's-active' : '']})
+				});
+
+				document.querySelectorAll('[data-tab]').forEach((tabButton) => {
+					bind(tabButton, { class: [selectedTab, () => tabButton.dataset.tab === selectedTab() ? 's-active' : '']})
+				});
+			}
+		});
+	</script>
 
 </MainLayout>

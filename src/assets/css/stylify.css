@@ -5,8 +5,6 @@
 	--border: #dddddd;
 	--background: #fff;
 	--darken-red-20: #eb102a;
-	--darken-background-10: #f5f5f5;
-	--darken-background-20: #ebebeb;
 	--colorToRgb-red-0-10: rgba(255,36,62,0.1);
 	--darken-red-50: #cd000c;
 	--lighten-red-20: #ff3852;
@@ -18,9 +16,6 @@
 .button__icon,
 .align-items\:center{
 	align-items: center
-}
-.align-items\:flex-end{
-	align-items: flex-end
 }
 table thead{
 	-webkit-backdrop-filter: blur(12px);
@@ -49,12 +44,6 @@ hr,
 table pre,
 table  code{
 	background: #ddd
-}
-.background\:darken\(\$background\,10\){
-	background: var(--darken-background-10)
-}
-.background\:darken\(\$background\,20\){
-	background: var(--darken-background-20)
 }
 .background\:rgba\(0\,0\,0\,0\.5\){
 	background: rgba(0,0,0,0.5)
@@ -147,9 +136,6 @@ table tr:last-of-type td{
 .border-radius\:8px{
 	border-radius: 8px
 }
-.border-radius\:50px{
-	border-radius: 50px
-}
 .border-radius\:2px{
 	border-radius: 2px
 }
@@ -203,16 +189,13 @@ article  h5:hover a,
 article  h6:hover a{
 	color: red
 }
-.\[a\]\{color\:\$text\;font-size\:20px\;md\:font-size\:32px\;font-weight\:bold\;transition\:color_\.3s\} a,
-.color\:\$text{
-	color: var(--text)
-}
 .color\:\#f1f1f1{
 	color: #f1f1f1
 }
 .\[a\]\{font-size\:24px\;color\:inherit\;text-decoration\:none\;hover\:color\:\$red\} a:hover,
 .\[a\]\{color\:\$grey\;hover\:color\:\$red\;text-decoration\:none\} a:hover,
 .\[a\]\{color\:\#000\;text-decoration\:none\;font-size\:32px\;hover\:color\:\$red\} a:hover,
+.\[a\]\{text-decoration\:none\;color\:\$grey\;hover\:color\:\$red\} a:hover,
 .hover\:color\:\$red:hover{
 	color: var(--red)
 }
@@ -221,17 +204,15 @@ article  h6:hover a{
 }
 .\[a\]\{font-size\:24px\;color\:inherit\;text-decoration\:none\;hover\:color\:\$red\} a,
 .\[a\]\{margin-top\:12px\;padding-left\:12px\;color\:inherit\;transition\:transform_\.3s\;text-decoration\:none\;hover\:transform\:translateX\(8px\)\} a,
+.\[a\]\{color\:inherit\;font-size\:20px\;md\:font-size\:32px\;font-weight\:bold\;transition\:color_\.3s\} a,
 .\[a\]\{font-size\:24px\;text-decoration\:none\;color\:inherit\} a,
 .color\:inherit{
 	color: inherit
 }
 .\[a\]\{color\:\$grey\;hover\:color\:\$red\;text-decoration\:none\} a,
-.\[a\]\{text-decoration\:none\;color\:\$grey\;hover\:color\:\$primary\} a,
+.\[a\]\{text-decoration\:none\;color\:\$grey\;hover\:color\:\$red\} a,
 .color\:\$grey{
 	color: var(--grey)
-}
-.\[a\]\{text-decoration\:none\;color\:\$grey\;hover\:color\:\$primary\} a:hover{
-	color: var(--primary)
 }
 .\[a\]\{color\:\#000\;text-decoration\:none\;font-size\:32px\;hover\:color\:\$red\} a{
 	color: #000
@@ -269,16 +250,13 @@ details summary::-webkit-details-marker,
 .display\:flex{
 	display: flex
 }
-.display\:grid{
-	display: grid
-}
 .button,
 .button__icon,
 .display\:inline-flex{
 	display: inline-flex
 }
-.\[\&\[hidden\]\]\{display\:none\!important\}[hidden]{
-	display: none!important
+.display\:grid{
+	display: grid
 }
 article img{
 	filter: brightness(.8) contrast(1.2)
@@ -324,7 +302,7 @@ article h2{
 	line-height: 4.42rem
 }
 article h3,
-.\[a\]\{color\:\$text\;font-size\:20px\;md\:font-size\:32px\;font-weight\:bold\;transition\:color_\.3s\} a{
+.\[a\]\{color\:inherit\;font-size\:20px\;md\:font-size\:32px\;font-weight\:bold\;transition\:color_\.3s\} a{
 	font-size: 2rem;
 	line-height: 3.4rem
 }
@@ -333,6 +311,11 @@ article  note *,
 .font-size\:14px{
 	font-size: 1.4rem;
 	line-height: 2.38rem
+}
+.\[\[data-tab\]_p\]\{font-size\:18px\;md\:font-size\:20px\} [data-tab] p,
+.font-size\:18px{
+	font-size: 1.8rem;
+	line-height: 3.06rem
 }
 .\[a\]\{font-size\:24px\;color\:inherit\;text-decoration\:none\;hover\:color\:\$red\} a,
 .\[a\]\{font-size\:24px\} a,
@@ -355,11 +338,6 @@ article  note *,
 	font-size: 6.4rem;
 	line-height: 7.68rem
 }
-.\[\[data-tab\]_p\]\{font-size\:18px\;md\:font-size\:20px\} [data-tab] p,
-.font-size\:18px{
-	font-size: 1.8rem;
-	line-height: 3.06rem
-}
 .font-size\:12px\!important{
 	font-size: 12px!important
 }
@@ -370,11 +348,7 @@ article  note *,
 .font-size\:24px\;text-decoration\:none\;color\:inherit{
 	font-size: 24px;text-decoration:none;color:inherit
 }
-.font-size\:4px{
-	font-size: 0.4rem;
-	line-height: 0.68rem
-}
-.\[a\]\{color\:\$text\;font-size\:20px\;md\:font-size\:32px\;font-weight\:bold\;transition\:color_\.3s\} a,
+.\[a\]\{color\:inherit\;font-size\:20px\;md\:font-size\:32px\;font-weight\:bold\;transition\:color_\.3s\} a,
 .font-weight\:bold{
 	font-weight: bold
 }
@@ -394,17 +368,14 @@ article  note *,
 .gap\:12px{
 	gap: 12px
 }
+.gap\:4px{
+	gap: 4px
+}
 .gap\:64px{
 	gap: 64px
 }
 .gap\:16px{
 	gap: 16px
-}
-.gap\:4px{
-	gap: 4px
-}
-.grid-template-columns\:repeat\(auto-fit\,minmax\(250px\,1fr\)\){
-	grid-template-columns: repeat(auto-fit,minmax(250px,1fr))
 }
 .grid-template-columns\:1fr_2fr_1fr{
 	grid-template-columns: 1fr 2fr 1fr
@@ -422,14 +393,14 @@ hr{
 .height\:100\%{
 	height: 100%
 }
-.height\:50px{
-	height: 50px
-}
 .\[a\.s-active\:\:before\]\{width\:8px\;height\:8px\;background\:\#ff2c21\;border-radius\:4px\;position\:absolute\;top\:50\%\;transform\:translateY\(-50\%\)\;left\:0\} a.s-active::before{
 	height: 8px
 }
 .height\:4px{
 	height: 4px
+}
+.height\:50px{
+	height: 50px
 }
 .inset\:0{
 	inset: 0
@@ -438,9 +409,6 @@ hr{
 .button__icon,
 .justify-content\:center{
 	justify-content: center
-}
-.justify-content\:space-between{
-	justify-content: space-between
 }
 .justify-content\:flex-end{
 	justify-content: flex-end
@@ -495,9 +463,6 @@ article h4{
 }
 article h1{
 	margin-bottom: 8px
-}
-.margin-bottom\:4px{
-	margin-bottom: 4px
 }
 .margin-bottom\:48px{
 	margin-bottom: 48px
@@ -560,9 +525,6 @@ article h4,
 .margin-top\:24px{
 	margin-top: 24px
 }
-.margin-top\:8px{
-	margin-top: 8px
-}
 .\[a\]\{margin-top\:12px\;padding-left\:12px\;color\:inherit\;transition\:transform_\.3s\;text-decoration\:none\;hover\:transform\:translateX\(8px\)\} a,
 .margin-top\:12px{
 	margin-top: 12px
@@ -572,6 +534,9 @@ article h4,
 }
 .margin-top\:64px{
 	margin-top: 64px
+}
+.margin-top\:8px{
+	margin-top: 8px
 }
 .\[pre\]\{margin\:0\;border-radius\:8px\;height\:auto\;max-height\:70vh\;overflow\:auto\;width\:100\%\} pre{
 	max-height: 70vh
@@ -616,9 +581,6 @@ article img{
 }
 .\[\.cm-editor\]\{min-height\:100\%\;border-radius\:8px\} .cm-editor{
 	min-height: 100%
-}
-.min-height\:180px{
-	min-height: 180px
 }
 .min-height\:200px{
 	min-height: 200px
@@ -754,7 +716,7 @@ h6 a,
 .\[a\]\{margin-top\:12px\;padding-left\:12px\;color\:inherit\;transition\:transform_\.3s\;text-decoration\:none\;hover\:transform\:translateX\(8px\)\} a,
 .\[a\]\{color\:\$grey\;hover\:color\:\$red\;text-decoration\:none\} a,
 .\[a\]\{color\:\#000\;text-decoration\:none\;font-size\:32px\;hover\:color\:\$red\} a,
-.\[a\]\{text-decoration\:none\;color\:\$grey\;hover\:color\:\$primary\} a,
+.\[a\]\{text-decoration\:none\;color\:\$grey\;hover\:color\:\$red\} a,
 .button,
 .\[a\]\{font-size\:24px\;text-decoration\:none\;color\:inherit\} a,
 .text-decoration\:none{
@@ -792,7 +754,7 @@ table thead,
 .button{
 	transition: background 0.3s
 }
-.\[a\]\{color\:\$text\;font-size\:20px\;md\:font-size\:32px\;font-weight\:bold\;transition\:color_\.3s\} a{
+.\[a\]\{color\:inherit\;font-size\:20px\;md\:font-size\:32px\;font-weight\:bold\;transition\:color_\.3s\} a{
 	transition: color .3s
 }
 .button{
@@ -807,9 +769,6 @@ table thead,
 .width\:100\%{
 	width: 100%
 }
-.width\:50px{
-	width: 50px
-}
 .\[a\.s-active\:\:before\]\{width\:8px\;height\:8px\;background\:\#ff2c21\;border-radius\:4px\;position\:absolute\;top\:50\%\;transform\:translateY\(-50\%\)\;left\:0\} a.s-active::before{
 	width: 8px
 }
@@ -818,6 +777,9 @@ table thead,
 }
 .button__icon{
 	width: 20px
+}
+.width\:50px{
+	width: 50px
 }
 .width\:200px{
 	width: 200px
@@ -862,7 +824,7 @@ article h1{
 	font-size: 4.8rem;
 	line-height: 5.76rem
 }
-.\[a\]\{color\:\$text\;font-size\:20px\;md\:font-size\:32px\;font-weight\:bold\;transition\:color_\.3s\} a{
+.\[a\]\{color\:inherit\;font-size\:20px\;md\:font-size\:32px\;font-weight\:bold\;transition\:color_\.3s\} a{
 	font-size: 3.2rem;
 	line-height: 3.84rem
 }

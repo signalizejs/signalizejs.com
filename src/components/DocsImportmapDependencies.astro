@@ -1,9 +1,9 @@
 ---
-import { getModuleDependencies } from "@config/config.mjs";
+import { getModulesDependencies } from "@config/config.mjs";
 import { path } from "@services/router.mjs";
 const { module } = Astro.props;
 
-const dependencies = getModuleDependencies(module);
+const dependencies = getModulesDependencies(module);
 ---
 
 {dependencies.length !== 0 && (

@@ -72,8 +72,8 @@
 		"./intersection-observer": {
 			"import": "./src/modules/intersection-observer.js"
 		},
-		"./visibility": {
-			"import": "./src/modules/visibility.js"
+		"./is-visible": {
+			"import": "./src/modules/is-visible.js"
 		},
 		"./logger": {
 			"import": "./src/modules/logger.js"

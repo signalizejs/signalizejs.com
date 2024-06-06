@@ -52,7 +52,7 @@ const modules = {
 	},
 	dialog: {
 		name: 'dialog',
-		dependencies: ['event'],
+		dependencies: ['event', 'dom-ready'],
 		api: [
 			{ label: 'dialog', anchor: 'dialog' },
 			{ label: 'openDialog', anchor: 'opendialog' },
@@ -61,12 +61,22 @@ const modules = {
 	},
 	directives: {
 		name: 'directives',
-		dependencies: ['event', 'scope', 'signal', 'dash-case'],
+		dependencies: ['event', 'evaluate', 'traverse-dom', 'bind', 'scope', 'signal', 'dash-case'],
 		api: [
 			{ label: 'directive', anchor: 'directive' },
 			{ label: 'getPrerenderedNodes', anchor: 'getprerenderednodes' },
 			{ label: 'processDirectives', anchor: 'processdirectives' }
 		]
+	},
+	'directives/if': {
+		name: 'directives/if',
+		dependencies: ['directives'],
+		api: [],
+	},
+	'directives/for': {
+		name: 'directives/for',
+		dependencies: ['directives'],
+		api: [],
 	},
 	'dom-ready': {
 		name: 'dom-ready',
@@ -110,8 +120,8 @@ const modules = {
 			{ label: 'observeIntersection' }
 		]
 	},
-	'visibility': {
-		name: 'visibility',
+	'is-visible': {
+		name: 'is-visible',
 		api: [
 			{ label: 'isVisible' }
 		]
@@ -136,7 +146,7 @@ const modules = {
 	},
 	scope: {
 		name: 'scope',
-		dependencies: ['event', 'mutation-observer'],
+		dependencies: ['mutation-observer'],
 		api: [
 			{ label: 'scope' }
 		]
@@ -268,7 +278,7 @@ export const modulesSections = [
 			modules.snippets,
 			modules["traverse-dom"],
 			modules.viewport,
-			modules.visibility,
+			modules['is-visible'],
 			modules.width
 		]
 	},
@@ -285,29 +295,32 @@ export const apiLinks = Object
 	.flat()
 	.sort((a, b) => (a.label < b.label) ? -1 : (a.label > b.label) ? 1 : 0);
 
-export const getModuleDependencies = (moduleName) => {
+export const getModulesDependencies = (...moduleNames) => {
 	const dependencies = [];
-	const module = modules[moduleName];
 
-	if (module === undefined) {
-		throw new Error(`Module "${moduleName}" not found.`);
-	}
+	for (const moduleName of moduleNames) {
+		const module = modules[moduleName];
 
-	const mapDependencies = (moduleDependencies) => {
-		for (const dependency of moduleDependencies) {
-			if (!dependencies.includes(modules[dependency])) {
-				dependencies.push(modules[dependency]);
-			}
+		if (module === undefined) {
+			throw new Error(`Module "${moduleName}" not found.`);
+		}
 
-			const moduleDependencyDependencies = modules[dependency]?.dependencies ?? [];
-			if (moduleDependencyDependencies.length) {
-				mapDependencies(moduleDependencyDependencies);
+		const mapDependencies = (moduleDependencies) => {
+			for (const dependency of moduleDependencies) {
+				if (!dependencies.includes(modules[dependency])) {
+					dependencies.push(modules[dependency]);
+				}
+
+				const moduleDependencyDependencies = modules[dependency]?.dependencies ?? [];
+				if (moduleDependencyDependencies.length) {
+					mapDependencies(moduleDependencyDependencies);
+				}
 			}
 		}
-	}
 
-	if (Array.isArray(module.dependencies)) {
-		mapDependencies(module.dependencies);
+		if (Array.isArray(module.dependencies)) {
+			mapDependencies(module.dependencies);
+		}
 	}
 
 	return dependencies.sort((a, b) => (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0)

@@ -51,21 +51,16 @@ if (hasDefaultCode || hasDefaultSlot) {
 }
 ---
 <script>
-	import { $ } from "@assets/global";
-	const { component, on } = await $.resolve('component', 'event');
+	import { $ } from '@assets/global';
+	const { component } = await $.resolve('component', 'event');
 
 	component('code-editor', {
 		props: ['code'],
-		components: ['code-mirror'],
 		setup({ $refs, $props, $el }) {
 			const { code } = $props;
 
-			on('component:setuped', $refs.codeMirror, ({ detail }) => {
-				detail.code.watch(({ newValue }) => code(newValue))
-			});
-
 			code.watch(({newValue}) => {
-				const editorPreview = $refs.codeEditor-preview;
+				const editorPreview = $refs.codeEditorPreview;
 				editorPreview.setAttribute(
 					'srcdoc',
 					$el.dataset.srdocTemplate.replace('__CODE__', newValue)

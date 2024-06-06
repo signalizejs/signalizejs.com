@@ -197,7 +197,7 @@ export default async ({ root, resolve }) => {
 
 		const offCallback = () => {
 			return off(events, targetOrSelector, listener, options)
-		}
+		};
 
 		if (typeof targetOrSelector !== 'string') {
 			attachListeners(targetOrSelector);

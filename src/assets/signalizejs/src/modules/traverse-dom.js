@@ -9,7 +9,7 @@
  */
 
 /** @type {import('../Signalize').SignalizeModule} */
-export default async ($) => ({
+export default () => ({
 	/** @type {traverseDom} */
 	traverseDom: async (root, callback, nodeTypes = []) => {
 		/**

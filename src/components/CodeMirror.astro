@@ -17,7 +17,6 @@ const prepareCode = (code) => {
 
 <script>
 import { $ } from '@assets/global';
-
 const { component } = await $.resolve('component')
 
 component('code-mirror', {
@@ -61,7 +60,7 @@ component('code-mirror', {
 		}
 
 		return {
-			loadCodeMirror
+			loadCodeMirror,
 		}
 	},
 })
@@ -77,7 +76,7 @@ component('code-mirror', {
 		[.cm-editor]{min-height:100%;border-radius:8px}
 		${withBorder ? '' : 'border:none'}
 	`}
-	code={code}
+	:code="code"
 	lang={lang}
 	readonly={readonly}
 >

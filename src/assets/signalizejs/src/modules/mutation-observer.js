@@ -62,6 +62,10 @@ export default ($) => {
 			}
 
 			for (const addedNode of mutation.addedNodes) {
+				if (!isAllowedNode(addedNode.nodeType)) {
+					continue;
+				}
+
 				if (removedNodes.includes(addedNode)) {
 					movedNodes.push(addedNode);
 				} else {

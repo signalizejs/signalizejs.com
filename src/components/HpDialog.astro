@@ -1,5 +1,8 @@
 ---
 import Editor from '@components/Editor.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
+
+const importmap = createImportMapJson(['dialog']);
 
 const code = `
 <dialog dialog="hello-world">
@@ -9,12 +12,13 @@ const code = `
 
 <button dialog-open="hello-world">Open Dialog</button>
 
+<script type="importmap">${importmap}</script>
+
 <script type="module">
 	import Signalize from 'signalizejs';
-	import dialog from 'signalizejs/dialog';
+	const { resolve } = new Signalize();
 
-	// Use the dialog plugin
-	new Signalize({ plugins: [ dialog() ] })
+	await resolve('dialog');
 </script>
 `.trim();
 ---

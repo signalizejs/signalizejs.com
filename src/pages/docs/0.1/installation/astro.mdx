@@ -22,9 +22,6 @@ Create `src/assets/layout.js` and add the following code into it:
 import Signalize from 'signalizejs';
 
 export const signalize = new Signalize();
-
-// Define global variable
-window.signalize = signalize;
 ```
 
 Open your layout file (like `src/layouts/main.astro`) and add the following code into it:
@@ -62,11 +59,9 @@ const importMap = JSON.stringify({
 ```
 
 ## Use Signalize from other places
-Astro.build uses Vite and bundles javascript under the hood.
+Astro.build uses Vite and internally converts your scripts into ES modules. Converted scripts are imported only once.
 
-This is not what we want, becaus we want to use ES modules and import maps.
-
-Therefore, we are not going to import Signalize from layout but from the global window object.
+Thanks to this feature we can import the Signalize instance from `layout.js` directly without beying woried about duplicated code in our `page.js`.
 ```html
 ---
 // src/pages/index.astro
@@ -74,7 +69,7 @@ import MainLayout from '../layouts/main.astro';
 ---
 <MainLayout>
 	<script>
-		import type { signalize } from '../assets/layout.js';
+		import { signalize } from '../assets/layout.js';
 		import type { on } from 'signalizejs/event';
 
 		// 7. Signalize instance will be used from window object

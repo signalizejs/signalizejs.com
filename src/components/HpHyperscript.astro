@@ -1,19 +1,21 @@
 ---
 import Editor from '@components/Editor.astro';
-import { cdnUrl } from '@config/config.mjs';
+import { createImportMapJson } from '@services/importmap.mjs';
+
+const importmap = createImportMapJson(['hyperscript', 'signal']);
 
 const code = `
 <div id="app"></div>
 
-<script type="module">
-	import Signalize from '${cdnUrl()}';
-	import hyperscript from '${cdnUrl('h')}'
+<script type="importmap">${importmap}</script>
 
-	const { h, signal } = new Signalize({
-		plugins: [ hyperscript() ]
-	});
+<script type="module">
+	import Signalize from 'signalizejs';
+	const { resolve } = new Signalize();
+
+	const { h, signal } = await resolve('hyperscript', 'signal');
 	// Create text signal
-	const text = signal('Hello World!');
+	const text = signal('Change me!');
 
 	document.querySelector('#app').replaceWith(
 		// Create elements

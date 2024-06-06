@@ -3,6 +3,8 @@ import { Image } from 'astro:assets';
 import { base64Symbol, siteUrl, githubLink, twitterLink, discordLink, apiLinks } from '@config/config.mjs';
 import { path } from '@services/router.mjs';
 import signalizeUrl from '@assets/signalizejs/src/Signalize?url';
+import signalizeEventUrl from '@assets/signalizejs/src/modules/event?url';
+import signalizeDashCaseUrl from '@assets/signalizejs/src/modules/dash-case?url';
 
 const url = Astro.url;
 let {
@@ -26,6 +28,8 @@ const modulesLinks = [];
 const importmap = JSON.stringify({
 	imports: {
 		signalizejs: signalizeUrl,
+		'signalizejs/event': signalizeEventUrl,
+		'signalizejs/dash-case': signalizeDashCaseUrl
 	}
 });
 
@@ -114,7 +118,7 @@ const importmap = JSON.stringify({
 			</main>
 		</div>
 
-		<footer class="margin-top:200px margin-bottom:32px container color:$grey [a]{text-decoration:none;color:$grey;hover:color:$primary} font-size:14px">
+		<footer class="margin-top:200px margin-bottom:32px container color:$grey [a]{text-decoration:none;color:$grey;hover:color:$red} font-size:14px">
 			<div class="border-bottom:1px_solid_$border padding-bottom:24px margin-bottom:24px display:flex gap:24px tolg:flex-direction:column lg:gap:100px">
 				<div class="max-width:380px">
 					<Image src={'/images/symbol.svg'} width="100" height="100" alt="" />

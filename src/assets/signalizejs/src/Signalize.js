@@ -57,11 +57,11 @@ export class Signalize {
 		'evaluate', 'event',
 		'ajax',
 		'height', 'hyperscript',
-		'intersection-observer', 'visibility',
+		'intersection-observer', 'is-visible',
 		'mutation-observer',
 		'scope', 'signal', 'snippets', 'spa',
 		'task',
-		'traverser-dom',
+		'traverse-dom',
 		'viewport',
 	];
 	/**
@@ -195,7 +195,9 @@ export class Signalize {
 				moduleName = `${this.#instanceId}/${moduleName}`;
 			}
 
-			if (moduleName in this.#modules && Object.keys(moduleConfig).length === 0) {
+			const moduleConfigIsEmpty = Object.keys(moduleConfig).length === 0;
+
+			if (moduleName in this.#modules && moduleConfigIsEmpty) {
 				resolved = {
 					...resolved,
 					...this.#modules[moduleName]
@@ -205,7 +207,7 @@ export class Signalize {
 
 			let modulePromise;
 
-			const canBeCached = !(moduleName in this.#modules) && (moduleConfig === null || !this.#inited);
+			const canBeCached = !(moduleName in this.#modules) && (moduleConfigIsEmpty || !this.#inited);
 
 			if (canBeCached && !(moduleName in this.#currentlyResolvedModules)) {
 				// eslint-disable-next-line no-async-promise-executor
@@ -214,12 +216,12 @@ export class Signalize {
 						let moduleFunctionality;
 						if (moduleInitFunction === null) {
 							const module = await this.#resolver(moduleName);
-							moduleFunctionality = (module[moduleName] ?? module.default)(this, moduleConfig);
+							moduleFunctionality = await (module[moduleName] ?? module.default)(this, moduleConfig);
 						} else {
 							moduleFunctionality = await moduleInitFunction(this, moduleConfig);
 						}
 
-						if (!(moduleName in this.#modules) && (moduleConfig === null || !this.#inited)) {
+						if (!(moduleName in this.#modules) && (moduleConfigIsEmpty || !this.#inited)) {
 							this.#modules[moduleName] = moduleFunctionality;
 						}
 

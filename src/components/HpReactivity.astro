@@ -1,15 +1,21 @@
 ---
+import { createImportMapJson } from '@services/importmap.mjs';
 import Editor from '@components/Editor.astro';
-import { cdnUrl } from '@config/config.mjs';
+
+const importmap = createImportMapJson(['signal', 'bind']);
 
 const code = `
 <input id="input" placeholder="Type something...">
 <div id="output"></div>
 
+<script type="importmap">${importmap}</script>
+
 <script type="module">
-	import Signalize from '${cdnUrl()}'
+	import Signalize from 'signalizejs';
 	// Create a Signalize instance
-	const { bind, signal } = new Signalize();
+	const { resolve } = new Signalize();
+	const { bind, signal } = await resolve('signal', 'bind');
+
 	// Create a signal
 	const text = signal('');
 	// Bind the signal to the input value attribute

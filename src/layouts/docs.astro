@@ -6,11 +6,9 @@ import { Image } from 'astro:assets';
 
 let {
 	frontmatter,
+	headings,
 	sections = []
 } = Astro.props;
-
-const file = await import(frontmatter.file);
-const headings = await file.getHeadings();
 
 const version = frontmatter.url.match(/\/docs\/(?<version>[\d.]+)\//)?.groups?.version
 

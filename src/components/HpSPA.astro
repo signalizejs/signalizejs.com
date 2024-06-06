@@ -1,32 +1,32 @@
 ---
 import CodeMirror from '@components/CodeMirror.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
+
+const importmap = createImportMapJson(['spa']);
 
 const code = `
 <a href="/path">Link</a>
 
+<script type="importmap">${importmap}</script>
+
 <script type="module">
 	import Signalize from 'signalizejs'
-	import fetch from 'signalizejs/fetch'
-	import snippets from 'signalizejs/snippets'
-	import spa from 'signalizejs/spa'
 
-	const { on, visit } = new Signalize({
-		// Init plugins
-		plugins: [ ajax(), snippets(), spa() ]
-	});
+	const { resolve } = new Signalize();
+	const { on, navigate } = await resolve('spa', 'event');
 
 	// Or send custom visit request
-	visit({
+	navigate({
 		url: '/path',
 		// Optional
-		scrollX: number,
-		scrollY: number,
+		scrollX: 0,
+		scrollY: 0,
 		// 'push' or 'replace'
 		stateAction: 'push'
 	})
 
-	on('spa:navigation:start', () => { // Visit start });
-	on('spa:navigation:end', () => { // Visit end });
+	on('spa:navigation:start', (data) => { // Visit start });
+	on('spa:navigation:end', (data) => { // Visit end });
 </script>
 `;
 ---

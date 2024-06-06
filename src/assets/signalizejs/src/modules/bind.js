@@ -42,15 +42,23 @@ export default async ({ resolve }) => {
 	 * @type {bind}
 	 */
 	const bind = (element, attributes) => {
+		/** @type {import('./scope.js').Scope} */
 		let componentScope = null;
 		const tagName = element.tagName.toLowerCase();
 
 		const bind = () => {
 			/** @type {CallableFunction[]} */
 			const unwatchSignalCallbacks = [];
+			/** @type {CallableFunction[]} */
 			const cleanups = [];
+			/** @type {string[]} */
+			const bindedProps = [];
 
 			for (let [attr, attrOptions] of Object.entries(attributes)) {
+				if (bindedProps.includes(attr)) {
+					continue;
+				}
+
 				if (attrOptions.length === 1) {
 					attrOptions = attrOptions[0];
 				}
@@ -62,6 +70,7 @@ export default async ({ resolve }) => {
 				const attributeBinderType = typeof attributeBinder;
 				const attributeBinderIsSignal = attributeBinder instanceof Signal;
 				let attributeInited = false;
+				/** @type {any} */
 				let previousSettedValue;
 				let previousValue;
 
@@ -78,7 +87,6 @@ export default async ({ resolve }) => {
 						return;
 					}
 
-					previousValue = value;
 					attribute = attributesAliases[attribute] ?? attribute;
 
 					if (textContentAttributes.includes(attribute)) {
@@ -103,6 +111,7 @@ export default async ({ resolve }) => {
 					} else {
 						element.setAttribute(attribute, value);
 					}
+					previousValue = value;
 					attributeInited = true;
 				};
 
@@ -152,12 +161,27 @@ export default async ({ resolve }) => {
 
 				if (getListener !== null || initValue !== undefined) {
 					const valueToSet = initValue !== undefined ? initValue : getListener();
+
 					if (componentScope) {
+						let binded = false;
+
 						if (attr in componentScope.$props) {
-							componentScope.$props[attr](valueToSet);
-							continue;
+							binded = true;
+							const valueToSetIsSignal = valueToSet instanceof Signal;
+							componentScope.$props[attr](valueToSetIsSignal ? valueToSet() : valueToSet);
+
+							if (valueToSetIsSignal && valueToSet !== componentScope.$props[attr]) {
+								componentScope.$props[attr].watch(({ newValue }) => {
+									valueToSet(newValue);
+								});
+							}
 						} else if (attr in componentScope.$propsAliases) {
 							componentScope.$props[componentScope.$propsAliases[attr]](valueToSet);
+							binded = true;
+						}
+
+						if (binded) {
+							bindedProps.push(attr);
 							continue;
 						}
 					} else {
