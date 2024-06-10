@@ -11,200 +11,225 @@ import { modulesSections } from '@config/config.mjs';
 import MainLayout from '@layouts/main.astro';
 import { Image } from 'astro:assets';
 import { path } from 'src/services/router.mjs';
+
+const installationGuides = [
+	{
+		label: 'Astro',
+		icon: 'astro',
+		link: path('docs', { slug: 'installation/astro' })
+	},
+	{
+		label: 'Symfony',
+		icon: 'symfony',
+		link: path('docs', { slug: 'installation/symfony' })
+	}
+];
 ---
 
 <MainLayout>
-	<section class="container margin-top:64px margin-bottom:180px">
-		<h1 class="margin-bottom:48px text-align:center max-width:1000px font-size:48px letter-spacing:-2px margin:0_auto text-wrap:balance">
-			<span class="font-size:64px">A client-side JavaScript framework</span><br>
-			<span class="color:$red display:inline-flex max-width:800px">designed for swift web development with minimum JavaScript</span>
-		</h1>
-		<div class="text-align:center font-size:18px margin:0_auto_24px_auto max-width:800px text-wrap:balance">
+	<div class="
+		[section_h2]{margin-top:0;margin-bottom:12px;font-size:24px;md:font-size:48px}
+		[section_>_p]{margin-top:0;margin-bottom:24px;max-width:800px;font-size:16px;md:font-size:18px}
+		[section+section]{margin-top:64px;lg:margin-top:128px}
+	">
+		<section class="container margin-top:48px md:margin-top:64px">
+			<h1 class="margin-bottom:24px sm:margin-bottom:48px text-align:center max-width:1000px letter-spacing:-2px margin:0_auto text-wrap:balance">
+				<span class="font-size:32px md:font-size:48px lg:font-size:64px">A client-side JavaScript framework</span><br>
+				<span class="font-size:24px md:font-size:32px lg:font-size:48px color:$red display:inline-flex max-width:800px">designed for swift web development with minimum JavaScript</span>
+			</h1>
+			<div class="text-align:center font-size:16px md:font-size:18px margin:0_auto_24px_auto max-width:800px text-wrap:balance [br]{tomd:display:none}">
+				<p>
+					Signalize leverages modern ES modules and import maps.<br>
+					It imports only a small 2 KB core and you decide what to import and when.<br>
+					This makes the framework small, scalable and flexible.
+				</p>
+			</div>
+			<div class="display:flex justify-content:center gap:24px margin-bottom:24px text-transform:uppercase">
+				<a href={path('docs')} class="button button--solid md:{font-size:18px;padding:12px;line-height:1}">Get Started</a>
+			</div>
+		</section>
+
+		<section id="modules" class="container">
+			<h2>Installation Guides</h2>
 			<p>
-				Signalize leverages modern ES modules and import maps.<br>
-				It imports only a small 2 KB core and you decide what to import and when.<br>
-				This makes the framework small, scalable and flexible.
+				Signalize functions are split into small modules and you decide what to import and when.
 			</p>
-		</div>
-		<div class="display:flex justify-content:center gap:24px margin-bottom:24px text-transform:uppercase">
-			<a href={path('docs')} class="button button--solid md:{font-size:18px;padding:12px;line-height:1}">Get Started</a>
-		</div>
-	</section>
+			<div class="display:flex gap:12px md:gap:24px">
+				{installationGuides.map(({ link, label, icon }) => (
+					<a href={link} class="color:inherit hover:{border-color:$red;color:$red} transition:border-color_.3s,color_.3s font-size:18px font-weight:bold border:1px_solid_$border padding:8px md:padding:12px text-decoration:none display:inline-flex allign-items:center gap:4px">
+						<i class={`icon-${icon} display:inline-flex align-items:center`}></i>
+						<span>{label}</span>
+					</a>
+				))}
+			</div>
+		</section>
 
-	<section id="modules" class="container margin-bottom:180px">
-		<h2 class="font-size:48px">Installation guides</h2>
-		<p class="max-width:800px font-size:18px">
-			Signalize functions are split into small modules and you decide what to import and when.
-		</p>
-		<div>
-			<a href=""></a>
-		</div>
-	</section>
-
-	<section id="modules" class="container margin-bottom:180px">
-		<h2 class="font-size:48px">Ecosystem</h2>
-		<p class="max-width:800px font-size:18px">
-			Signalize functions are split into small modules and you decide what to import and when.
-		</p>
-		<div class="display:grid gap:24px gap grid-template-columns:repeat(auto-fill,minmax(350px,1fr))">
-			{modulesSections.map(({ name, color, icon, description, modules }) => (
-				<div class="text-decoration:none color:$grey padding:16px border:1px_solid_$border">
-					<div class="gap:16px display:inline-flex">
-						<div class="flex-shrink:0 width:50px height:50px border-radius:4px background-image:linear-gradient(rgba(255,255,255,.2),rgba(255,255,255,0)) display:flex align-items:center justify-content:center" style={`background-color:${color};`}>
-							<i class={`icon-${icon} font-size:32px text-shadow:0_1px_1px_rgba(0,0,0,0.2) color:#fff`}></i>
-						</div>
-						<div>
-							<h4 class="margin:0_0_4px_0">{name}</h4>
-							<div>{description}</div>
-							<div class="margin-top:8px display:flex flex-wrap:wrap gap:4px">
-								{modules.map(({ name, api }) => (
-									api.map(({ label }) => (
-										<a href={path('docs', {slug: `modules/${name.toLowerCase()}` })} class="button padding:4px!important font-size:12px!important">
-											{label}
-										</a>
-									))
-								))}
+		<section id="modules" class="container">
+			<h2>Ecosystem</h2>
+			<p>
+				Signalize functions are split into small modules and you decide what to import and when.
+			</p>
+			<div class="display:grid gap:12px md:gap:24px gap grid-template-columns:repeat(auto-fill,minmax(300px,1fr)) sm:grid-template-columns:repeat(auto-fill,minmax(350px,1fr))">
+				{modulesSections.map(({ name, color, icon, description, modules }) => (
+					<div class="text-decoration:none color:$grey padding:8px md:padding:16px border:1px_solid_$border">
+						<div class="gap:16px display:inline-flex">
+							<div class="flex-shrink:0 width:50px height:50px border-radius:4px background-image:linear-gradient(rgba(255,255,255,.2),rgba(255,255,255,0)) display:flex align-items:center justify-content:center" style={`background-color:${color};`}>
+								<i class={`icon-${icon} font-size:32px text-shadow:0_1px_1px_rgba(0,0,0,0.2) color:#fff`}></i>
+							</div>
+							<div>
+								<h4 class="margin:0_0_4px_0">{name}</h4>
+								<div>{description}</div>
+								<div class="margin-top:8px display:flex flex-wrap:wrap gap:4px">
+									{modules.map(({ name, api }) => (
+										api.map(({ label }) => (
+											<a href={path('docs', {slug: `modules/${name.toLowerCase()}` })} class="button padding:4px!important font-size:12px!important">
+												{label}
+											</a>
+										))
+									))}
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			))}
-		</div>
-	</section>
-
-	<section class="container margin-bottom:180px">
-		<div class="text-align:center"><h2 class="font-size:24px md:font-size:48px">Try Signalize in the Playground</h2></div>
-		<playground-tabs class={`
-			lg:{display:grid;grid-template-columns:30%_70%}
-			[[data-tab]:not(.s-active)]{display:none}
-			[[data-tab]_p]{font-size:18px;md:font-size:20px}
-		`}>
-			<div class="
-				overflow:auto padding:24px_24px_0_24px
-				display:flex flex-direction:row gap:12px
-				tolg:{flex-wrap:wrap;justify-content:center;margin-bottom:24px}
-				lg:{flex-direction:column;gap:24px}
-				[a]{color:inherit;font-size:20px;md:font-size:32px;font-weight:bold;transition:color_.3s}
-				[a:hover,a.s-active]{color:$red}
-			">
-				<a role="button" data-tab-button="signals" class="s-active">Signals & Reactivity</a>
-				<a role="button" data-tab-button="components">Web Components</a>
-				<a role="button" data-tab-button="directives">Directives</a>
-				<a role="button" data-tab-button="prerendered-state">Prerendered State</a>
-				<a role="button" data-tab-button="dialog">Dialog</a>
-				<a role="button" data-tab-button="spa">SPA</a>
-				<a role="button" data-tab-button="snippets">Snippets</a>
-				<a role="button" data-tab-button="hyperscript">Hyperscript</a>
+				))}
 			</div>
-			<div class="overflow:auto">
-				<div data-tab="signals" class="s-active">
-					<HpSignals />
+		</section>
+
+		<section class="container margin-bottom:180px">
+			<div class="text-align:center">
+				<h2 class="font-size:24px md:font-size:48px">Try Signalize in the Playground</h2>
+			</div>
+			<playground-tabs class={`
+				lg:{display:grid;grid-template-columns:30%_70%}
+				[[data-tab]:not(.s-active)]{display:none}
+			`}>
+				<div class="
+					overflow:auto padding:24px_24px_0_24px
+					display:flex flex-direction:row gap:12px
+					tolg:{flex-wrap:wrap;justify-content:center;margin-bottom:24px}
+					lg:{flex-direction:column;gap:24px}
+					[a]{color:inherit;font-size:20px;md:font-size:32px;font-weight:bold;transition:color_.3s}
+					[a:hover,a.s-active]{color:$red}
+				">
+					<a role="button" data-tab-button="signals" class="s-active">Signals & Reactivity</a>
+					<a role="button" data-tab-button="components">Web Components</a>
+					<a role="button" data-tab-button="directives">Directives</a>
+					<a role="button" data-tab-button="prerendered-state">Prerendered State</a>
+					<a role="button" data-tab-button="dialog">Dialog</a>
+					<a role="button" data-tab-button="spa">SPA</a>
+					<a role="button" data-tab-button="snippets">Snippets</a>
+					<a role="button" data-tab-button="hyperscript">Hyperscript</a>
+				</div>
+				<div class="overflow:auto">
+					<div data-tab="signals" class="s-active">
+						<HpSignals />
+						<p>
+							<a href="/modules/signalizejs-signal">Signals</a> are reactive primitive and they are the heart of reactivity in Signalize.<br>
+							To easily bind signals to elements, there is a <a href="/modules/signalizejs-bind">bind</a> method, that provides two-directional data binding and automatically converts strings to numbers in inputs when possible.<br>
+							Signals are defined as a class, so you can easily extend them for additional functionality.<br>
+						</p>
+					</div>
+					<div data-tab="components">
+						<HpComponents />
+						<p>
+							<a href="/modules/signalizejs-component">Component plugin</a> provide an easy way to define reusable web component.
+						</p>
+					</div>
+					<div data-tab="directives">
+						<HpDirectives />
+						<p>
+							<a href="/modules/signalizejs-signal">Directives plugin</a> provides a simple way to bind logic to elements. It's similar like in Vue or Alpine, but with a few diferences like that under the hood it uses Signals, root element is not necessary and data can be defined on the same element where they are used.
+						</p>
+					</div>
+					<div data-tab="prerendered-state">
+						<HpPrerenderedState />
+						<p>
+							<a href="/modules/signalizejs-signal">Directives</a> such as <code>for</code> and <code>if</code> can work with prerendered state from the server. If these directives detects <code>prerendered</code> section after them, they will render only after some signal changes instead of on init. This way you don't have to add a <code>loader</code> or hide elements that were not rendered yet.
+						</p>
+					</div>
+					<div data-tab="spa">
+						<HpSPA />
+						<p>
+							<a href="/modules/signalizejs-spa">SPA plugin</a> can turn any website into a single page application. Under the hood it uses View Transition when possible.
+						</p>
+					</div>
+					<div data-tab="snippets">
+						<HpSnippets />
+						<p>
+							<a href="/modules/signalizejs-snippets">Snippets plugin</a> simplifies HTML snippets synchronization for example from response with the existing HTML. This allows you to append products to category, load additional carousel items, redraw dashboard and etc.
+						</p>
+					</div>
+					<div data-tab="dialog">
+						<HpDialog />
+						<p>
+							<a href="/modules/signalizejs-dialog">Dialog plugin</a> simplifies the usage of the native dialog element.
+						</p>
+					</div>
+					<div data-tab="hyperscript">
+						<HpHyperscript />
+						<p>
+							<a href="/modules/signalizejs-h">Hyperscript plugin</a> is a simple way to define reusable and reactive template or elements. Internally it automatically binds Signals to attributes and properties.
+						</p>
+					</div>
+				</div>
+			</playground-tabs>
+			<div class="text-align:center margin-top:24px"><a href={path('docs')} class="button button--solid md:{font-size:24px;padding:24px;line-height:1}">Get Started</a></div>
+		</section>
+
+		<section class="container margin-bottom:180px">
+			<div class="display:flex align-items:center gap:24px max-width:900px margin:0_auto tosm:flex-direction:column">
+				<div class="display:flex flex-direction:column flex:1 font-size:16px text-wrap:balance [p]{margin-top:0}">
+					<h2 class="font-size:48px margin-top:0 margin-bottom:20px">Simplicity to the win</h2>
 					<p>
-						<a href="/modules/signalizejs-signal">Signals</a> are reactive primitive and they are the heart of reactivity in Signalize.<br>
-						To easily bind signals to elements, there is a <a href="/modules/signalizejs-bind">bind</a> method, that provides two-directional data binding and automatically converts strings to numbers in inputs when possible.<br>
-						Signals are defined as a class, so you can easily extend them for additional functionality.<br>
+						Signalize is a client-side, module based, platform focused, dependecy-less JavaScript framework. It is inspired by frameworks such as Vue.js (Directives), Svelte (Data Binding), Angular & Solid (Signals), Nette (Snippets), Hotwired Turbo (SPA) and jQuery (Utilities).
+					</p>
+					<p>
+						By default, Signalize contains only ES modules loader. All additional functionality is split into modules and you decide, what to import and when. This makes the framework small and flexible.
+					</p>
+					<p>
+						Signalize is as an alternative for situations where you need similar features to those of modern frameworks, prefer something small and simple or have a backend written in a language other than JavaScript.
 					</p>
 				</div>
-				<div data-tab="components">
-					<HpComponents />
-					<p>
-						<a href="/modules/signalizejs-component">Component plugin</a> provide an easy way to define reusable web component.
-					</p>
-				</div>
-				<div data-tab="directives">
-					<HpDirectives />
-					<p>
-						<a href="/modules/signalizejs-signal">Directives plugin</a> provides a simple way to bind logic to elements. It's similar like in Vue or Alpine, but with a few diferences like that under the hood it uses Signals, root element is not necessary and data can be defined on the same element where they are used.
-					</p>
-				</div>
-				<div data-tab="prerendered-state">
-					<HpPrerenderedState />
-					<p>
-						<a href="/modules/signalizejs-signal">Directives</a> such as <code>for</code> and <code>if</code> can work with prerendered state from the server. If these directives detects <code>prerendered</code> section after them, they will render only after some signal changes instead of on init. This way you don't have to add a <code>loader</code> or hide elements that were not rendered yet.
-					</p>
-				</div>
-				<div data-tab="spa">
-					<HpSPA />
-					<p>
-						<a href="/modules/signalizejs-spa">SPA plugin</a> can turn any website into a single page application. Under the hood it uses View Transition when possible.
-					</p>
-				</div>
-				<div data-tab="snippets">
-					<HpSnippets />
-					<p>
-						<a href="/modules/signalizejs-snippets">Snippets plugin</a> simplifies HTML snippets synchronization for example from response with the existing HTML. This allows you to append products to category, load additional carousel items, redraw dashboard and etc.
-					</p>
-				</div>
-				<div data-tab="dialog">
-					<HpDialog />
-					<p>
-						<a href="/modules/signalizejs-dialog">Dialog plugin</a> simplifies the usage of the native dialog element.
-					</p>
-				</div>
-				<div data-tab="hyperscript">
-					<HpHyperscript />
-					<p>
-						<a href="/modules/signalizejs-h">Hyperscript plugin</a> is a simple way to define reusable and reactive template or elements. Internally it automatically binds Signals to attributes and properties.
-					</p>
+				<div class="width:200px">
+					<Image src="/images/machacek.png" format="webp" alt="" width={200} height={200} loading="lazy" fetchpriority="low" decoding="async" class="border-radius:200px" />
+					<div class="text-align:center">
+						<h3 class="margin-bottom:12px">
+							<strong class="font-size:22px">Vladimír Macháček</strong><br>
+							<div class="font-size:18px font-weight:400">
+								Author of  Signalize<br>
+							</div>
+						</h3>
+						<span class="display:flex justify-content:center gap:12px [a]{font-size:24px;text-decoration:none;color:inherit}">
+							<a href="https://x.com/8machy" target="_blank" rel="noopener nofollow">
+								<i class="icon-x"></i>
+							</a>
+							<a href="https://github.com/Machy8" target="_blank" rel="noopener nofollow">
+								<i class="icon-github"></i>
+							</a>
+						</span>
+					</div>
 				</div>
 			</div>
-		</playground-tabs>
-		<div class="text-align:center margin-top:24px"><a href={path('docs')} class="button button--solid md:{font-size:24px;padding:24px;line-height:1}">Get Started</a></div>
-	</section>
+		</section>
+		<script>
+			import { $ } from '@assets/global';
+			const { component, signal, bind, on } = await $.resolve('component', 'signal', 'bind', 'event');
 
-	<section class="container margin-bottom:180px">
-		<div class="display:flex align-items:center gap:24px max-width:900px margin:0_auto tosm:{flex-direction:column;border-top:1px_solid_lighten($grey,30)}">
-			<div class="display:flex flex-direction:column flex:1 font-size:16px text-wrap:balance [p]{margin-top:0}">
-				<h2 class="font-size:48px margin-top:0 margin-bottom:20px">Simplicity to the win</h2>
-				<p>
-					Signalize is a client-side, module based, JavaScript framework. It is inspired by frameworks such as Vue.js (Directives), Svelte (Data Binding), Angular & Solid (Signals), Nette (Snippets), Hotwired Turbo (SPA) and jQuery (Utilities).
-				</p>
-				<p>
-					By default, Signalize contains only ES modules loader. All additional functionality is split into modules and you decide, what to import and when. This makes the framework small and flexible.
-				</p>
-				<p>
-					Signalize is as an alternative for situations where you need similar features to those of modern frameworks, prefer something small and simple, don't want to install a ton of random packages, or have a backend written in a language other than JavaScript.
-				</p>
-			</div>
-			<div class="width:200px">
-				<Image src="/images/machacek.png" format="webp" alt="" width={200} height={200} loading="lazy" fetchpriority="low" decoding="async" class="border-radius:200px" />
-				<div class="text-align:center">
-					<h3 class="margin-bottom:12px">
-						<strong class="font-size:22px">Vladimír Macháček</strong><br>
-						<div class="font-size:18px font-weight:400">
-							Author of  Signalize<br>
-						</div>
-					</h3>
-					<span class="display:flex justify-content:center gap:12px [a]{font-size:24px;text-decoration:none;color:inherit}">
-						<a href="https://x.com/8machy" target="_blank" rel="noopener nofollow">
-							<i class="icon-x"></i>
-						</a>
-						<a href="https://github.com/Machy8" target="_blank" rel="noopener nofollow">
-							<i class="icon-github"></i>
-						</a>
-					</span>
-				</div>
-			</div>
-		</div>
-	</section>
-	<script>
-		import { $ } from '@assets/global';
-		const { component, signal, bind, on } = await $.resolve('component', 'signal', 'bind', 'event');
+			component('playground-tabs', {
+				setup() {
+					const selectedTab = signal('signals');
 
-		component('playground-tabs', {
-			setup() {
-				const selectedTab = signal('signals');
+					document.querySelectorAll('[data-tab-button]').forEach((tabButton) => {
+						on('click', tabButton, () => selectedTab(tabButton.dataset.tabButton));
+						bind(tabButton, { class: [selectedTab, () => tabButton.dataset.tabButton === selectedTab() ? 's-active' : '']})
+					});
 
-				document.querySelectorAll('[data-tab-button]').forEach((tabButton) => {
-					on('click', tabButton, () => selectedTab(tabButton.dataset.tabButton));
-					bind(tabButton, { class: [selectedTab, () => tabButton.dataset.tabButton === selectedTab() ? 's-active' : '']})
-				});
-
-				document.querySelectorAll('[data-tab]').forEach((tabButton) => {
-					bind(tabButton, { class: [selectedTab, () => tabButton.dataset.tab === selectedTab() ? 's-active' : '']})
-				});
-			}
-		});
-	</script>
+					document.querySelectorAll('[data-tab]').forEach((tabButton) => {
+						bind(tabButton, { class: [selectedTab, () => tabButton.dataset.tab === selectedTab() ? 's-active' : '']})
+					});
+				}
+			});
+		</script>
+	</div>
 
 </MainLayout>

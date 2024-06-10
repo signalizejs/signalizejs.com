@@ -6,8 +6,8 @@ description: 'Bind signals and values to element attributes and properties.'
 ---
 
 import Editor from '@codeEditor';
-import { cdnUrl } from '@config/config';
 import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
 
 ## Installation
 <ImportMapDependencies module="bind" />
@@ -37,9 +37,17 @@ const { bind } = await signalize.resolve('bind');
 </p>
 
 <div id="output"></div>
+
+<script type="importmap">${createImportMapJson(['signal', 'bind'])}</script>
+
 <script type="module">
-import Signalize from '${cdnUrl()}';
-const { bind, signal } = new Signalize();
+import Signalize from 'signalizejs';
+
+const { resolve } = new Signalize();
+const { signal, bind } = await resolve('signal', 'bind');
+
+const firstName = signal('');
+const lastName = signal('');
 
 const value = signal('');
 bind(document.querySelector('#text-input'), { value });
@@ -57,9 +65,14 @@ If we need to modify the the binded value, like composing it from two signals or
 <input id="lastName">
 
 <div id="output"></div>
+
+<script type="importmap">${createImportMapJson(['signal', 'bind'])}</script>
+
 <script type="module">
-import Signalize from '${cdnUrl()}';
-const { bind, signal } = new Signalize();
+import Signalize from 'signalizejs';
+
+const { resolve } = new Signalize();
+const { signal, bind } = await resolve('signal', 'bind');
 
 const firstName = signal('');
 const lastName = signal('');
@@ -94,13 +107,16 @@ The setter is used only on attributes that can be listened for some input as val
 
 <div id="output"></div>
 
-<script type="module">
-import Signalize from '${cdnUrl()}';
+<script type="importmap">${createImportMapJson(['signal', 'bind'])}</script>
 
-const { Signal, bind } = new Signalize();
+<script type="module">
+	import Signalize from 'signalizejs';
+
+	const { resolve } = new Signalize();
+	const { signal, bind } = await resolve('signal', 'bind');
 
 // 1. Create article signal
-const article = new Signal({
+const article = signal({
 	title: 'Hello World!',
 	content: 'Lorem Ipsum'
 });

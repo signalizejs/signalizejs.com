@@ -1,9 +1,7 @@
-import { latestSignalizeVersion } from "@config/config.mjs";
-
 const routes = {
 	'docs': (params) => {
-		const { slug = 'introduction', version } = params;
-		return `/docs/${version}/${slug}`;
+		const { slug = 'introduction'} = params;
+		return `/docs/${slug}`;
 	},
 	'homepage': () => '/',
 	'playground': () => {
@@ -19,7 +17,6 @@ export const path = (routeName, params = {}) => {
 	}
 
 	return route({
-		version: latestSignalizeVersion,
 		...params
 	});
 }

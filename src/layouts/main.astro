@@ -88,16 +88,30 @@ const importmap = JSON.stringify({
 
 		<div snippet="content">
 			{headerVisible && (
-				<header class="container display:grid grid-template-columns:1fr_2fr_1fr align-items:center">
+				<header class="container display:flex flex-direction:column lg:display:grid lg:grid-template-columns:1fr_2fr_1fr align-items:center">
 					<div>
-						<a href={path('homepage')}>
+						<a href={path('homepage')} class="display:flex">
 							<Image src={'/images/logo-light.svg'} width="200" height="100" alt="" />
 						</a>
 					</div>
-					<nav class="justify-content:center display:flex gap:24px [a]{color:$grey;hover:color:$red;text-decoration:none}">
+					<div class="lg:display:none margin-bottom:12px">
+						<div class="[a]{color:#000;text-decoration:none;font-size:32px;hover:color:$red} display:flex align-items:center gap:12px">
+							<a href={githubLink} aria-label="Github" target="_blank" rel="noopener" class="with-icon">
+								<i class="icon-github"></i>
+							</a>
+							<a href={discordLink} aria-label="Discord" target="_blank" rel="noopener" class="with-icon">
+								<i class="icon-discord"></i>
+							</a>
+							<a href={twitterLink} aria-label="X" target="_blank" rel="noopener" class="with-icon">
+								<i class="icon-x"></i>
+							</a>
+						</div>
+					</div>
+					<nav class="justify-content:center align-items:center display:flex gap:12px [a]{color:$grey;hover:color:$red;text-decoration:none}">
+						<span class="lg:display:none"><a href={path('docs')} class="button button--outline text-transform:uppercase">Documentation</a></span>
 						<a href={path('playground')}>Playground</a>
 					</nav>
-					<div class="display:flex gap:24px align-items:center">
+					<div class="display:none lg:display:flex gap:12px align-items:center">
 						<a href={path('docs')} class="button button--outline text-transform:uppercase">Documentation</a>
 						<div class="[a]{color:#000;text-decoration:none;font-size:32px;hover:color:$red} display:flex align-items:center gap:12px">
 							<a href={githubLink} aria-label="Github" target="_blank" rel="noopener" class="with-icon">
@@ -122,7 +136,7 @@ const importmap = JSON.stringify({
 			<div class="border-bottom:1px_solid_$border padding-bottom:24px margin-bottom:24px display:flex gap:24px tolg:flex-direction:column lg:gap:100px">
 				<div class="max-width:380px">
 					<Image src={'/images/symbol.svg'} width="100" height="100" alt="" />
-					<p>Signalize is a client-side, module based, dependecy-less javascript framework designed for swift web development with minimum javascript.</p>
+					<p>Signalize is a client-side, module based, platform-focused, dependecy-less javascript framework designed for swift web development with minimum javascript.</p>
 					<div class="[a]{font-size:24px} display:flex gap:8px margin-top:12px">
 						<a href={githubLink} aria-label="Github" target="_blank" rel="noopener" class="with-icon">
 							<i class="icon-github"></i>

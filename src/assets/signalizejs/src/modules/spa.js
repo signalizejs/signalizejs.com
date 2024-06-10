@@ -262,9 +262,11 @@ export default async ({ params, resolve, root }, options) => {
 					urlHash = urlHash.slice(1);
 					const element = root.querySelector(`[id="${urlHash}"]`);
 					if (element !== null) {
-						element.scrollIntoView({
-							block: 'start',
-							inline: 'nearest'
+						queueMicrotask(() => {
+							element.scrollIntoView({
+								block: 'start',
+								inline: 'nearest'
+							});
 						});
 					}
 				} else {
@@ -305,7 +307,8 @@ export default async ({ params, resolve, root }, options) => {
 		const navigationConfig = {
 			url: state.url,
 			scrollX: state.scrollX,
-			scrollY: state.scrollY
+			scrollY: state.scrollY,
+			stateAction: 'replace'
 		};
 
 		dispatch('spa:popstate', navigationConfig);

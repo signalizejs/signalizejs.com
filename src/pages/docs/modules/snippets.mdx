@@ -6,8 +6,8 @@ description: 'Redraw the current DOM elements based on string input.'
 ---
 
 import Editor from '@codeEditor';
-import { cdnUrl } from '@config/config';
 import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
 
 The redraw method provided by Snippets module can be used to manually redraw snippets in the actual DOM. It can redraw multiple snippets at once.
 
@@ -21,6 +21,8 @@ const { redrawSnippet } = await signalize.resolve('snippets');
 ## API
 
 ### redrawSnippet
+
+#### Simple redraw
 Redraw snippets in the current DOM on string input
 
 <Editor code={`
@@ -29,35 +31,41 @@ Redraw snippets in the current DOM on string input
 
 <button id="button">Redraw</button>
 
+<script type="importmap">${createImportMapJson(['snippets', 'event'])}</script>
+
 <script type="module">
-	import Signalize from '${cdnUrl()}';
-	import snippets from '${cdnUrl('snippets')}';
-	const { on, redrawSnippet } = new Signalize({ plugins: [ snippets() ]});
+	import Signalize from 'signalizejs';
+
+	const { resolve } = new Signalize();
+	const { redrawSnippet, on } = await resolve('snippets', 'event');
 
 	on('click', '#button', () => {
 		// Redraw snippets based on HTML input
 		redrawSnippet(\`
 			<div snippet="snippet-1">Hello World!</div>
 			<div snippet="snippet-2">Clicked</div>
-		\`)
+		\`);
 	});
 </script>
 `} />
 
-The default snippet action is replace. But you can also append/prepend children. This is good for carousels and products list.
+The default snippet action is `replace`. But you can also append/prepend children. This is good for carousels and products list.
 
 <Editor code={`
 
 <ul snippet="list" snippet-action="append-children">
-	<li>Item</li>
+	<li>Item - prerendered</li>
 </ul>
 
 <button id="button">Redraw</button>
 
+<script type="importmap">${createImportMapJson(['snippets', 'event'])}</script>
+
 <script type="module">
-	import Signalize from '${cdnUrl()}';
-	import snippets from '${cdnUrl('snippets')}';
-	const { on, redrawSnippet } = new Signalize({ plugins: [ snippets() ]});
+	import Signalize from 'signalizejs';
+
+	const { resolve } = new Signalize();
+	const { redrawSnippet, on } = await resolve('snippets', 'event');
 
 	on('click', '#button', () => {
 		// Redraw snippets based on HTML input
@@ -65,13 +73,61 @@ The default snippet action is replace. But you can also append/prepend children.
 			<ul snippet="list" snippet-action="append-children">
 				<li>Item - added</li>
 			</ul>
-		\`)
+		\`);
+	});
+</script>
+`} />
+
+#### Overriding Configuration
+Let's say we send a request to the server, we get the response and in the content there are snippets configured using html attributes.
+We need to change the way they will be rendered. This can be done by passing options into the `redrawSnippet` method.
+
+<Editor code={`
+<ul snippet="list" snippet-action="replace">
+	<li>Product 1</li>
+</ul>
+
+<button snippet="button" id="button">Load products</button>
+
+<script type="importmap">${createImportMapJson(['snippets', 'event'])}</script>
+
+<script type="module">
+	import Signalize from 'signalizejs';
+
+	const { resolve } = new Signalize();
+	const { redrawSnippet, on } = await resolve('snippets', 'event');
+
+	on('click', '#button', () => {
+		const response = \`
+			<ul snippet="list" snippet-action="replace">
+				<li>Product 2</li>
+			</ul>
+			<button snippet="button" id="button" disabled>
+				Loaded.
+			</button>
+		\`;
+
+		redrawSnippet(response, {
+			snippets: {
+				// snippet name: { snippet configuration }
+				list: {
+					// Product 1 will not be replaced
+					// The Product 2 will be added to the list
+					snippetActions: ['append-children']
+				},
+				button: {
+					// "disabled" attribute will be added
+					// Text will remain the same
+					snippetActions: ['sync-attributes']
+				}
+			}
+		});
 	});
 </script>
 `} />
 
 ## Attribute Directives
-- `snippet`: This attribute is used to define a snippet. All elements with snippet from passed argument are synchronized with those in the page.
+- `snippet`: This attribute is used to define a snippet. All elements with snippet attribute, that are in the new content, are synchronized with those in the page.
 - `snippet-action`: This attribute tells snippets module how the snippet should be synchronized:
 	- `replace`: This is going to replace the actuall snippet with a new one.
 	- `append-children`: This is going to take children of a new snippet and append them on the end of the actual snippet.
@@ -85,7 +141,7 @@ The `snippet-action` can contain several actions:
 ```
 
 ## Dispatched Events
-You can listen to the following events through the [on](/docs/0.1/modules/event#on) function:
+You can listen to the following events through the [on](/docs/modules/event#on) function:
 - `snippets:redraw:start`: This event is triggered when the synchronization of created DOM from data argument starts.
 - `snippets:redraw:end`: This event is triggered when the synchronization ends.
 - `snippets:redraw:transition:start`: This event is triggered when browsr supports view transitions and the transitions starts.

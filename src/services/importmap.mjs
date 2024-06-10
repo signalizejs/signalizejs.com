@@ -5,6 +5,8 @@ import componentUrl from 'signalizejs/component?url';
 import dashCaseUrl from 'signalizejs/dash-case?url';
 import dialogUrl from 'signalizejs/dialog?url';
 import directivesUrl from 'signalizejs/directives?url';
+import directivesForUrl from 'signalizejs/directives/for?url';
+import directivesIfUrl from 'signalizejs/directives/if?url';
 import domReadyUrl from 'signalizejs/dom-ready?url';
 import evaluateUrl from 'signalizejs/evaluate?url';
 import eventUrl from 'signalizejs/event?url';
@@ -34,6 +36,8 @@ export const createImportMapJson = (selectedModules) => {
 		'dash-case': dashCaseUrl,
 		dialog: dialogUrl,
 		directives: directivesUrl,
+		'directives/for': directivesForUrl,
+		'directives/if': directivesIfUrl,
 		'dom-ready': domReadyUrl,
 		evaluate: evaluateUrl,
 		event: eventUrl,
@@ -64,7 +68,7 @@ export const createImportMapJson = (selectedModules) => {
 
 	for (const module of selectedModules) {
 		const moduleName = `signalizejs/${module}`
-		console.log(moduleName);
+
 		if (moduleName in modules) {
 			continue;
 		}

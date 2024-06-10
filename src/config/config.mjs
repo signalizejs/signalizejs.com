@@ -1,19 +1,3 @@
-import hyperscript from "@assets/signalizejs/src/modules/hyperscript";
-
-export const latestSignalizeVersion = '0.1';
-
-export const cdnUrl = (packageName) => {
-	if (typeof packageName !== 'string') {
-		return process.env.ENV === 'dev'
-			? `/src/assets/signalizejs/src/Signalize.js`
-			: `https://cdn.jsdelivr.net/npm/signalizejs@latest/+esm`;
-	}
-
-	return process.env.ENV === 'dev'
-		? `/src/assets/signalizejs/src/modules/${packageName}.js`
-		: `https://cdn.jsdelivr.net/npm/signalizejs@latest${packageName}/+esm`;
-}
-
 export const githubLink = 'https://github.com/signalizejs/signalize';
 
 export const discordLink = 'https://discord.gg/V82TvAVRKY';
@@ -61,7 +45,7 @@ const modules = {
 	},
 	directives: {
 		name: 'directives',
-		dependencies: ['event', 'evaluate', 'traverse-dom', 'bind', 'scope', 'signal', 'dash-case'],
+		dependencies: ['event', 'evaluate', 'traverse-dom', 'bind', 'scope', 'signal', 'dash-case', 'directives/for', 'directives/if'],
 		api: [
 			{ label: 'directive', anchor: 'directive' },
 			{ label: 'getPrerenderedNodes', anchor: 'getprerenderednodes' },
@@ -273,6 +257,7 @@ export const modulesSections = [
 			modules["dom-ready"],
 			modules.event,
 			modules.height,
+			modules.hyperscript,
 			modules["mutation-observer"],
 			modules.offset,
 			modules.snippets,
@@ -311,7 +296,10 @@ export const getModulesDependencies = (...moduleNames) => {
 					dependencies.push(modules[dependency]);
 				}
 
-				const moduleDependencyDependencies = modules[dependency]?.dependencies ?? [];
+				const moduleDependencyDependencies = (modules[dependency]?.dependencies ?? []).filter((moduleDependency) => {
+					return !dependencies.includes(moduleDependency) && !moduleNames.includes(moduleDependency);
+				});
+
 				if (moduleDependencyDependencies.length) {
 					mapDependencies(moduleDependencyDependencies);
 				}

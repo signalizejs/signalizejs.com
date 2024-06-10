@@ -6,8 +6,8 @@ description: 'Wrapper around native javascript dialog functionality.'
 ---
 
 import Editor from '@codeEditor';
-import { cdnUrl } from '@config/config';
 import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
 
 ## Installation
 <ImportMapDependencies module="dialog" />
@@ -35,7 +35,7 @@ openDialog('my-dialog');
 - Open dialog by id => `dialog="my-dialog"`
 
 ```js
-openDialog('my-dialog', true)
+openDialog('my-dialog', true);
 ```
 - Open dialog modelessly by id => `dialog="my-dialog"`
 - Calls [show](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/show) instead of [showModal](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal)
@@ -58,12 +58,13 @@ The Dialog module comes with the Signalize default installation. You just need t
 
 <button dialog-open="my-dialog">Open Dialog</button>
 
-<script type="module">
-	import Signalize from '${cdnUrl()}';
-	import dialogPlugin from '${cdnUrl('dialog')}';
+<script type="importmap">${createImportMapJson(['dialog'])}</script>
 
-	// Use the dialog plugin
-	new Signalize({ plugins: [ dialogPlugin() ] });
+<script type="module">
+	import Signalize from 'signalizejs';
+
+	const { resolve } = new Signalize();
+	await resolve('dialog');
 </script>
 `} />
 
@@ -74,10 +75,10 @@ The Dialog module comes with the Signalize default installation. You just need t
 - `dialog-modeless`: If this attribute is set, it will open [modeless dialog](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement#instance_methods)
 
 ## Dispatched Events
-You can listen to the following events through the [on](/docs/0.1/modules/event#on) function:
+You can listen to the following events through the [on](/docs/modules/event#on) function:
 - `dialog:closed`: Dispatched when a dialog is closed
 - `dialog:opened`: Dispatched when a dialog is opened
 
-## URL hash
+## URL Hash
 - Dialog module watches url hash for changes
 - If a dialog was found with the given url hash like `example.com#my-dialog`, it will be automatically opened.

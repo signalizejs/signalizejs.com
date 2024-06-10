@@ -20,7 +20,7 @@ const {
 ```
 
 ## Javascript Evaluation
-Directives use [javascript evaluator](/docs/0.1/modules/evaluate).
+Directives use [javascript evaluator](/docs/modules/evaluate).
 - This evaluator is able to process only inline javascript.
 - There is no `unsafe eval` (eval, new Function).
 - It doesn't support full javascript syntax. Make sure to read about the supported syntax.
@@ -31,8 +31,8 @@ Add custom directive
 ```js
 directive('name', {
 	matcher: /reg exp to match the attribute/,
-	callback: async ({ vnode, attribute, matches }) => {
-		const { $data, $el } = vnode;
+	callback: async ({ scope, attribute, matches }) => {
+		const { $data, $el } = scope;
 		// This method is called, when the directive is matched on any element
 	}
 });
@@ -40,14 +40,14 @@ directive('name', {
 Matcher is a function. This way we can check, if directive should be executed for the element or not.
 ```js
 directive('name', {
-	matcher: ({ vnode, attribute }) => {
+	matcher: ({ scope, attribute }) => {
 		// Checks if directive can be processed for the element
 		// Return, if the directive should not be processed
 		if (false) return;
 
 		return /reg exp to match the attribute/;
 	},
-	callback: async ({ vnode, data, attribute, matches }) => {
+	callback: async ({ scop, data, attribute, matches }) => {
 		// This method is called, when the directive is matched on any element
 	}
 });
@@ -91,18 +91,17 @@ It will be matched like this:
 
 ## Directives
 Directives available by default, sorted by execution order:
-- bind - all elements
-- on - all elements
+- `bind` - all elements
+- `on` - all elements
 
 Other directives you can import:
-- for - templates only
-- if - templates only
+- `for` - templates only
+- `if` - templates only
 
 Each directive has access to the following data:
 - `$el` - current element
-- `$` - current signalize instance;
+- `$` - current signalize instance
 - `$refs` - returns an element or array of elements `<input ref="field">`
-- `$parent` - returns parent component. Can receive name of the parent like `$parent('custom-parrent')`.
 
 ### bind
 Bind directive is used to bind attributes and properties to elements.
@@ -153,6 +152,26 @@ Key should be always binded inside the loop. This is, because the for loop allow
 <template :for="i of 100">
 	<label :key="key + '-label'">Text</label>
 	<input :key="key + '-input'">
+</template>
+```
+
+Inside the `for` directive the `iterator` variable is initialized.  It holds important information about the current loop:
+- `counter`: iteration counter
+- `first`: is this the first iteration?
+- `last`: is this the last iteration?
+- `odd`: is this iteration odd?
+- `even`: is thi iteration even?
+
+```html
+<template :for="i of count">
+	<div>
+		<template :if="iterator.last">
+			<span> Last item</span>
+		</template>
+		<template :if="!iterator.last">
+			<span :text="'Item' + iterator.counter"></span>
+		</template>
+	</div>
 </template>
 ```
 

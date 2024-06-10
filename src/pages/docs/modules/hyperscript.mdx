@@ -6,8 +6,8 @@ description: 'Hyperscript: create html elements easily with reactive data and at
 ---
 
 import Editor from '@codeEditor';
-import { cdnUrl } from '@config/config';
 import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
 
 ## Installation
 <ImportMapDependencies module="hyperscript" />
@@ -50,14 +50,15 @@ An example with signals:
 <Editor code={`
 <div id="app"></div>
 
-<script type="module">
-	import Signalize from '${cdnUrl()}';
-	import hyperscript from '${cdnUrl('h')}'
+<script type="importmap">${createImportMapJson(['hyperscript', 'signal'])}</script>
 
-	const { h, signal } = new Signalize({
-		plugins: [ hyperscript() ]
-	});
-	// Create text signal
+<script type="module">
+	import Signalize from 'signalizejs';
+
+	const { resolve } = new Signalize();
+	const { h, signal } = await resolve('hyperscript', 'signal');
+
+	// Create a text signal
 	const text = signal('Hello World!');
 
 	document.querySelector('#app').replaceWith(

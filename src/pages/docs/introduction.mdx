@@ -1,7 +1,7 @@
 ---
 layout: '@docsLayout'
 title: 'Introduction'
-description: ''
+metaDescription: 'Learn how to use Signalize JavasScript framework in no time. Signalize is a client-side, module based, platform-focused, dependecy-less javascript framework designed for swift web development with minimum javascript.'
 ---
 
 Signalize in a nutshell:
@@ -34,11 +34,11 @@ In the simplified example bellow you can see Signalize initialization. Check it 
 	import Signalize from 'signalizejs';
 
 	// 3. Create a new Signalize instance
-	const signalize = new Signalize();
+	const { resolve } = new Signalize();
 
 	// 4.1 Resolve the Event module, because we need the "on" function
 	// 4.2 The Event module will automatically import the Mutation Observer module
-	const { on } = await signalize.resolve('event');
+	const { on } = await resolve('event');
 
 	// 5. Use the on function
 	on('dom:ready', () => alert('Hello World!'));
@@ -127,6 +127,8 @@ export default signalize;
 ```
 
 #### Configuration Options
+<div class="overflow:auto">
+
 | Option                 | Info                                                                                                                                                                                                                                                      |
 |------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **root**               | Optional. HTML Element \| Document. The root for which Signalize will be initialized.                                                                                                                                                                     |
@@ -135,12 +137,15 @@ export default signalize;
 | **modules**            | Optional. Array of modules and with configuration. Used for instant modules initialization. See bellow.                                                                                                                                                   |
 | **globals**            | Optional. Object. Global variables. This is here, for variables you want have available within the Signalize instance. They are for example directly injected into directives by directives plugin.                                                       |
 
+</div>
+
 #### Default Params
+<div class="overflow:auto">
 | Key                    | Info                                                                                                                                                                                                                                                                                      |
 |------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **attributeSeparator** | Optional. String. The separator used within all `attribute` selectors provided by modules. By default, the separator is `-` (dash). So you write for example `data-attribute`. If you set the separator to `:`, you will write `data:attribute`.                                          |
 | **attributePrefix**    | Optional. String. The prefix before all "attribute" selectors provided by modules. By default you write `attribute=""`. If you want `data-` preefix (to have valid HTML for example), set the prefix and write `data-attribute=""`. This can be used to have valid attribute selectors.   |
-
+</div>
 
 ### 4. Import What You Need
 As mentioned in the import map section, official Signalize modules, can be imported without `signalizejs` prefix.
@@ -281,6 +286,8 @@ This way, you will not have to add internal dependencies into the import map eve
 			"signalizejs/dash-case": "",
 			"signalizejs/dialog": "",
 			"signalizejs/directives": "",
+			"signalizejs/directives/for": "",
+			"signalizejs/directives/if": "",
 			"signalizejs/dom-ready": "",
 			"signalizejs/evaluate": "",
 			"signalizejs/event": "",
@@ -336,5 +343,5 @@ Now, if you decide to use ES modules and lazy load them, you will have to manual
 ### Trade offs
 [ES modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) and [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) have good support in browsers, however nothing is without trade-offs:
 - In case, when you need to load a lot (like a hundred for example) uncached modules, it may be a bit slower than one big bundle.
-- It is caused by the requests amount (and also, your users often doesn't have that performant devices like devs)
+- It is caused by the requests amount
 - You may want to test this, if this is your case
