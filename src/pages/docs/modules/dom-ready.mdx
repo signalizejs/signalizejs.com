@@ -1,20 +1,18 @@
 ---
 order: 2
 layout: '@docsLayout'
-title: 'signalizejs/dom-ready'
+title: 'signalizejs/dom/ready'
 description: 'DOM ready listener.'
 ---
 import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 ## Installation
-<ImportMapDependencies module="dom-ready" />
-
-Add a public path for `signalizejs/dom-ready` into your import map.
+<ImportMapDependencies module="dom/ready" />
 
 This module doesn't expose any functionality. It only triggers `dom:ready` event. See below.
 
 ## Usage
-This plugin ads a `dom:ready` event, you can listen to through the [on](/plugins/signalizejs-on) function.
+This plugin ads a `dom:ready` event, you can listen to through the [on](/docs/modules/event#on) function.
 
 ```js
 const { on } = await signalize.resolve('event');
@@ -25,5 +23,5 @@ on('dom:ready', () => {
 ```
 
 ## Dispatched events
-You can listen to these events through the [on](/plugins/signalizejs-on) function.
+You can listen to these events through the [on](/docs/modules/event#on) function.
 `dom:ready`: Triggered when the DOM is [ready](https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event).

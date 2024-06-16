@@ -11,11 +11,8 @@ import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 ```js
 import Signalize from 'signalizejs';
-import intersectionObserverPlugin from 'signalizejs/intersection-observer';
 
-const { observeIntersection } = new Signalize({
-	plugins: [ intersectionObserverPlugin() ]
-});
+const { observeIntersection } = await resolve('intersection-observer');
 ```
 
 ## API

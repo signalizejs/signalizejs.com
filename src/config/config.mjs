@@ -28,12 +28,6 @@ export const modules = {
 			{ label: 'component' }
 		]
 	},
-	'strings/cases': {
-		name: 'strings/cases',
-		api: [
-			{ label: 'strings/cases' }
-		]
-	},
 	dialog: {
 		name: 'dialog',
 		dependencies: ['event', 'dom/ready'],
@@ -54,16 +48,19 @@ export const modules = {
 	},
 	'directives/if': {
 		name: 'directives/if',
+		slug: 'directives-if',
 		dependencies: ['directives'],
 		api: [],
 	},
 	'directives/for': {
 		name: 'directives/for',
+		slug: 'directives-for',
 		dependencies: ['directives'],
 		api: [],
 	},
 	'dom/ready': {
 		name: 'dom/ready',
+		slug: 'dom-ready',
 		dependencies: ['event'],
 		api: [
 			{ label: 'isDomReady'}
@@ -71,6 +68,7 @@ export const modules = {
 	},
 	'dom/traverser': {
 		name: 'dom/traverser',
+		slug: 'dom-traverser',
 		api: [
 			{ label: 'traverseDom' },
 		]
@@ -91,13 +89,6 @@ export const modules = {
 			{ label: 'customEvent', anchor: 'customevent', },
 			{ label: 'customEventListener', anchor: 'customeventlistener', },
 			{ label: 'dispatch', anchor: 'dispatch' },
-		]
-	},
-	sizes: {
-		name: 'sizes',
-		api: [
-			{ label: 'height', anchor: '#height' },
-			{ label: 'width', anchor: '#width' }
 		]
 	},
 	hyperscript: {
@@ -131,6 +122,13 @@ export const modules = {
 			{ label: 'offset' }
 		]
 	},
+	sizes: {
+		name: 'sizes',
+		api: [
+			{ label: 'height', anchor: 'height' },
+			{ label: 'width', anchor: 'width' }
+		]
+	},
 	scope: {
 		name: 'scope',
 		dependencies: ['mutation-observer'],
@@ -156,6 +154,13 @@ export const modules = {
 		dependencies: ['dom/ready', 'event', 'ajax', 'snippets'],
 		api: [
 			{ label: 'navigate' }
+		]
+	},
+	'strings/cases': {
+		name: 'strings/cases',
+		slug: 'strings-cases',
+		api: [
+			{ label: 'strings/cases' }
 		]
 	},
 	task: {
@@ -259,6 +264,7 @@ export const modulesSections = [
 			modules.offset,
 			modules.sizes,
 			modules.snippets,
+			modules["strings/cases"],
 			modules.viewport,
 			modules.visibility,
 		]
@@ -270,7 +276,7 @@ export const apiLinks = Object
 	.map((module) => {
 		return module.api.map(({ label, anchor }) => ({
 			label,
-			slug: `modules/${module.name}${anchor ? `#${anchor}` : ''}`
+			slug: `modules/${module.slug ?? module.name}${anchor ? `#${anchor}` : ''}`
 		}))
 	})
 	.flat()

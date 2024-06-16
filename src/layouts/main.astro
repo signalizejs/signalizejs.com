@@ -1,10 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import { base64Symbol, siteUrl, githubLink, twitterLink, discordLink, apiLinks } from '@config/config.mjs';
+import { base64Symbol, siteUrl, githubLink, twitterLink, discordLink, apiLinks, modules } from '@config/config.mjs';
 import { path } from '@services/router.mjs';
-import signalizeUrl from '@assets/signalizejs/src/Signalize?url';
-import signalizeEventUrl from '@assets/signalizejs/src/modules/event?url';
-import signalizeDashCaseUrl from '@assets/signalizejs/src/modules/strings/cases?url';
 
 const url = Astro.url;
 let {
@@ -24,7 +21,6 @@ const getStartedLinks = [
 	{ label: 'Tips for writting JavaScript', link: path('docs', { slug: 'tips-for-writting-javascript' })},
 ];
 
-const modulesLinks = [];
 ---
 
 <html lang="en">
@@ -160,8 +156,8 @@ const modulesLinks = [];
 					<section>
 						<h3>Modules</h3>
 						<nav>
-							{modulesLinks.map(({ link, label }) => (
-								<a href={link}>{label}</a>
+							{Object.values(modules).map(({ name, slug }) => (
+								<a href={`${path('docs', { slug: slug ?? name })}`}>{name}</a>
 							))}
 						</nav>
 					</section>

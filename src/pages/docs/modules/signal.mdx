@@ -66,10 +66,10 @@ Signals can be watched for the following events. See the example below:
 - **before it is set** -Useful to check the new value and possibly modify the value or block the setter.
 - **after it is set** - Trigger some callback like recalculating variables that depend on the signal.
 
-Signals are often used with the [bind method](/plugins/signalizejs-bind).
+Signals are often used with the [bind method](/docs/modules/bind).
 
 Below is an example with two number inputs:
-- Signals are connected to elements using the [bind method](/plugins/signalizejs-bind).
+- Signals are connected to elements using the [bind method](/docs/modules/bind).
 - Signals are watched using `.watch()` method.
 - When any signal changes, it updates the output under the input elements.
 - `numberB` cannot be lower than `numberA`. It's always +1 higher than `numberA`.

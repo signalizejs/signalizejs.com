@@ -52,7 +52,7 @@ if (sections.length === 0) {
 			for (const module of modules) {
 				links.push(...module.api.map(({ label, anchor }) => ({
 					label,
-					link: `${path('docs', { slug: `modules/${module.name}`, version })}${anchor ? `#${anchor}` : ''}`
+					link: `${path('docs', { slug: `modules/${module.slug ?? module.name}`, version })}${anchor ? `#${anchor}` : ''}`
 				})))
 			}
 
