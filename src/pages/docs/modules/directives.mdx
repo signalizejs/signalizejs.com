@@ -6,7 +6,7 @@ description: 'Attribute Directives inspired by Vue and Svelte.'
 ---
 import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
-Directives can be used only within [web components](/plugins/signalizejs-components) and are initialized on dom ready and after component is constructed.
+Directives can be used only within [web components](/plugins/signalizejs-components) and are initialized on DOM ready and after the component is constructed.
 
 ## Installation
 <ImportMapDependencies module="directives" />
@@ -20,14 +20,15 @@ const {
 ```
 
 ## Javascript Evaluation
-Directives use [javascript evaluator](/docs/modules/evaluate).
+Directives use javascript [javascript evaluator](/docs/modules/evaluator)
+
 - This evaluator is able to process only inline javascript.
-- There is no `unsafe eval` (eval, new Function).
+- There is no `unsafe eval` (eval, new Function, Async function Prototype).
 - It doesn't support full javascript syntax. Make sure to read about the supported syntax.
 
 ## API
 ### directive
-Add custom directive
+Add a custom directive
 ```js
 directive('name', {
 	matcher: /reg exp to match the attribute/,
@@ -37,7 +38,7 @@ directive('name', {
 	}
 });
 ```
-Matcher is a function. This way we can check, if directive should be executed for the element or not.
+Matcher is a function. This way we can check if the directive should be executed for the element or not.
 ```js
 directive('name', {
 	matcher: ({ scope, attribute }) => {
@@ -54,21 +55,21 @@ directive('name', {
 ```
 
 ### getPrerenderedNodes
-This method returns `Node` array of elements, that are prerendered between `<!-- prerendered -->...<!-- /prerendered -->` after current element.
+This method returns a `Node` array of elements that are prerendered between `<!-- prerendered -->...<!-- /prerendered -->` after the current element.
+
 ```js
 const nodes = getPrerenderedNodes(element);
 ```
 
 ### processDirectives
-This method traverses over the dom tree of the root and initialize directives.
-- `directives`: if directives are passed as an argument, only the selected directives will be processed.
-- `onlyRoot`: if this is set to true, only the selected root will be processed.
+This method traverses over the DOM tree of the root and initializes directives.
+- `directives`:  If directives are passed as an argument, only the selected directives will be processed.
+
 ```js
 await processDirectives({
 	root: element,
 	// Optional
-	directives: ['my-directive'],
-	onlyRoot: false
+	directives: ['my-directive']
 });
 ```
 
@@ -83,18 +84,16 @@ It will be matched like this:
 ```
 
 ### Attributes
-- Directives are using `attributePrefix` and `attributeSeparator` which you can specify during Signalize inititialization.
+Directives use attributePrefix and attributeSeparator, which you can specify during Signalize initialization.
 - The default `attributeSeparator` is `-` (dash).
-- By default, there is no prefix, so you write for example `signal=""`, `bind-value=""`
-- However, if you define the attribute prefix to be `data-`, then you use `data-signal=""`, `data-bind-value=""`
+- By default, there is no prefix, so you write, for example, `signal=""`, `bind-value=""`.
+- However, if you define the attribute prefix to be `data-`, then you use `data-signal=""`, `data-bind-value=""`.
 
 
 ## Directives
-Directives available by default, sorted by execution order:
+Directives available by default:
 - `bind` - all elements
 - `on` - all elements
-
-Other directives you can import:
 - `for` - templates only
 - `if` - templates only
 
@@ -104,8 +103,8 @@ Each directive has access to the following data:
 - `$refs` - returns an element or array of elements `<input ref="field">`
 
 ### bind
-Bind directive is used to bind attributes and properties to elements.
-- It can bind normal value types as well as Signals
+The bind directive is used to bind attributes and properties to elements.
+- It can bind normal value types as well as Signals.
 - If you pass a signal on its own into the directive, you don't have to call it to get the value.
 
 ```html
@@ -125,6 +124,7 @@ Bind directive is used to bind attributes and properties to elements.
 
 #### interpolation
 Signalize doesn't support interpolation. Instead, use bind `html` or `text`.
+
 ```html
 <div :html=""></div>
 <div :text=""></div>
@@ -132,9 +132,9 @@ Signalize doesn't support interpolation. Instead, use bind `html` or `text`.
 ```
 
 ### for
-For loop is used for rendering elements within a for loop.
+The for loop is used for rendering elements within a for loop.
 - The supported syntax is `for of` and `for in`.
-- If you just need to trigger the iteration multiple times, you can use `value of 1000` / `value in 1000` shortcut.
+- If you just need to trigger the iteration multiple times, you can use the `value of 1000` / `value in 1000` shortcut.
 
 ```html
 <template :for="item of items"></template>
@@ -143,7 +143,8 @@ For loop is used for rendering elements within a for loop.
 <template :for="[key, value] of Object.entries(data)"></template>
 ```
 
-Key should be always binded inside the loop. This is, because the for loop allows you to render multiple roots:
+The key should always be bound inside the loop. This is because the for loop allows you to render multiple roots:
+
 ```html
 <template :for="i of 100">
 	<li :key="i"></li>
@@ -155,12 +156,12 @@ Key should be always binded inside the loop. This is, because the for loop allow
 </template>
 ```
 
-Inside the `for` directive the `iterator` variable is initialized.  It holds important information about the current loop:
-- `counter`: iteration counter
-- `first`: is this the first iteration?
-- `last`: is this the last iteration?
-- `odd`: is this iteration odd?
-- `even`: is thi iteration even?
+Inside the `for` directive, the `iterator` variable is initialized. It holds important information about the current loop:
+`counter`: iteration counter
+`first`: is this the first iteration?
+`last`: is this the last iteration?
+`odd`: is this iteration odd?
+`even`: is this iteration even?
 
 ```html
 <template :for="i of count">
@@ -176,8 +177,8 @@ Inside the `for` directive the `iterator` variable is initialized.  It holds imp
 ```
 
 ### if
-If directive is used for conditional rendering.
-- It can be used only on template element.
+The if directive is used for conditional rendering.
+- It can be used only on a template element.
 - Inside the directive, there can be multiple roots.
 - It doesn't need a wrapping element inside.
 
@@ -195,7 +196,8 @@ However, if you plan to use it in loops, you might want to wrap it in a div or s
 ```
 
 ### on
-On directive is used to bind listeners to an element.
+The on directive is used to bind listeners to an element.
+
 ```html
 <button @click="alert('Hello World!')"></button>
 <button on-click="alert('Hello World!')"></button>

@@ -1,26 +1,17 @@
-/**
- * Interface representing the scope with essential properties and methods.
- *
- * @typedef
- * @property {Element} $el - The root element associated with the scope.
- * @property {(callback?: CallableFunction) => void} $cleanup - Performs cleanup operations, optionally executing a callback.
- */
-
-/**
- * Type representing a function that initializes a scope.
- *
- * @typedef {function} ScopeInitFunction
- * @param {ScopeInterface} scope - The scope object to be initialized.
- * @returns {void}
- */
-
-/** @type {import('../Signalize').SignalizeModule} */
+/** @type {import('../../types/Signalize').Module<import('../../types/modules/scope').ScopeModule>} */
 export default async ($) => {
 	const { params, resolve } = $;
+
+	/**
+	 * @type {{
+	 *  observeMutations: import('../../types/modules/mutation-observer').observeMutations
+	 * }}
+	 */
 	const { observeMutations } = await resolve('mutation-observer');
 	const scopeKey = '__signalizeScope';
 	const refAttribute = `${params.attributePrefix}ref`;
 
+	/** @type {import('../../types/modules/scope').Scope} */
 	class Scope {
 		/**
 		 * @readonly
@@ -35,31 +26,32 @@ export default async ($) => {
 
 		/**
 		 * @readonly
-		 * @type {import('../Signalize').Signalize}
+		 * @type {import('../../types/Signalize').Signalize}
 		 */
 		$ = $;
 
 		/**
 		 * @readonly
-		 * @type {HTMLElement}
+		 * @type {import('../../types/modules/scope').SignalizeNode}
 		 */
 		$el;
 
 		/**
-		 * @type {Scope|null}
+		 * @type {Scope|undefined}
 		 */
-		$parentScope = null;
+		$parentScope
 
 		/**
 		 * @constructor
 		 * @param {Object} options - The options object for initializing the instance.
-		 * @param {Node} options.node - The Node associated with the instance.
+		 * @param {import('../../types/modules/scope').SignalizeNode} options.node - The Node associated with the instance.
 		 */
 		constructor ({ node }) {
 			this.$el = node;
 			node[scopeKey] = this;
 		}
 
+		/** @type {import('../../types/modules/scope').$data} */
 		get $data() {
 			return new Proxy(this.#data, {
 				/**
@@ -91,6 +83,7 @@ export default async ($) => {
 			});
 		}
 
+		/** @type {import('../../types/modules/scope').$data} */
 		set $data (data) {
 			for (const key in this.$data) {
 				if (key in data) {
@@ -105,10 +98,7 @@ export default async ($) => {
 			}
 		}
 
-		/**
-		 * @param {CallableFunction} [callback]
-		 * @returns {void}
-		 */
+		/** @type {import('../../types/modules/scope').$cleanup} */
 		$cleanup = (callback) => {
 			if (callback !== undefined) {
 				this.#cleanups.add(callback);
@@ -116,7 +106,7 @@ export default async ($) => {
 			}
 
 			/**
-			 * @param {Element} element
+			 * @param {import('../../types/modules/scope').SignalizeNode} element
 			 * @returns {void}
 			 */
 			const cleanChildren = (element) => {
@@ -138,10 +128,7 @@ export default async ($) => {
 			cleanChildren(this.$el);
 		};
 
-		/**
-		 * @param {string} name
-		 * @returns {Element[]}
-		 */
+		/** @type {import('../../types/modules/scope').$refs} */
 		$refs = new Proxy({}, {
 			get: (target, key) => {
 				const refs = [...this.$el.querySelectorAll(`[${refAttribute}=${key}]`)].filter((element) => {
@@ -170,11 +157,7 @@ export default async ($) => {
 		});
 	}
 
-	/**
-	 * @param {Node} node
-	 * @param {ScopeInitFunction} [init]
-	 * @returns {Scope|undefined}
-	 */
+	/** @type {import('../../types/modules/scope').scope} */
 	const scope = (node, init) => {
 		if (typeof init === 'function') {
 			init(node[scopeKey] ?? new Scope({ node }));

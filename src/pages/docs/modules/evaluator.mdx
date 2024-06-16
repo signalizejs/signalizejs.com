@@ -1,7 +1,7 @@
 ---
 order: 2
 layout: '@docsLayout'
-title: 'signalizejs/evaluate'
+title: 'signalizejs/evaluator'
 description: 'Javascript evaluator without unsafe eval.'
 ---
 
@@ -9,10 +9,10 @@ import Editor from '@codeEditor';
 import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 ## Installation
-<ImportMapDependencies module="evaluate" />
+<ImportMapDependencies module="evaluator" />
 
 ```js
-const { evaluate } = await signalize.resolve('evaluate');
+const { evaluate } = await signalize.resolve('evaluator');
 ```
 
 ## API
@@ -21,9 +21,9 @@ It doesn't use any form of unsafe eval (`eval`, `new Function`).
 
 **Trade Offs**
 
-Because evaluate is not using a native javascript evaluator, not every syntax will work.
-The evaluator was created primarily for [directives](/plugins/signalizejs-directives) to allow developers write simple logic directly in the directive.
-It can process a lot of javascript syntax but it wasn't developed for the purpose of evaluating all javascript features.
+Because evaluator is not using a native javascript evaluator (like new Function or eval), not every syntax is supported.
+The evaluator was created primarily for [directives](/plugins/signalizejs-directives) for writting simple logic directly in the html attribute.
+It can process various javascript syntaxes but it wasn't developed for the purpose of evaluating all javascript features.
 
 Some javascript features I don't think are used that much are not implemented in order to decrease the plugin size and complexity and some of them wan't work because of the endless complexity of javascript syntax. You can create an issue on Github if you think, something should be added or fixed:
 - You cannot define anything (let, var, const, variables, functions, objects, arrays...)
@@ -34,7 +34,7 @@ Some javascript features I don't think are used that much are not implemented in
 - Multiple script steps split by `;` are not implemented
 - The text interpolation is not implemented. Use `+` => `'Text ' + variable`
 
-Simply put, if it doesn't work in the Evaluator, move it directly into the JS and make an issue on Github, so we can discuss possible solutions.
+Simply put, if it doesn't work in the Evaluator, move it directly into the JS and ask on the Discord Channel or make an issue on Github, so we can discuss possible solutions.
 
 ### evaluate
 Evaluate function parses string and executes it.

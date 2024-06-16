@@ -59,6 +59,11 @@ component('code-mirror', {
 			loadCodeMirror();
 		}
 
+		const unwatch = code.watch(() => {
+			loadCodeMirror();
+			unwatch()
+		});
+
 		return {
 			loadCodeMirror,
 		}

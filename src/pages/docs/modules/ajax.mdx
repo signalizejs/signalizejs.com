@@ -2,47 +2,44 @@
 order: 2
 layout: '@docsLayout'
 title: 'signalizejs/ajax'
-description: 'Wrapper around native JavaScript fetch.'
+description: 'A wrapper around the native JavaScript fetch API.'
 ---
+
 import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
-It does the following:
-- Improves error handling
-- By default it sets method to `POST` if the body argument is passed and no method was added
-- If body argument is passed, it's not a string, number or FormData, it automatically converts it using `JSON.stringify()` and sets `application/json` header
-- It ads `X-Requested-With` header to the request, so you can detect if the request is ajax or not on the server
+**What it Does:**
+
+* Improves error handling.
+* By default, sets the method to `POST` if a body argument is provided and no method is specified.
+* If the body argument is passed and is not a string, number, or FormData, it automatically converts it using `JSON.stringify()` and sets the `Content-Type` header to `application/json`.
+* Adds the `X-Requested-With` header to the request, allowing you to detect AJAX requests on the server side.
 
 ## Installation
+
 <ImportMapDependencies module="ajax" />
 
 ```js
 const { ajax } = await signalize.resolve('ajax');
-```
 
-## API
+// Usage:
 
-### ajax
-- Send fetch request to the server
-- The arguments are the same like for [native fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
-- Returns an object with the fetch response and error
-
-```js
 const {
-	// Fetch response
-	response,
-	// Error info or null
-	error
+  // Fetch response
+  response,
+  // Error information (null if no error)
+  error,
 } = await ajax(url, options);
 
 if (error === null) {
-	const json = response.json();
-	// Do something ...
+  const json = response.json();
+  // Do something with the data...
 }
-```
 
-## Dispatched Events
-You can listen to the following events through the [on](/docs/modules/event#on) function:
-- `ajax:request:start` - Dispatched, when the requests starts
-- `ajax:request:success` - Dispatched, when the requests ends and is without an error
-- `ajax:request:error` - Dispatched, when the requests ends and contains errors
-- `ajax:request:end` - Dispatched, when the requests ends (even with an error).
+// Dispatched Events
+
+You can listen to the following events using the `on` function (see the [/docs/modules/event#on](/docs/modules/event#on) documentation):
+
+* `ajax:request:start`: Dispatched when the request starts.
+* `ajax:request:success`: Dispatched when the request completes successfully (no error).
+* `ajax:request:error`: Dispatched when the request encounters an error.
+* `ajax:request:end`: Dispatched when the request finishes (regardless of success or error).

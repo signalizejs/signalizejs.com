@@ -2,60 +2,59 @@ import signalizeUrl from 'signalizejs?url';
 import ajaxUrl from 'signalizejs/ajax?url';
 import bindUrl from 'signalizejs/bind?url';
 import componentUrl from 'signalizejs/component?url';
-import dashCaseUrl from 'signalizejs/dash-case?url';
+import dashCaseUrl from 'signalizejs/strings/cases?url';
 import dialogUrl from 'signalizejs/dialog?url';
 import directivesUrl from 'signalizejs/directives?url';
 import directivesForUrl from 'signalizejs/directives/for?url';
 import directivesIfUrl from 'signalizejs/directives/if?url';
-import domReadyUrl from 'signalizejs/dom-ready?url';
-import evaluateUrl from 'signalizejs/evaluate?url';
+import domReadyUrl from 'signalizejs/dom/ready?url';
+import domTraverserUrl from 'signalizejs/dom/traverser?url';
+import evaluatorUrl from 'signalizejs/evaluator?url';
 import eventUrl from 'signalizejs/event?url';
-import heightUrl from 'signalizejs/height?url';
 import hyperscriptUrl from 'signalizejs/hyperscript?url';
 import intersectionObserverUrl from 'signalizejs/intersection-observer?url';
-import isVisibleUrl from 'signalizejs/is-visible?url';
 import loggerUrl from 'signalizejs/logger?url';
 import mutationObserverUrl from 'signalizejs/mutation-observer?url';
 import offsetUrl from 'signalizejs/offset?url';
 import scopeUrl from 'signalizejs/scope?url';
 import signalUrl from 'signalizejs/signal?url';
+import sizesUrl from 'signalizejs/sizes?url';
 import snippetsUrl from 'signalizejs/snippets?url';
 import spaUrl from 'signalizejs/spa?url';
 import taskUrl from 'signalizejs/task?url';
-import traversDomUrl from 'signalizejs/traverse-dom?url';
 import viewportUrl from 'signalizejs/viewport?url';
-import widthUrl from 'signalizejs/width?url';
-import { getModulesDependencies } from '@config/config.mjs';
+import visibilityUrl from 'signalizejs/visibility?url';
 
-export const createImportMapJson = (selectedModules) => {
+import { getModulesDependencies, modules } from '@config/config.mjs';
+
+export const createImportMapJson = (selectedModules = Object.keys(modules)) => {
 	const map = {
 		signalizejs: signalizeUrl,
 		ajax: ajaxUrl,
 		bind: bindUrl,
 		component: componentUrl,
-		'dash-case': dashCaseUrl,
+		'dom/ready': domReadyUrl,
+		'dom/traverser': domTraverserUrl,
 		dialog: dialogUrl,
 		directives: directivesUrl,
 		'directives/for': directivesForUrl,
 		'directives/if': directivesIfUrl,
-		'dom-ready': domReadyUrl,
-		evaluate: evaluateUrl,
+		evaluator: evaluatorUrl,
 		event: eventUrl,
-		height: heightUrl,
 		hyperscript: hyperscriptUrl,
 		'intersection-observer': intersectionObserverUrl,
-		'is-visible': isVisibleUrl,
 		logger: loggerUrl,
 		'mutation-observer': mutationObserverUrl,
 		offset: offsetUrl,
 		scope: scopeUrl,
 		signal: signalUrl,
+		sizes: sizesUrl,
 		snippets: snippetsUrl,
 		spa: spaUrl,
+		'strings/cases': dashCaseUrl,
 		task: taskUrl,
-		'traverse-dom': traversDomUrl,
 		viewport: viewportUrl,
-		width: widthUrl
+		visibility: visibilityUrl
 	};
 
 	let modules = {

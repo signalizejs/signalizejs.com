@@ -2,7 +2,7 @@
 order: 2
 layout: '@docsLayout'
 title: 'signalizejs/dialog'
-description: 'Wrapper around native javascript dialog functionality.'
+description: 'Wrapper around native JavaScript dialog functionality.'
 ---
 
 import Editor from '@codeEditor';
@@ -74,11 +74,19 @@ The Dialog module comes with the Signalize default installation. You just need t
 - `dialog-open`: Is used to open dialog after click `dialog-open="dialog-id"`
 - `dialog-modeless`: If this attribute is set, it will open [modeless dialog](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement#instance_methods)
 
+
+Available Directives
+- **dialog**: Used as an ID for the dialog element (replace with id).
+- **dialog-close**: Used to close the dialog after click (dialog-close is enough) => `dialog-close="dialog-id"`
+- **dialog-open**: Used to open the dialog after click (dialog-open="dialog-id" is enough) => `dialog-open="dialog-id"`
+- **dialog-modeless**: If set, opens a [modeless dialog](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement#instance_methods) (link to modeless dialog).
+
+
 ## Dispatched Events
-You can listen to the following events through the [on](/docs/modules/event#on) function:
+You can listen to the following events through the [on](/docs/modules/event#on) method:
 - `dialog:closed`: Dispatched when a dialog is closed
 - `dialog:opened`: Dispatched when a dialog is opened
 
 ## URL Hash
-- Dialog module watches url hash for changes
-- If a dialog was found with the given url hash like `example.com#my-dialog`, it will be automatically opened.
+- The Dialog module watches the URL hash for changes
+- If a dialog with the given URL hash is found (e.g., `example.com#my-dialog`), it will be automatically opened.

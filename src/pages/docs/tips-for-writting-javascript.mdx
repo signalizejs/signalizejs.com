@@ -1,43 +1,43 @@
 ---
 layout: '@docsLayout'
 title: 'Tips for writting and loading Javascript'
-description: 'Learn some usefull tricks for writting Javascript'
+description: 'Learn useful tricks for writing optimized JavaScript'
 ---
 
-Because we live in the era of frameworks like Vue.js, Next.js, Svelte, Solid and Qwik we got used to write and split our code in a completely different way than it was done with client-side only javascript frameworks (like jQuery) or with vanilla js.
+Because we live in the era of frameworks like Vue.js, Next.js, Svelte, Solid, and Qwik, we are accustomed to writing and splitting our code in a completely different way than with client-side-only JavaScript frameworks (like jQuery) or vanilla JS.
 
-However, if you don't use component based framework, you will probably need to find your own way for loading and spliting code.
+However, if you don't use a component-based framework that splits assets automagically, you will probably need to find your own way of loading and splitting code.
 
-Tips mentioned in this section are focused to help you write maintainable javascript in the "old school way". They are universal so you can use them even if you don't use Signalize.
+The tips mentioned in this section are focused on helping you write maintainable JavaScript in the "old school way." They are universal, so you can use them even if you don't use Signalize.
 
 ## Selectors
-Selectors we add to elements should describe, what they are used for.
+Selectors we add to elements should describe what they are used for.
 
-Let's start with prefixes. Prefixes are good to separate "logical and state selectors" from "styling only" or "descriptive" selectors,
-- `js-`: use this prefix for selectors that will be used within javascript => `js-toggle-button`. These selectors should be only in templates and in javascript files.
-- `s-`: use this prefix for setting some state of an element aka `s-active`, `s-toggled`. These classes can be styled within css and can be set by javascript.
+Let's start with prefixes. Prefixes are good for separating "logical and state selectors" from "styling only" or "descriptive" selectors:
+- `js-`: Use this prefix for selectors that will be used within JavaScript => `js-toggle-button`. These selectors should be only in templates and JavaScript files.
+- `s-`: Use this prefix for setting some state of an element, e.g., `s-active`, `s-toggled`. These classes can be styled within CSS and can be set by JavaScript.
 
-To improve searching for selectors in the project and to instantly see which classes are together, it's better to keep the naming in "sequence":
+To improve searching for selectors in the project and to instantly see which classes belong together, it's better to keep the naming in "sequence":
 - Let's say we have a `js-tabs` component.
-- Our class for a single tab will be: `js-tabs-tab`.
+- Our class for a single tab will be `js-tabs-tab`.
 - The class for the toggle button will be `js-tabs-tab-toggle` not `js-toggle-tab`.
-- Now, if we search for `js-tabs` we instantly see, which selectors works together in which files.
+- Now, if we search for `js-tabs` we instantly see which selectors work together in which files.
 
-Directives such as `data-` can be used to "keep a state" directly on a DOM Element  and in the same time to for example select an element:
-- `data-js-`: can be used to define for example `data-js-tab="first"`, `data-js-tab-toggle="first"`. It's easy to understand what these directives do. Thanks to the `js` prefix we know it's going to be used by javascript and that the button toggles a tab with given id.
-- `data-s`: this directive can be used to maintain a state on an element, such as `data-s-tab-toggled="false"`. This directive can also be used within css for styling toggled or hidden element.
+Directives such as `data-` can be used to "keep a state" directly on a DOM element and at the same time select an element:
+- `data-js-`: can be used to define, for example, `data-js-tab="first"`, `data-js-tab-toggle="first"`. It's easy to understand what these directives do. Thanks to the js prefix, we know it's going to be used by JavaScript and that the button toggles a tab with a given ID.
+- `data-s`: this directive can be used to maintain a state on an element, such as `data-s-tab-toggled="false"`. This directive can also be used within CSS for styling toggled or hidden elements.
 
 ## Splitting Code
-Spliting assets is always a pain.
+Splitting assets is always a challenge.
 
-There are various ways for loading JS and CSS. The following tips works for me so I have decided to share them:
+There are various ways to load JS and CSS. The following tips work for me, so I have decided to share them:
 - **Layout CSS and JS** - Magic that is used anywhere.
 - **Page CSS and JS** - Only for one page.
 - **Lazyloaded chunks after an event** - dialogs, dropdowns, cart. Use Signalize `resolve` function, native [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import) or embed the path to the script into the head of your page.
 
 Individual logic should be split into files. Do not place all logic into one file. You can use one of the following tips to split the code:
 
-**Directory Structure 1 - Keep CSS and JS in separated directories:**
+**Directory Structure 1 - Keep CSS and JS in separate directories:**
 - assets
 	- js
 		- components
@@ -69,11 +69,9 @@ Individual logic should be split into files. Do not place all logic into one fil
 [ES modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) are supported in most modern browsers and they have a lot of features:
 - They are imported and executed only once.
 - Dependencies are resolved automatically. No need for bundling.
-- With importmaps, you can easily orchestrate your import paths. Javascript Frameworks like Astro don't even need importmaps in most cases.
+- With import maps, you can easily orchestrate your import paths. JavaScript frameworks like Astro don't even need import maps in most cases.
 - It's easy to split functionality into various ES modules and import them only when necessary using dynamic imports.
 - Etc...
-
-ES modules are import only once. They let you import other scripts through import maps
 
 ```html
 <script type="module">
@@ -83,16 +81,16 @@ ES modules are import only once. They let you import other scripts through impor
 
 ## Loading Code
 
-The "basic goal" to write optimized javascript is, to delay it's loading and execution until it's really necessary and load only what is necessary.
+The "basic goal" to write optimized JavaScript is to delay its loading and execution until it's really necessary and load only what is necessary.
 
-For example, if you have multiple carousels on your page you might want to load the script for them after click on a button that will trigger the slide effect to left/right. When the script is loaded, it should only initialize those carousels, that are currently in the viewport by checking visibility using [intersection observer](/docs/modules/intersection-observer).
-This can be applied to any other scripts and logic => dialogs, content loaded within dropdowns and filters, and etc.
+For example, if you have multiple carousels on your page, you might want to load the script for them after a click on a button that will trigger the slide effect to the left/right. When the script is loaded, it should only initialize those carousels that are currently in the viewport by checking visibility using [intersection observer](/docs/modules/intersection-observer).
+This can be applied to any other scripts and logic => dialogs, content loaded within dropdowns and filters, etc.
 
-Harry Roberts had a nice talk [Get Your Head Straight](https://www.smashingmagazine.com/2021/09/css-head-tag/) (slides are [here](https://speakerdeck.com/csswizardry/get-your-head-straight)) where he was talking about the order of elements within the head tag and how to load scripts and styles.
-To make it short, Javascript and CSS should be split into 3 locations:
-- `Head start CSS`: Right after title element. For example for Critical CSS, Layout and Page css
-- `Body after priority content JS`: For example before footer or after last product list. Any high priority JS. Navigation, filter or analytics like GTM and FB.
-- `Body end`: Low priority js. Those that user will probably not be used immediately after the page loads. Dialogs, dropdowns, js for content in togggable sections and etc.
+Harry Roberts had a nice talk [Get Your Head Straight](https://www.smashingmagazine.com/2021/09/css-head-tag/) (slides are [here](https://speakerdeck.com/csswizardry/get-your-head-straight)) where he talked about the order of elements within the head tag and how to load scripts and styles.
+To summarize, JavaScript and CSS should be split into three locations:
+- `Head start CSS`: Right after the title element. For example, for Critical CSS, Layout, and Page CSS.
+- `Body after priority content JS`: For example, before the footer or after the last product list. Any high-priority JS, like navigation, filter, or analytics (e.g., GTM and FB).
+- `Body end`: Low-priority JS. Those that the user will probably not use immediately after the page loads, like dialogs, dropdowns, and JS for content in toggleable sections.
 
 ```html
 <html>
@@ -118,21 +116,21 @@ To make it short, Javascript and CSS should be split into 3 locations:
 
 ## Use the Web Platform
 
-Modern browsers provides a lot of native functionality, that you might want to check and consider, before creating your own solution:
+Modern browsers provide a lot of native functionality that you might want to check and consider before creating your own solution:
 - [Dialog Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog) - Good for dialogs and all kinds of notifications.
-- [Details Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details) - Dropdowns or toggable navigations.
-- [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) - Side menu, mobile menu or additional info messages.
-- [CSS Toggles](https://tabatkins.github.io/css-toggle/#introduction) - Use CSS to toggle things instead of javascript.
-- [CSS Scroll Snap](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll_snap) - Use CSS to create carousels, galeries and etc.
+- [Details Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details) - Dropdowns or toggleable navigations.
+- [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) - Side menu, mobile menu, or additional info messages.
+- [CSS Toggles](https://tabatkins.github.io/css-toggle/#introduction) - Use CSS to toggle things instead of JavaScript.
+- [CSS Scroll Snap](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll_snap) - Use CSS to create carousels, galleries, etc.
 - [Form Validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation) - Native form validation attributes.
-- [Lazyload Attribute](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) - Native lazyloading instead of custom JS.
+- [Lazyload Attribute](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) - Native lazy loading instead of custom JS.
 - [View Transitions Meta Tag](https://developer.chrome.com/blog/spa-view-transitions-land/#transitions-across-documents) - This one meta tag (I hope) will be able to deprecate any "SPA library" one day.
 - [Cross Document View Transition](https://developer.chrome.com/docs/web-platform/view-transitions/cross-document) - Probably somewhere in the future an alternative to complex Single Page Applications.
 
 ## YAGNI & KISS principles
-You Aren't Gonna Need It + Keep It Simple Stupid.
+You Aren't Gonna Need It + Keep It Simple, Stupid.
 
-Think what your clients/customers want and if the script you write is really necessary. A few examples:
-- Does the form need to be reactive or can it be validated only before it is send?
-- Do I need super cool carousel with ninja animations or am I fine with native scroll snap?
-- Is there any need for "SPA" besides it just "looks cool"? Does any customer need that?
+Think about what your clients/customers want and if the script you write is really necessary. A few examples:
+- Does the form need to be reactive, or can it be validated only before it is sent?
+- Do I need a super cool carousel with ninja animations, or am I fine with native scroll snap?
+- Is there any need for an "SPA" besides it just "looks cool"? Does any customer need that?

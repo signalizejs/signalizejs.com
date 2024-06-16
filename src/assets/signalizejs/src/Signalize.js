@@ -1,98 +1,43 @@
-/**
- * Global variables that can are used within an outside of Signalize to avoid poluting Window object.
- *
- * @typedef {Record<string, any>} SignalizeGlobals
- */
-
-/**
- * Global settings for Signalize and its modules.
- *
- * @typedef {Record<string, any>} SignalizeParams
- */
-
-/**
- * List of signalize modules that will be inited instantly when the Signalize instance is created.
- *
- * @typedef {Array<string|[string, Record<string, any>]|[string, Function]|[string, Function, Record<string, any>]>} SignalizeModules
- */
-
-/**
- * Module resolver definition
- *
- * @template T
- * @callback SignalizeModulesResolver<T>
- * @param {string} moduleName
- * @returns {Promise<T>}
- */
-
-/**
- * Options for configuring Signalize.
- *
- * @typedef {Object} SignalizeOptions
- * @property {Element | Document} [root] - The root element or document where Signalize will operate.
- * @property {SignalizeParams} [params] - The separator used in attribute names for component customization.
- * @property {SignalizeGlobals} [globals] - Optional global settings for Signalize.
- * @property {SignalizeModules} [modules] - Optional array of modules to be applied to Signalize.
- * @property {string} [instanceId] - The id of the Signalize instance for imports to prevent collisions.
- * @property {SignalizeModulesResolver<unknown>} [resolver] - Modules resolver
- */
-
-/**
- * @template {Record<string, any> = {}} C
- * @template {Record<string, any>|void = {}} F
- * @callback SignalizeModule
- * @param {Signalize} signalize - The Signalize instance to which the module will be applied.
- * @param {C} config - Module config. Direct from init function or from params.
- * @returns {F|Promise<F>}attributePrefix
- */
 export class Signalize {
 	/**
 	 * List of internal modules in /modules,
 	 * so they can be resolved without full package name like signalizejs/something
 	 */
 	#internalModules = [
+		'ajax',
 		'bind',
 		'component',
-		'dash-case', 'dialog', 'dom-ready', 'directives', 'directives/for', 'directives/if',
-		'evaluate', 'event',
-		'ajax',
-		'height', 'hyperscript',
-		'intersection-observer', 'is-visible',
+		'dialog', 'dom/ready', 'dom/traverser', 'directives', 'directives/for', 'directives/if',
+		'evaluator', 'event',
+		'hyperscript',
+		'intersection-observer', 'visibility',
 		'mutation-observer',
-		'scope', 'signal', 'snippets', 'spa',
+		'offset',
+		'scope', 'signal', 'sizes', 'snippets', 'spa', 'strings/cases',
 		'task',
-		'traverse-dom',
 		'viewport',
 	];
-	/**
-	 * @type {Record<string, Promise<any>>}
-	 */
+	/** @type {Record<string, Promise<any>>} */
 	#currentlyResolvedModules = {};
 	/** @type {Record<string, any>} */
 	#modules = {};
 	/** @type {Promise<any>|null} */
 	#initPromise = null;
 	#inited = false;
-	/**
-	 * @template T
-	 * @type {SignalizeModulesResolver<T>}
-	 */
+	/** @type {import('../types/Signalize').ModulesResolver} */
 	#resolver = (moduleName) => import(moduleName);
 	#instanceId = 'signalizejs';
-	/** @type {Element|Document} */
+	/** @type {import('../types/Signalize').Root} */
 	root;
-	/** @type {SignalizeGlobals} */
+	/** @type {import('../types/Signalize').Globals} */
 	globals = {};
-	/** @type {SignalizeParams} */
+	/** @type {import('../types/Signalize').Params} */
 	params = {
 		attributePrefix: '',
 		attributeSeparator: '-'
 	};
 
-	/**
-	 * @constructor
-	 * @param {SignalizeOptions} options
-	 */
+	/** @param {import('../types/Signalize').SignalizeConfig} options */
 	constructor (options = {}) {
 		this.root = options?.root ?? document;
 
@@ -100,10 +45,7 @@ export class Signalize {
 			this.root.__signalize = this;
 
 			const init = async () => {
-				if ('resolver' in options) {
-					this.#resolver = options.resolver;
-				}
-
+				this.#resolver = options.resolver ?? this.#resolver
 				this.#instanceId = options?.instanceId ?? this.#instanceId;
 				this.globals = options?.globals ?? this.globals;
 				this.params = options?.params ?? this.params;
@@ -126,10 +68,7 @@ export class Signalize {
 		return this.root.__signalize;
 	}
 
-	/**
-	 * @param {Function} [callback]
-	 * @returns {Promise<void>}
-	 */
+	/** @param {import('../types/Signalize').InitedCallback} [callback] */
 	inited = async (callback) => {
 		if (!this.#inited) {
 			await this.#initPromise;
@@ -142,13 +81,12 @@ export class Signalize {
 
 	/**
 	 * @template T
-	 * @param {Array<string|[string, Record<string, any>|Function, Record<string, any>|undefined]|Record<string, any>>} modules
-	 * @returns {Promise<T>}
+	 * @type {import('../types/Signalize').Resolve<T>}
 	 */
 	resolve = async (...modules) => {
 		const lastItem = modules[modules.length - 1];
 		const lastItemIsConfig = !(Array.isArray(lastItem) || typeof lastItem === 'string');
-		let resolveConfig = {
+		const resolveConfig = {
 			waitOnInit: true,
 			...lastItemIsConfig ? lastItem : {}
 		};
@@ -161,15 +99,18 @@ export class Signalize {
 			await this.inited();
 		}
 
-		/** @type {T} */
 		let resolved = {};
-		/** @type {Promise<Record<string, any>>[]} */
-		let importsPromises = [];
+
+		/**
+		 * @template T
+		 * @type {Promise<Record<string, any>>[]} */
+		const importsPromises = [];
 
 		for (const moduleToImport of modules) {
 			/** @type {string} */
 			let moduleName;
-			let moduleInitFunction = null;
+			/** @type {CallableFunction} */
+			let moduleInitFunction;;
 			let moduleConfig = {};
 
 			if (typeof moduleToImport === 'string') {
@@ -214,7 +155,7 @@ export class Signalize {
 				this.#currentlyResolvedModules[moduleName] = new Promise(async (resolve, reject) => {
 					try {
 						let moduleFunctionality;
-						if (moduleInitFunction === null) {
+						if (moduleInitFunction === undefined) {
 							const module = await this.#resolver(moduleName);
 							moduleFunctionality = await (module[moduleName] ?? module.default)(this, moduleConfig);
 						} else {

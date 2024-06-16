@@ -1,0 +1,23 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/visibility'
+description: 'Retrieve information about HTML element visibility.'
+---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
+## Installation
+<ImportMapDependencies module="visibility" />
+
+```js
+const { isVisible } = await signalize.resolve('visibility');
+```
+
+## API
+
+### isVisible
+Check if an element is visible. The method returns `true` or `false`.
+
+```js
+isVisible(document.querySelector('#element'));
+```

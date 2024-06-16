@@ -2,7 +2,7 @@
 order: 2
 layout: '@docsLayout'
 title: 'signalizejs/signal'
-description: 'Reactive primitive that can be watched, used to create stores or binded to element properties and attributes.'
+description: 'Reactive primitive that can be watched, used to create stores, or bound to element properties and attributes.'
 ---
 
 import Editor from '@codeEditor';
@@ -23,11 +23,11 @@ const {
 
 ### signal
 Signals in a nutshell:
-- Signal in the Signalize is basically a "variable" that you can watch for changes or when it's value is accessed.
-- Every Signal you create while using Signalize is an instance the `Signal` class.
-- The method `signal` creates a new instance of the `Signal` class with the value you pass in during the inicialization.
+- A `signal` in Signalize is basically a "variable" that you can watch for changes or when its value is accessed.
+- Every signal you create while using Signalize is an instance of the `Signal` class.
+- TThe method `signal` creates a new instance of the `Signal` class with the value you pass in during initialization.
 
-Let's start with how signal can be used:
+Let's start with how a signal can be used:
 ```js
 // 1. Creating a signal
 const number = signal(0);
@@ -41,7 +41,7 @@ number(1)
 const actualNumber = number(); // => 1
 
 // 4. We may want to watch the signal
-// See docs bellow for more info
+// See docs below for more info
 
 // 4.1 Triggered after every set
 const unwatch = number.watch(({ newValue, oldValue }) => {});
@@ -61,17 +61,17 @@ number.watch(({ newValue, oldValue }) => {
 number.watch(({ newValue, oldValue }) => {}, { execution: 'onGet' });
 ```
 
-Signals can be watched for the following events. See example bellow:
-- **on every get** - to track places, where signal is used
-- **before it is set** - usefull to check the new value and possibly modify the value or block setter.
-- **after it is set** - trigger some callback like recalculation variables that depends on the signal
+Signals can be watched for the following events. See the example below:
+- **on every get** - To track places where the signal is used.
+- **before it is set** -Useful to check the new value and possibly modify the value or block the setter.
+- **after it is set** - Trigger some callback like recalculating variables that depend on the signal.
 
 Signals are often used with the [bind method](/plugins/signalizejs-bind).
 
-Bellow is an example in which are two number inputs:
+Below is an example with two number inputs:
 - Signals are connected to elements using the [bind method](/plugins/signalizejs-bind).
-- Signals are watched using `.watch()` methods.
-- When any signal changes, it's gonna update the output under input elements.
+- Signals are watched using `.watch()` method.
+- When any signal changes, it updates the output under the input elements.
 - `numberB` cannot be lower than `numberA`. It's always +1 higher than `numberA`.
 
 <Editor code={`
@@ -130,13 +130,12 @@ B: <input id="numberB" type="number"><br>
 `} />
 
 ### Signal
-Signal is a class that is used while creating a new signal with the `signal` method.
+Signal is a class that is used when creating a new signal with the `signal` method.
 
 Because Signal is a class, it can be easily extended for additional functionality.
-This way we can make a specific Signal, that can be reused within the application.
+This way, we can make a specific Signal that can be reused within the application.
 
-Let's make a signal that will contain `increase` and `decrease` methods.
-
+Let's make a signal that will contain `increment` method.
 ```js
 const { Signal } = await signalize.resolve('signal');
 

@@ -6,7 +6,7 @@ export const twitterLink = 'https://x.com/signalizejs';
 
 export const siteUrl = 'https://signalizejs.com';
 
-const modules = {
+export const modules = {
 	ajax: {
 		name: 'ajax',
 		dependencies: [ 'event' ],
@@ -23,20 +23,20 @@ const modules = {
 	},
 	component: {
 		name: 'component',
-		dependencies: ['dash-case', 'event', 'scope', 'signal'],
+		dependencies: ['event', 'scope', 'strings/cases', 'signal'],
 		api: [
 			{ label: 'component' }
 		]
 	},
-	'dash-case': {
-		name: 'dash-case',
+	'strings/cases': {
+		name: 'strings/cases',
 		api: [
-			{ label: 'dash-case' }
+			{ label: 'strings/cases' }
 		]
 	},
 	dialog: {
 		name: 'dialog',
-		dependencies: ['event', 'dom-ready'],
+		dependencies: ['event', 'dom/ready'],
 		api: [
 			{ label: 'dialog', anchor: 'dialog' },
 			{ label: 'openDialog', anchor: 'opendialog' },
@@ -45,7 +45,7 @@ const modules = {
 	},
 	directives: {
 		name: 'directives',
-		dependencies: ['event', 'evaluate', 'traverse-dom', 'bind', 'scope', 'signal', 'dash-case', 'directives/for', 'directives/if'],
+		dependencies: ['bind', 'directives/for', 'directives/if', 'dom/traverser', 'event', 'evaluator', 'scope', 'signal', 'strings/cases'],
 		api: [
 			{ label: 'directive', anchor: 'directive' },
 			{ label: 'getPrerenderedNodes', anchor: 'getprerenderednodes' },
@@ -62,13 +62,21 @@ const modules = {
 		dependencies: ['directives'],
 		api: [],
 	},
-	'dom-ready': {
-		name: 'dom-ready',
+	'dom/ready': {
+		name: 'dom/ready',
 		dependencies: ['event'],
-		api: []
+		api: [
+			{ label: 'isDomReady'}
+		]
 	},
-	evaluate: {
-		name: 'evaluate',
+	'dom/traverser': {
+		name: 'dom/traverser',
+		api: [
+			{ label: 'traverseDom' },
+		]
+	},
+	evaluator: {
+		name: 'evaluator',
 		dependencies: ['signal'],
 		api: [
 			{ label: 'evaluate' }
@@ -85,10 +93,11 @@ const modules = {
 			{ label: 'dispatch', anchor: 'dispatch' },
 		]
 	},
-	height: {
-		name: 'height',
+	sizes: {
+		name: 'sizes',
 		api: [
-			{ label: 'height' }
+			{ label: 'height', anchor: '#height' },
+			{ label: 'width', anchor: '#width' }
 		]
 	},
 	hyperscript: {
@@ -102,12 +111,6 @@ const modules = {
 		name: 'intersection-observer',
 		api: [
 			{ label: 'observeIntersection' }
-		]
-	},
-	'is-visible': {
-		name: 'is-visible',
-		api: [
-			{ label: 'isVisible' }
 		]
 	},
 	logger: {
@@ -150,7 +153,7 @@ const modules = {
 	},
 	spa: {
 		name: 'spa',
-		dependencies: ['event', 'ajax', 'snippets'],
+		dependencies: ['dom/ready', 'event', 'ajax', 'snippets'],
 		api: [
 			{ label: 'navigate' }
 		]
@@ -161,23 +164,17 @@ const modules = {
 			{ label: 'task' }
 		]
 	},
-	'traverse-dom': {
-		name: 'traverse-dom',
-		api: [
-			{ label: 'traverseDom' },
-		]
-	},
 	viewport: {
 		name: 'viewport',
-		dependencies: ['height', 'offset'],
+		dependencies: [ 'sizes', 'offset'],
 		api: [
 			{ label: 'isInViewport' }
 		]
 	},
-	width: {
-		name: 'width',
+	visibility: {
+		name: 'visibility',
 		api: [
-			{ label: 'width' }
+			{ label: 'isVisible' }
 		]
 	}
 };
@@ -200,7 +197,7 @@ export const modulesSections = [
 		color: '#91d630',
 		modules: [
 			modules.directives,
-			modules.evaluate
+			modules.evaluator
 		]
 	},
 	{
@@ -254,17 +251,16 @@ export const modulesSections = [
 		color: '#4bd8f3',
 		modules: [
 			modules.ajax,
-			modules["dom-ready"],
+			modules["dom/ready"],
+			modules["dom/traverser"],
 			modules.event,
-			modules.height,
 			modules.hyperscript,
 			modules["mutation-observer"],
 			modules.offset,
+			modules.sizes,
 			modules.snippets,
-			modules["traverse-dom"],
 			modules.viewport,
-			modules['is-visible'],
-			modules.width
+			modules.visibility,
 		]
 	},
 ];
@@ -280,6 +276,22 @@ export const apiLinks = Object
 	.flat()
 	.sort((a, b) => (a.label < b.label) ? -1 : (a.label > b.label) ? 1 : 0);
 
+export const getModuleNames = () => {
+	/** @type {Record<string, string[]>} */
+	const moduleNameGroups = {};
+
+	for (const moduleName in modules) {
+		const moduleNameFirstLetter = moduleName[0];
+		if (!(moduleNameFirstLetter in moduleNameGroups)) {
+			moduleNameGroups[moduleNameFirstLetter] = [];
+		}
+
+		moduleNameGroups[moduleNameFirstLetter].push(moduleName);
+	}
+
+	return Object.values(moduleNameGroups);
+}
+
 export const getModulesDependencies = (...moduleNames) => {
 	const dependencies = [];
 
@@ -292,6 +304,7 @@ export const getModulesDependencies = (...moduleNames) => {
 
 		const mapDependencies = (moduleDependencies) => {
 			for (const dependency of moduleDependencies) {
+
 				if (!dependencies.includes(modules[dependency])) {
 					dependencies.push(modules[dependency]);
 				}

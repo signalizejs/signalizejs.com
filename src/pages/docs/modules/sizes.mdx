@@ -1,0 +1,32 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/sizes'
+description: 'Get computed element sizes.'
+---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
+## Installation
+<ImportMapDependencies module="sizes" />
+
+```js
+const { height, width } = await signalize.resolve('sizes');
+```
+
+## API
+
+### height
+Get the height of an element or document.
+
+```js
+height(document.querySelector('#element'));
+```
+
+### width****
+Get the width of an element or document.
+
+```js
+const { width } = signalize;
+
+width(document.querySelector('#element'));
+```

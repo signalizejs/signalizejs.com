@@ -1,7 +1,7 @@
 ---
 layout: '@docsLayout'
 title: 'How to install Signalize in Astro.build'
-description: 'Learn how to install Signalize framework in your Astro.build applications easily and quickly.'
+description: 'Learn how to install the Signalize framework in your Astro.build applications easily and quickly.'
 ---
 
 ## Install Signalize
@@ -17,14 +17,14 @@ pnpm i signalizejs
 
 ## Initialization
 
-Create `src/assets/layout.js` and add the following code into it:
+Create `src/assets/layout.js` and add the following code to it:
 ```js
 import Signalize from 'signalizejs';
 
 export const signalize = new Signalize();
 ```
 
-Open your layout file (like `src/layouts/main.astro`) and add the following code into it:
+Open your layout file (like `src/layouts/main.astro`) and add the following code to it:
 ```html
 ---
 // 1. Get signalizejs url
@@ -58,10 +58,10 @@ const importMap = JSON.stringify({
 </html>
 ```
 
-## Use Signalize from other Scripts
+## Usage
 Astro.build uses Vite and internally converts your scripts into ES modules. Converted scripts are imported only once.
 
-Thanks to this feature we can import the Signalize instance from `layout.js` directly without beying woried about duplicated code in our `page.js`.
+Thanks to this feature, we can import the Signalize instance from `layout.js` directly without worrying about duplicated code in our `page.js`.
 ```html
 ---
 // src/pages/index.astro
@@ -77,4 +77,43 @@ import MainLayout from '../layouts/main.astro';
 		const { on } = await signalize.resolve<{ on: on }>('event');
 	</script>
 </MainLayout>
+```
+
+## How to pass Props to Components
+Below is an example showing how to pass props to a child component:
+
+- Create a child component
+- Destruct `props` object in the child component from `Astro.props`;
+- Pass `props` object to the child component as property from the place where you want to use the component
+
+The child component:
+```html
+---
+// src/components/MyComponent.astro
+const { props = {} } = Astro.prorps
+---
+
+<script>
+import { signalize } from '/path/to/instance.js';
+
+const { component } = await signalize.resolve('component');
+
+component('my-component', {
+	props: ['some-property'],
+	setup({ $props }) {
+		const { someProperty } = $props;
+	}
+});
+</script>
+
+<my-component { ...props } />
+```
+
+Page:
+```html
+---
+import MyComponent from 'src/components/MyComponent.astro';
+---
+
+<MyComponent props={{ someProp: 'Some Value' }} />
 ```

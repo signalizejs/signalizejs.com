@@ -1,24 +1,10 @@
-/**
- * @typedef SnippetOptions
- * @property {string[]} [snippetActions]
- * @property {HTMLElement|DocumentFragment} [newSnippet]
- * @property {HTMLElement} [existingSnippet]
- */
-
-/**
- * @typedef RedrawSnippetOptions
- * @property {Record<string, SnippetOptions>} [snippets]
- * @property {boolean} [transitionsEnabled]
- */
-
-/**
- * @callback redrawSnippet
- * @param {string} content
- * @param {RedrawSnippetOptions} [options]
- */
-
-/** @type {import('../Signalize').SignalizeModule} */
+/** @type {import('../../types/Signalize').Module<import('../../types/modules/snippets').SnippetsModule>} */
 export default async ({ params, resolve, root }) => {
+	/**
+	 * @type {{
+	 *   dispatch: import('../../types/modules/event').dispatch
+	 * }}
+	 */
 	const { dispatch } = await resolve('event');
 	const snippetAttribute = `${params.attributePrefix}snippet`;
 	const snippetAttributeDirective = `${snippetAttribute}${params.attributeSeparator}`;
@@ -32,7 +18,7 @@ export default async ({ params, resolve, root }) => {
 	 */
 	const parseHtml = (html, type = 'text/html') => (new DOMParser()).parseFromString(html, type);
 
-	/** @type {redrawSnippet} */
+	/** @type {import('../../types/modules/snippets').redrawSnippet} */
 	const redrawSnippet = async (content, options = {}) => {
 		const fragment = parseHtml(content);
 		const snippets = [...fragment.querySelectorAll(`[${snippetAttribute}]`)];
@@ -52,7 +38,7 @@ export default async ({ params, resolve, root }) => {
 					continue;
 				}
 
-				let snippetConfig = {
+				const snippetConfig = {
 					snippetId,
 					snippetActions: newSnippet.getAttribute(`${snippetActionAttribute}`)?.split(' ') ?? ['replace'],
 					newSnippet,

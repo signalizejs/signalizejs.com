@@ -1,30 +1,18 @@
 /**
- * Represents the result of a fetch operation, containing the response and any potential error.
- *
- * @typedef FetchReturn
- * @property {Response | null} response - The response from the fetch operation (or null if an error occurred).
- * @property {Error|null} error - Any error that occurred during the fetch operation.
+ * @type {import('../../types/Signalize').Module<
+ *  import('../../types/modules/ajax').AjaxModule,
+ *  import('../../types/modules/ajax').AjaxModuleConfig
+ * >}
  */
-
-/**
- * Options for configuring a plugin related to fetch operations.
- *
- * @typedef PluginOptions
- * @property {string} [requestedWithHeader] - The value for the 'Requested-With' header (optional).
- * @property {string} [acceptHeader] - The value for the 'Accept' header (optional).
- */
-
-/** @type {import('../Signalize').SignalizeModule} */
-export default async ({ resolve }, pluginOptions) => {
-	const { dispatch } = await resolve('event');
+export default async ({ resolve }, config) => {
 	/**
-	 * Asynchronously performs a fetch operation with the given resource and options.
-	 *
-	 * @function
-	 * @param {RequestInfo | URL} resource - The URL or request information for the fetch operation.
-	 * @param {RequestInit | undefined} [options={}] - Optional configuration for the fetch operation.
-	 * @returns {Promise<FetchReturn>} A promise that resolves to the result of the fetch operation.
+	 * @type {{
+	 *  dispatch: import('../../types/modules/event').dispatch
+	 * }}
 	 */
+	const { dispatch } = await resolve('event');
+
+	/** @type {import('../../types/modules/ajax').ajax} */
 	const ajax = async (resource, options = {}) => {
 		const customOptions = {...options };
 		/** @type {Response|null} */
@@ -35,8 +23,8 @@ export default async ({ resolve }, pluginOptions) => {
 		/** @type {RequestInit} */
 		let requestOptions = {
 			headers: {
-				'X-Requested-With': pluginOptions?.requestedWithHeader ?? 'XMLHttpRequest',
-				Accept: pluginOptions?.acceptHeader ?? '*'
+				'X-Requested-With': config?.requestedWithHeader ?? 'XMLHttpRequest',
+				Accept: config?.acceptHeader ?? '*'
 			}
 		};
 

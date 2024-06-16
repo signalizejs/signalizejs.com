@@ -4,7 +4,7 @@ import { base64Symbol, siteUrl, githubLink, twitterLink, discordLink, apiLinks }
 import { path } from '@services/router.mjs';
 import signalizeUrl from '@assets/signalizejs/src/Signalize?url';
 import signalizeEventUrl from '@assets/signalizejs/src/modules/event?url';
-import signalizeDashCaseUrl from '@assets/signalizejs/src/modules/dash-case?url';
+import signalizeDashCaseUrl from '@assets/signalizejs/src/modules/strings/cases?url';
 
 const url = Astro.url;
 let {
@@ -25,14 +25,6 @@ const getStartedLinks = [
 ];
 
 const modulesLinks = [];
-const importmap = JSON.stringify({
-	imports: {
-		signalizejs: signalizeUrl,
-		'signalizejs/event': signalizeEventUrl,
-		'signalizejs/dash-case': signalizeDashCaseUrl
-	}
-});
-
 ---
 
 <html lang="en">
@@ -44,6 +36,8 @@ const importmap = JSON.stringify({
 		<link rel="icon" href={base64Symbol} sizes="any" type="image/png">
 		<link rel="manifest" href="/site.webmanifest">
 		<link rel="mask-icon" href="/assets/images/favicon/safari-pinned-tab.svg" color="#121212">
+		<link rel="prefetch" href={path('docs')} />
+
 		<meta name="msapplication-TileColor" content="#121212">
 		<meta name="theme-color" content="#121212">
 
@@ -70,7 +64,7 @@ const importmap = JSON.stringify({
 		<meta property="twitter:image" content={pageImage} />
 
 		<title>{pageTitle}</title>
-		<script type="importmap" :html={importmap}></script>
+
 		<script>
 			import '@assets/global';
 		</script>

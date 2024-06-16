@@ -1,8 +1,7 @@
 ---
 import CodeMirror from "@components/CodeMirror.astro";
 
-let { code = '', direction = 'vertical', lazyload = true } = Astro.props;
-
+const { code = '', props = {}, direction = 'vertical', lazyload = true } = Astro.props;
 let previewCode = '';
 let iframeDocument = '';
 
@@ -50,15 +49,15 @@ if (hasDefaultCode || hasDefaultSlot) {
 	setPreviewCode(code)
 }
 ---
+
 <script>
 	import { $ } from '@assets/global';
-	const { component } = await $.resolve('component', 'event');
+	const { component } = await $.resolve('component');
 
 	component('code-editor', {
 		props: ['code'],
 		setup({ $refs, $props, $el }) {
 			const { code } = $props;
-
 			code.watch(({newValue}) => {
 				const editorPreview = $refs.codeEditorPreview;
 				editorPreview.setAttribute(
@@ -67,19 +66,16 @@ if (hasDefaultCode || hasDefaultSlot) {
 				);
 				editorPreview.contentWindow.location.reload(true);
 			});
-
-			return {
-				code
-			}
 		}
 	});
 
 </script>
 
 <code-editor
+	{ ...props }
+	code={code}
 	ref="codeEditor"
 	data-srdoc-template={`${iframeSrdocTemplate}`}
-	code={code}
 	class={`display:flex gap:24px ${direction === 'vertical' ? 'flex-direction:column-reverse' : 'md:display:grid md:grid-template-columns:50%_50%'}`}
 >
 	<CodeMirror code={code} lazyload={lazyload} withBorder={false} />

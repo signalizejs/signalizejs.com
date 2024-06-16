@@ -1,7 +1,8 @@
 import Signalize from 'signalizejs';
 import componentModule from 'signalizejs/component';
-import evaluateModule from 'signalizejs/evaluate';
-import traverserDomModule from 'signalizejs/traverse-dom';
+import evaluatorModule from 'signalizejs/evaluator';
+import domReadyModule from 'signalizejs/dom/ready';
+import domTraverserModule from 'signalizejs/dom/traverser';
 import directivesModule from 'signalizejs/directives';
 import mutationObserverModule from 'signalizejs/mutation-observer';
 import scopeModule from 'signalizejs/scope';
@@ -11,35 +12,36 @@ import ajaxModule from 'signalizejs/ajax';
 import snippetsModule from 'signalizejs/snippets';
 import spaModule from 'signalizejs/spa';
 import signalModule from 'signalizejs/signal';
-import dashCaseModule from 'signalizejs/dash-case';
-import domReadyModule from 'signalizejs/dom-ready';
+import dashCaseModule from 'signalizejs/strings/cases';
 
 export const $ = new Signalize({
 	modules: [
+		['ajax', ajaxModule],
 		['event', eventModule],
-		['dom-ready', domReadyModule],
+		['dom/ready', domReadyModule],
+		['dom/traverser',domTraverserModule],
 		['signal', signalModule],
 		['scope', scopeModule],
 		['bind', bindModule],
 		['mutation-observer', mutationObserverModule],
-		['dash-case', dashCaseModule],
-		['evaluate', evaluateModule],
-		['traverse-dom', traverserDomModule],
+		['strings/cases', dashCaseModule],
+		['evaluator', evaluatorModule],
 		['directives', directivesModule],
-		['ajax', ajaxModule],
 		['snippets', snippetsModule],
 		['spa', spaModule],
 		['component', componentModule]
 	]
 });
 
-const { on, component, signal, bind } = await $.resolve('event', 'component', 'signal', 'bind');
-
-component('header-navigation', {
-	construct: () => ({
-		navigationOpened: signal(false)
-	})
-})
+/**
+ * @type {{
+ * 	on: import('signalizejs/types/index.js').on,
+ *  component: import('signalizejs/types/index.js').component,
+ *  signal: import('signalizejs/types/index.js').signal,
+ *  bind: import('signalizejs/types/index.js').bind
+ * }}
+ */
+const { on, component, signal, bind } = await $.resolve('bind', 'event', 'component', 'signal');
 
 component('spa-loader', {
 	setup({ $refs, $el }) {

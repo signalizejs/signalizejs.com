@@ -2,15 +2,13 @@
 order: 2
 layout: '@docsLayout'
 title: 'signalizejs/task'
-description: 'Schedule task to be executed only if there is no pending user input. Serves for breaking long task to small ones.'
+description: 'Schedule tasks to be executed only if there is no pending user input. Used for breaking long tasks into smaller ones.'
 ---
 import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
-The provided `task` function can be used to break long running task into multiple small ones which can improve INP.
-The task schedules a queue of passed tasks and executes them in the order they were passed but doesn't execute them, if there is any `pending input` from the user.
-It gives the task lower priority than user input so the user input is processed before the task.
+The `task` function provided can be used to break long-running tasks into smaller ones, which can improve interaction to next paint (INP). This function schedules a queue of tasks passed to it and executes them in the order they were passed, but it postpones their execution if there is any pending user input. It prioritizes user input so that user actions are processed before the scheduled tasks.
 
-Signalize use it for example to trigger DOM ready events. In future, it will be probably used on more places.
+Signalize uses this function, for example, to trigger DOM ready events. In the future, it will likely be used in more scenarios.
 
 Resources:
 - [Improve interaction to next paint](https://nitropack.io/blog/post/improve-interaction-to-next-paint-inp)
@@ -26,15 +24,15 @@ const { task } = await signalize.resolve('task');
 ## Api
 
 ### task
-Call a function provided as argument only if there is no user input.
+The task function calls a function provided as an argument only if there is no user input pending.
 
-Be aware, that the task delays the execution of each function passed as argument.
-Therefore, it is not good to wrap perfomance critical function calls into the task.
-It should be used for non critical tasks like:
-- Loading the current amount of favorite products into several processes
-- Breaking image gallery openning process
-- Sending things on background to server
-- Rendering hidden template in dropdown and such
+It is important to note that the task function delays the execution of each function passed as an argument.
+Therefore, it is not suitable for wrapping performance-critical function calls.
+It should be used for non-critical tasks such as:
+- Loading the current amount of favorite products in the background.
+- Breaking the process of opening an image gallery.
+- Sending background tasks to the server.
+- Rendering hidden templates in dropdown menus, and similar tasks.
 
 ```js
 const { task } = signalize

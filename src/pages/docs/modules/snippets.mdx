@@ -9,8 +9,6 @@ import Editor from '@codeEditor';
 import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 import { createImportMapJson } from '@services/importmap.mjs';
 
-The redraw method provided by Snippets module can be used to manually redraw snippets in the actual DOM. It can redraw multiple snippets at once.
-
 ## Installation
 <ImportMapDependencies module="snippets" />
 
@@ -23,7 +21,7 @@ const { redrawSnippet } = await signalize.resolve('snippets');
 ### redrawSnippet
 
 #### Simple redraw
-Redraw snippets in the current DOM on string input
+Redraws snippets in the current DOM based on string input.
 
 <Editor code={`
 <div snippet="snippet-1">Hello ...</div>
@@ -49,7 +47,8 @@ Redraw snippets in the current DOM on string input
 </script>
 `} />
 
-The default snippet action is `replace`. But you can also append/prepend children. This is good for carousels and products list.
+The default snippet action is `replace`, but you can also append/prepend children.
+This is useful for example efor carousels and product lists.
 
 <Editor code={`
 
@@ -79,7 +78,7 @@ The default snippet action is `replace`. But you can also append/prepend childre
 `} />
 
 #### Overriding Configuration
-Let's say we send a request to the server, we get the response and in the content there are snippets configured using html attributes.
+Let's say we send a request to the server and get the response. In the content, there are snippets configured using HTML attributes.
 We need to change the way they will be rendered. This can be done by passing options into the `redrawSnippet` method.
 
 <Editor code={`
@@ -127,13 +126,13 @@ We need to change the way they will be rendered. This can be done by passing opt
 `} />
 
 ## Attribute Directives
-- `snippet`: This attribute is used to define a snippet. All elements with snippet attribute, that are in the new content, are synchronized with those in the page.
-- `snippet-action`: This attribute tells snippets module how the snippet should be synchronized:
-	- `replace`: This is going to replace the actuall snippet with a new one.
-	- `append-children`: This is going to take children of a new snippet and append them on the end of the actual snippet.
-	- `prepend-children`: This is going to take children of a new snippet and add them at the start of the actual snippet.
-	- `replace-children`: This is going to replace all inner children.
-	- `sync-attributes`: This will sync all attributes on the existing snippet with the new snippet.
+- `snippet`: This attribute is used to define a snippet. All elements with a `snippet` attribute that are in the new content are synchronized with those on the page.
+- `snippet-action`: This attribute tells the snippets module how the snippet should be synchronized:
+	- `replace`: This will replace the actual snippet with a new one.
+	- `append-children`: This will take the children of the new snippet and append them to the end of the actual snippet.
+	- `prepend-children`: This will take the children of the new snippet and add them at the start of the actual snippet.
+	- `replace-children`: This will replace all inner children.
+	- `sync-attributes`: This will synchronize all attributes on the existing snippet with those on the new snippet.
 
 The `snippet-action` can contain several actions:
 ```html
@@ -142,7 +141,7 @@ The `snippet-action` can contain several actions:
 
 ## Dispatched Events
 You can listen to the following events through the [on](/docs/modules/event#on) function:
-- `snippets:redraw:start`: This event is triggered when the synchronization of created DOM from data argument starts.
+- `snippets:redraw:start`: This event is triggered when the synchronization of the created DOM from the data argument starts.
 - `snippets:redraw:end`: This event is triggered when the synchronization ends.
-- `snippets:redraw:transition:start`: This event is triggered when browsr supports view transitions and the transitions starts.
+- `snippets:redraw:transition:start`: This event is triggered when the browser supports view transitions and the transition starts.
 - `snippets:redraw:transition:end`: This event is triggered when the view transition ends.

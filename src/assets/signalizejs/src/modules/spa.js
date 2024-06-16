@@ -1,89 +1,39 @@
-/**
- * Represents an action type for managing state (e.g., push or replace).
- *
- * @typedef {'push' | 'replace'} StateAction
- */
-
-/**
- * Represents data associated with navigation.
- *
- * @typedef {Object} NavigationData
- * @property {string | URL} url - The URL for navigation.
- * @property {number} [scrollX] - The scroll position on the X-axis.
- * @property {number} [scrollY] - The scroll position on the Y-axis.
- * @property {StateAction} [stateAction] - The action type for managing state (push or replace).
- */
-
-/**
- * Represents the state object for Single Page Application (SPA) history.
- *
- * @typedef {Object} SpaHistoryState
- * @property {string | URL} [url] - The URL for navigation.
- * @property {number} [scrollX] - The scroll position on the X-axis.
- * @property {number} [scrollY] - The scroll position on the Y-axis.
- * @property {StateAction} [stateAction] - The action type for managing state (push or replace).
- * @property {boolean} [spa] - Indicates that the history state is related to a Single Page Application (SPA).
- */
-
-/**
- * Represents data associated with dispatching events for Single Page Application (SPA).
- *
- * @typedef {Object} SpaDispatchEventData
- * @property {unknown|null} error - Error that occured during navigation
- * @property {string | URL} url - The URL for navigation.
- * @property {number} [scrollX] - The scroll position on the X-axis.
- * @property {number} [scrollY] - The scroll position on the Y-axis.
- * @property {StateAction} [stateAction] - The action type for managing state (push or replace).
- * @property {boolean} [success] - Indicates the success of the dispatch event.
- */
-
-/**
- * Represents a cache for responses with keys as strings and values as strings.
- *
- * @typedef {Record<string, string>} ResponseCache
- */
-
-/**
- * Options for configuring a plugin.
- *
- * @typedef PluginOptions
- * @property {string} [cacheHeader] - The cache header option for the plugin.
- * @property {string} [appVersionHeader] - The app version header option for the plugin.
- */
-
-/**
- * @typedef CurrentState
- * @property {string} url
- * @property {boolean} spa
- * @property {number} scrollX
- * @property {number} scrollY
- */
-
-/**
- * @callback navigate
- * @param {NavigationData} data
- */
-
-/** @type {import('../Signalize').SignalizeModule} */
-export default async ({ params, resolve, root }, options) => {
-	const { dispatch, ajax, redrawSnippet, on, customEventListener, customEvent } = await resolve('event', 'ajax', 'snippets');
+/** @type {import('../../types/Signalize').Module<import('../../types/modules/spa').SpaModule, import('../../types/modules/spa').SpaConfig>} */
+export default async ({ params, resolve, root }, config) => {
+	/**
+	 * @type {{
+	 *   dispatch: import('../../types/modules/event').dispatch,
+	 *   ajax: import('../../types/modules/ajax').ajax,
+	 *   redrawSnippet: import('../../types/modules/snippets').redrawSnippet,
+	 *   on: import('../../types/modules/event').on,
+	 *   customEventListener: import('../../types/modules/event').customEventListener,
+	 *   customEvent: import('../../types/modules/event').customEvent,
+	 * }}
+	 */
+	const { dispatch, ajax, redrawSnippet, on, customEventListener, customEvent } = await resolve(
+		'dom/ready',
+		'event',
+		'ajax',
+		'snippets'
+	);
 	const spaAttribute = `${params.attributePrefix}spa`;
 	const spaUrlAttribute = `${spaAttribute}${params.attributeSeparator}url`;
 	const spaIgnoreAttribute = `${spaAttribute}${params.attributeSeparator}ignore`;
 	const spaStateActionAttribute = `${spaAttribute}${params.attributeSeparator}state-action`;
 	const spaMetaCacheNameAttribute = `${spaAttribute}${params.attributeSeparator}cache-control`;
 	const spaHeaderPrefix = 'X-Spa-';
-	const spaCacheHeader = options?.cacheHeader ?? `${spaHeaderPrefix}Cache-Control`;
-	const spaAppVersionHeader = options?.appVersionHeader ?? `${spaHeaderPrefix}App-Version`;
-	const spaTransitionsHeader = options?.appVersionHeader ?? `${spaHeaderPrefix}Transitions`;
+	const spaCacheHeader = config?.cacheHeader ?? `${spaHeaderPrefix}Cache-Control`;
+	const spaAppVersionHeader = config?.appVersionHeader ?? `${spaHeaderPrefix}App-Version`;
+	const spaTransitionsHeader = config?.appVersionHeader ?? `${spaHeaderPrefix}Transitions`;
+	const defaultStateAction = 'push';
 
-	/** @type {CurrentState|undefined} */
+	/** @type {import('../../types/modules/spa').HistoryState|undefined} */
 	let currentState;
 	/** @type {AbortController} */
 	let abortNavigationController;
 	const spaVersion = null;
 	const host = window.location.host;
-	/** @type {ResponseCache} */
+	/** @type {import('../../types/modules/spa').ResponseCache} */
 	const responseCache = {};
 
 	/**
@@ -129,19 +79,17 @@ export default async ({ params, resolve, root }, options) => {
 		}
 	}));
 
-	/**
-	 * @param {NavigationData} data
-	 * @returns {Promise<SpaDispatchEventData>}
-	 */
+	/** @type {import('../../types/modules/spa').navigate} */
 	const navigate = async (data) => {
 		updateCurrentState();
 
 		firstNavigationTriggered = true;
-		/**
-		 * @type {SpaDispatchEventData}
-		 */
+		/** @type {import('../../types/modules/spa.d.ts').NavigationEventData} */
 		const dispatchEventData = {
 			...data,
+			scrollX: data.scrollX ?? window.scrollX,
+			scrollY: data.scrollY ?? window.scrollY,
+			stateAction: data.stateAction ?? defaultStateAction,
 			error: null
 		};
 
@@ -153,7 +101,7 @@ export default async ({ params, resolve, root }, options) => {
 
 		dispatch('spa:navigation:start', { ...dispatchEventData });
 
-		const { url, stateAction = 'push' } = data;
+		const { url, stateAction = defaultStateAction } = data;
 		const urlString = url instanceof URL ? url.toString() : url;
 
 		/** @type {import('./ajax.js').FetchReturn} */
@@ -262,11 +210,9 @@ export default async ({ params, resolve, root }, options) => {
 					urlHash = urlHash.slice(1);
 					const element = root.querySelector(`[id="${urlHash}"]`);
 					if (element !== null) {
-						queueMicrotask(() => {
-							element.scrollIntoView({
-								block: 'start',
-								inline: 'nearest'
-							});
+						element.scrollIntoView({
+							block: 'start',
+							inline: 'nearest'
 						});
 					}
 				} else {
@@ -292,7 +238,7 @@ export default async ({ params, resolve, root }, options) => {
 	 * @returns {void}
 	 */
 	const onPopState = () => {
-		/** @type {SpaHistoryState} */
+		/** @type {import('../../types/modules/spa.d.ts').HistoryState} */
 		const state = window.history.state;
 
 		if (!(state?.spa ?? false)) {
@@ -303,7 +249,7 @@ export default async ({ params, resolve, root }, options) => {
 			return;
 		}
 
-		/** @type {NavigationData} */
+		/** @type {import('../../types/modules/spa.d.ts').NavigationData} */
 		const navigationConfig = {
 			url: state.url,
 			scrollX: state.scrollX,
@@ -353,7 +299,7 @@ export default async ({ params, resolve, root }, options) => {
 		}
 
 		const hrefUrl = createUrl(`${window.location.origin}${url}`);
-		let currentLocation = getCurrentLocation();
+		const currentLocation = getCurrentLocation();
 
 		if (hrefUrl === null || hrefUrl.toString() === currentLocation.toString()) {
 			event.preventDefault();
@@ -374,8 +320,8 @@ export default async ({ params, resolve, root }, options) => {
 
 		event.preventDefault();
 
-		/** @type {StateAction} */
-		let stateAction = 'push';
+		/** @type {import('../../types/modules/spa.d.ts').StateAction} */
+		let stateAction = defaultStateAction;
 		const stateActionAttribute = element.getAttribute(spaStateActionAttribute);
 
 		if (stateActionAttribute) {
@@ -402,7 +348,7 @@ export default async ({ params, resolve, root }, options) => {
 		};
 
 		window.history.replaceState(currentState, '', window.location.href);
-	}
+	};
 
 	on('dom:ready', () => {
 		updateCurrentState();

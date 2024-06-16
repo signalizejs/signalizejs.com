@@ -2,11 +2,9 @@
 order: 2
 layout: '@docsLayout'
 title: 'signalizejs/mutation-observer'
-description: 'Watch for hanges being made on the DOM tree of the selected element.'
+description: 'Watch for changes being made to the DOM tree of the root or selected element.'
 ---
 import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
-
-Signalize core starts mutation observer automatically for each instance and watches the configured root for `childList` and `subtree` changes.
 
 ## Installation
 <ImportMapDependencies module="mutation-observer" />
@@ -21,9 +19,11 @@ const {
 ## API
 
 ### observeMutations
-Observe mutations and provide callback and options
-- [initOptions](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/observe#parameters) are identical to mutation observer options
-- `callback`: function that receives a list of mutations based on configuration
+Signalize starts one mutation observer automatically for and watches the configured root for `childList` and `subtree` changes.
+
+Observe mutations and provide a callback and options:
+- [initOptions](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/observe#parameters) are identical to mutation observer options.
+- `callback`: function that receives a list of mutations based on configuration.
 
 ```js
 import Signalize from 'signalizejs';
@@ -37,13 +37,13 @@ const observer = observeMutations(element);
 
 // Observe mutation for element, do not dispatch event, call callback instead.
 const observer = observeMutations(element, (mutations) => {
-	// Do something, when there is a mutation on selected element
+	// Do something when there is a mutation on the selected element
 });
 ```
 
 ## Dispatched events
 You can listen to the following events through the [on](/docs/modules/event#on) function:
-- `dom:mutation` - This event is fired on every dom mutation
-- `dom:mutation:node:added` - This event is fired when any node is added
-- `dom:mutation:node:moved` - This event is fired when any node was moved in the dom
-- `dom:mutation:node:removed` - This event is fired when any node is removed
+- `dom:mutation` - This event is fired on every DOM mutation.
+- `dom:mutation:node:added` - This event is fired when any node is added.
+- `dom:mutation:node:moved` - This event is fired when any node is moved in the DOM.
+- `dom:mutation:node:removed` - This event is fired when any node is removed.

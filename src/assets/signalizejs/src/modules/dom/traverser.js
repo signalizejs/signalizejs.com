@@ -1,16 +1,6 @@
-/**
- * Asynchronously traverses the DOM starting from a given root node and invokes a callback on each node.
- *
- * @callback traverseDom
- * @param {Element} root
- * @param {(node: Node) => Promise<false|void>} callback
- * @param {number[]} [nodeTypes=[]]
- * @returns {Promise<void>}
- */
-
-/** @type {import('../Signalize').SignalizeModule} */
+/** @type {import('../../../types/Signalize').Module<import('../../../types/modules/dom/traverser').DomTraverserDomModule>} */
 export default () => ({
-	/** @type {traverseDom} */
+	/** @type {import('../../../types/modules/dom/traverser').traverseDom} */
 	traverseDom: async (root, callback, nodeTypes = []) => {
 		/**
 		 * @param {Node} node

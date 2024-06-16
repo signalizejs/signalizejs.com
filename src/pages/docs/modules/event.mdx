@@ -17,30 +17,31 @@ const {
 	off,
 	on,
 	customEvent,
-	customEventListener
+	customEventListener,
+	dispatch
 } = new Signalize();
 ```
 
 ## API
 
 ### on
-Atach listener to elements or listen to dispatched events.
+Attach a listener to elements or listen to dispatched events.
 
 Listeners are automatically attached to dynamically added elements if the second argument is a string selector.
 ```js
 // Listen to globally dispatched event on the root element
 on('custom:event', () => {});
 
-// Binds listener directly to existing element
+// Bind listener directly to an existing element
 on('click', document.querySelector('#element'), () => {});
 
-// Binds listener globally, works on dynamically added elements
+// Bind listener globally, works on dynamically added elements
 on('click', '.element', () => {});
 
-// Binds two events to already existing elements
+// Bind two events to already existing elements
 on('click mouseover', document.querySelectorAll('.element'), () => {});
 
-// Binds two events to already existing elements
+// Bind two events to already existing elements with options
 on('click mouseover', document.querySelectorAll('.element'), () => {}, {
 	// Default false
 	passive: true,
@@ -49,7 +50,8 @@ on('click mouseover', document.querySelectorAll('.element'), () => {}, {
 });
 ```
 
-The `on` function also automatically prepares function that will remove the defined listenr, so you don't have to prepare it yourself:
+The `on` function also automatically prepares a function that will remove the defined listener, so you don't have to prepare it yourself:
+
 ```js
 const removeListener = on('click', '.selector', () => alert('Hello World'));
 
@@ -58,14 +60,14 @@ removeListener();
 ```
 
 ### off
-Remove event listener or listeners from one or more elements.
+Remove an event listener or listeners from one or more elements.
 
 ```js
-// Binds listener directly to existing element
+// Bind listener directly to an existing element
 const handler = () => alert('Hello World!');
 const element = document.querySelector('#element');
 
-// Remove handler from existing element
+// Remove handler from the existing element
 off('click', element, handler);
 
 // Remove handler from all elements globally
@@ -87,14 +89,14 @@ customEventListener('clickOutside', () => {
 });
 
 /*
- Before "listener" callback is attached to a custom event listener event as argument,
- there is a check, if the event should be triggered only once (once: true).
+ Before the "listener" callback is attached to a custom event listener event as an argument,
+ there is a check if the event should be triggered only once (once: true).
 
- If so, the "off" callback of custom event listener is called automatically
- after the first call if it is defined. You don't have to programe it by yourself.
+ If so, the "off" callback of the custom event listener is called automatically
+ after the first call if it is defined. You don't have to program it yourself.
 
  This keeps the behavior similar to the native once: true option.
- You should always consider the possibility to remove event listener.
+ You should always consider the possibility of removing the event listener.
 */
 on('clickOutside', element, () => {
 	// This will be triggered only once and automatically removed
@@ -103,7 +105,7 @@ on('clickOutside', element, () => {
 ```
 
 ### customEvent
-Creates a custom event you can later dispatch.
+Create a custom event you can later dispatch.
 
 Internaly uses native [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent).
 
@@ -120,4 +122,18 @@ const myEvent = customEvent(
 );
 
 document.dispatchEvent(myEvent);
+```
+
+### dispatch
+Create and dispatches a [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent) to the target element.
+
+```js
+// Dispatch event to the configured root element
+dispatch('my-event');
+
+// Dispatch event with custom data
+dispatch('my-event', data)
+
+// Dispatch event to selected element.
+dispatch('my-event', data, element)
 ```

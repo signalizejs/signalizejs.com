@@ -1,0 +1,9 @@
+---
+import { getModuleNames } from '@config/config.mjs';
+---
+
+<ul>
+	{getModuleNames().map((names) => (
+		<li>{names.join(', ')}</li>
+	))}
+<ul>

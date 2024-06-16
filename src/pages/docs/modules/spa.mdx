@@ -2,7 +2,7 @@
 order: 2
 layout: '@docsLayout'
 title: 'signalizejs/spa'
-description: 'Turn any website to Single Page Application (SPA) in a minute.'
+description: 'Turn any website into a Single Page Application (SPA) in a minute.'
 ---
 import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
@@ -17,7 +17,8 @@ const { navigate } = await signalize.resolve('spa');
 
 ### navigate
 
-The visit method can be used to manually trigger visit of some page:
+The `navigate` method can be used to manually trigger a navigation to a specific page:
+
 
 ```js
 const result = await navigate({
@@ -27,25 +28,25 @@ const result = await navigate({
 ```
 
 ## Attribute Directives
-- `data-spa-url`: Is a fallback attribute checked for url for spa module if `href` attribute was not found on a link or element.
-- `data-spa-ignore` (empty): This tells spa to ignore the link with this attribute
+- `data-spa-url`: This attribute serves as a fallback URL for the SPA module if the `href` attribute is not found on a link or element.
+- `data-spa-ignore` (empty): This attribute instructs the SPA module to ignore the link with this attribute.
 
 ## Meta Tags
-- `<meta name="spa-cache-control" content="no-cache">`: This informs SPA module to not cache the result of requested page.
-- `<meta name="spa-app-version" content="...">`: This informs SPA module about the current version of the app.
+- `<meta name="spa-cache-control" content="no-cache">`: This meta tag informs the SPA module not to cache the result of the requested page.
+- `<meta name="spa-app-version" content="...">`:  This meta tag informs the SPA module about the current version of the application.
 
 ## Response Headers
-- `X-Spa-Cache-Control` (string): This header can be used to tell SPA module to not cache the requested page. The acceptable value right now is only `no-cache`;
-- `X-Spa-App-Version` (string): This header can be used to tell SPA module the current version of the APP. It can be used to inform the user, that the app version change and it might be better to refresh the page.
+- `X-Spa-Cache-Control` (string): This header can be used to instruct the SPA module not to cache the requested page. Currently, the acceptable value is only `no-cache`.
+- `X-Spa-App-Version` (string): This header can be used to inform the SPA module of the current version of the application. It can be useful to notify users that a new version is available and prompt them to refresh the page.
 
 ## Dispatched Events
 You can listen to the following events through the [on](/docs/modules/event#on) function:
-- `spa:navigation:start`: This event is triggered when a visit starts
-- `spa:navigation:end`: This event is triggered when a visit ends
-- `spa:page:ready`: Triggers on `dom:ready` and after successfull navigation
-- `spa:request:start`: This event is triggered when the target page is not cached yet and the ajax request starts.
-- `spa:request:end`: This event triggered when the ajax request for a page ends
-- `spa:scroll:start`: This event is triggered after the requested page is synchronized with current DOM. It scrolls element, that matches url hash into the view. This event can be stopped by calling `event.preventDefault()` within the listener.
-- `spa:app-version:changed`: This sevent is triggered when the meta tag or request header of app version is changed within the received data of the requested page. It can be used to inform user that a new version of the application has been released and he might want to reload the page.
-- `spa:popstate`: This event is triggered on any window popstate event
-- `spa:clicked`: This event is triggered when a user clicks on a link that can be processed by SPA module
+- `spa:navigation:start`: Triggered when a navigation begins.
+- `spa:navigation:end`: Triggered when a navigation ends
+- `spa:page:ready`: Triggered on `dom:ready` and after a successful navigation.
+- `spa:request:start`: Triggered when the target page is not yet cached and the AJAX request starts.
+- `spa:request:end`: Triggered when the AJAX request for a page completes.
+- `spa:scroll:start`:  Triggered after the requested page is synchronized with the current DOM. It scrolls the element matching the URL hash into view. This event can be prevented by calling `event.preventDefault()` in the listener.
+- `spa:app-version:changed`: Triggered when the meta tag or request header indicating the app version changes in the received data of the requested page. Useful for informing users about a new application version so they can for example refresh the page and get the new version of the app.
+- `spa:popstate`: Triggered on any window popstate event.
+- `spa:clicked`: Triggered when a user clicks on a link that can be processed by the SPA module.

@@ -1,18 +1,13 @@
-/**
- * @typedef AttributeConfig
- * @property {CallableFunction} [set]
- * @property {CallableFunction} [get]
- */
-
-/**
- * @callback bind
- * @param {HTMLElement} element
- * @param {Record<string, AttributeConfig|import('./signal.js').Signal>} attributes
- * @returns {void}
-*/
-
-/** @type {import('../Signalize').SignalizeModule} */
+/** @type {import('../../types/Signalize').Module<import('../../types/modules/bind').BindModule>} */
 export default async ({ resolve }) => {
+	/**
+	 * @type {{
+	 *  on: import('../../types/modules/event').on,
+	 *  off: import('../../types/modules/event').off,
+	 *  Signal: import('../../types/modules/signal').signal,
+	 *  scope: import('../../types/modules/scope').scope
+	 * }}
+	 */
 	const { on, off, Signal, scope } = await resolve('event', 'signal', 'scope');
 
 	const reactiveInputAttributes = ['value', 'checked'];
@@ -33,20 +28,15 @@ export default async ({ resolve }) => {
 		'scoped', 'seamless', 'selected',
 		'typemustmatch'
 	];
+
 	const attributesAliases = {
 		text: 'textContent',
 		html: 'innerHTML'
 	};
 
-	/**
-	 * @type {bind}
-	 */
+	/** @type {import('../../types/modules/bind').bind} */
 	const bind = (element, attributes) => {
-		/** @type {import('./scope.js').Scope} */
-		let componentScope = null;
-		const tagName = element.tagName.toLowerCase();
-
-		const bind = () => {
+		const bindAttributes = () => {
 			/** @type {CallableFunction[]} */
 			const unwatchSignalCallbacks = [];
 			/** @type {CallableFunction[]} */
@@ -54,6 +44,7 @@ export default async ({ resolve }) => {
 			/** @type {string[]} */
 			const bindedProps = [];
 
+			// eslint-disable-next-line prefer-const
 			for (let [attr, attrOptions] of Object.entries(attributes)) {
 				if (bindedProps.includes(attr)) {
 					continue;
@@ -161,32 +152,7 @@ export default async ({ resolve }) => {
 
 				if (getListener !== null || initValue !== undefined) {
 					const valueToSet = initValue !== undefined ? initValue : getListener();
-
-					if (componentScope) {
-						let binded = false;
-
-						if (attr in componentScope.$props) {
-							binded = true;
-							const valueToSetIsSignal = valueToSet instanceof Signal;
-							componentScope.$props[attr](valueToSetIsSignal ? valueToSet() : valueToSet);
-
-							if (valueToSetIsSignal && valueToSet !== componentScope.$props[attr]) {
-								componentScope.$props[attr].watch(({ newValue }) => {
-									valueToSet(newValue);
-								});
-							}
-						} else if (attr in componentScope.$propsAliases) {
-							componentScope.$props[componentScope.$propsAliases[attr]](valueToSet);
-							binded = true;
-						}
-
-						if (binded) {
-							bindedProps.push(attr);
-							continue;
-						}
-					} else {
-						setAttribute(attr, valueToSet);
-					}
+					setAttribute(attr, valueToSet);
 				}
 
 				for (const signalToWatch of signalsToWatch) {
@@ -218,19 +184,7 @@ export default async ({ resolve }) => {
 			});
 		};
 
-		if (tagName.split('-').length > 1) {
-			componentScope = scope(element);
-			if (customElements.get(tagName) === undefined) {
-				on('component:beforeSetup', ({ target }) => {
-					if (target === element) {
-						bind();
-					}
-				});
-				return;
-			}
-		}
-
-		bind();
+		bindAttributes();
 	};
 
 	return { bind };
