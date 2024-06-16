@@ -2,7 +2,7 @@
 import Editor from '@components/Editor.astro';
 import { createImportMapJson } from '@services/importmap.mjs';
 
-const importmap = createImportMapJson(['snippets']);
+const importmap = createImportMapJson(['snippets', 'event']);
 
 const code = `
 <div snippet="snippet-1">Hello ...</div>

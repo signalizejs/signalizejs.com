@@ -21,6 +21,13 @@ const getStartedLinks = [
 	{ label: 'Tips for writting JavaScript', link: path('docs', { slug: 'tips-for-writting-javascript' })},
 ];
 
+const organizationSchema = {
+	"@context":"https://schema.org",
+	"@type":"Organization",
+	"url":"https://signalizejs.com",
+	"logo":"https://stylifycss.com/images/logo/vertical.png"
+}
+
 ---
 
 <html lang="en">
@@ -177,5 +184,6 @@ const getStartedLinks = [
 				Copyright © 2024 - today Vladimír Macháček
 			</div>
 		</footer>
+		<script type="application/ld+json" set:html={organizationSchema}></script>
 	</body>
 </html>

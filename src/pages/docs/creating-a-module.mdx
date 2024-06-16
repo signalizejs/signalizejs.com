@@ -1,5 +1,63 @@
 ---
 layout: '@docsLayout'
 title: 'Creating Custom Modules'
-description: 'Learn how to define a custom ES module for the Signalize JavaScript Framework. Create a new set of functions, define a new page with lazy initialization and etc.'
+description: 'Learn how to define a custom ES module for the Signalize JavaScript Framework. Create a new set of functions, define a new page with lazy initialization, etc.'
 ---
+
+## Module Boilerplate
+A module in terms of Signalize is a simple export:
+- The export function can be asynchronous.
+- The module config can be optional.
+- The first argument is the Signalize instance in which the module was initialized.
+
+```js
+export default async (signalizeInstance, moduleConfig) => {
+	return {
+		// Functionality you want to return, if any
+	}
+};
+```
+
+## Definition example
+Module definition:
+```js
+// my-module.js
+export default (signalize, config) => {
+	const myFunction = (content) => alert(content);
+
+	return {
+		myFunction
+	}
+}
+```
+
+Lazy module usage:
+```html
+<script type="importmap">
+	{
+		"imports": {
+			"my-module": "/public/path/to/my-module.js"
+		}
+	}
+</script>
+<script>
+	import Signalize from 'signalizejs';
+	const { resolve } = new Signalize({
+		params: {
+			/*
+				"my-module" is found as a key in params, therefore the value of "my-module" will be passed
+				into the resolved module and merged with the direct config.
+			*/
+			'my-module': {}
+		}
+	});
+
+	const { myFunction } = await resolve('my-module');
+	// Or with direct config as a completely new instance of the module separate from others
+	const { myFunction } = await resolve(['my-module', { /* Direct Config */ }]);
+
+	myFunction('Hello World!');
+</script>
+```
+
+More about modules initialization can be found on the [introduction page](/docs/introduction#4-import-what-you-need).
