@@ -262,6 +262,7 @@ export const modulesSections = [
 			modules.hyperscript,
 			modules["mutation-observer"],
 			modules.offset,
+			modules.scope,
 			modules.sizes,
 			modules.snippets,
 			modules["strings/cases"],

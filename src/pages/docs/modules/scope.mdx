@@ -1,0 +1,31 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/scope'
+description: 'Add a scope to an element prototype.'
+---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
+## Installation
+<ImportMapDependencies module="scope" />
+
+```js
+const { scope } = await signalize.resolve('scope');
+```
+
+## API
+
+### scope
+Get the height of an element or document.
+
+```js
+const element = document.querySelector('#element');
+
+// Get element scope
+const elementScope = scope(element);
+
+// Modify or create an element scope
+const elementScope = scope(element, (elementScope) => {
+	elementScope.customProperty = '';
+});
+```

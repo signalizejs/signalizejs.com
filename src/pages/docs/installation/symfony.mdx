@@ -1,5 +1,69 @@
 ---
 layout: '@docsLayout'
 title: 'How to install Signalize in Symfony'
-description: 'Learn how to install Signalize framework in your Symfony applications easily and quickly.'
+description: 'Learn how to install the Signalize framework in your Symfony applications easily and quickly.'
 ---
+
+## Asset Mapper
+This tutorial expects that you use Symfony [Asset Mapper](https://symfony.com/doc/current/frontend/asset_mapper.html).
+
+### Install Signalize
+```
+npm i signalizejs
+
+yarn add signalizejs
+
+pnpm i signalizejs
+```
+
+## Configure Importmap
+Open the `importmap.php` file and add the following:
+
+```php
+// ...
+
+return [
+	'app' => [
+		'path' => './assets/app.js',
+		'entrypoint' => true,
+	],
+	// This module will be prepared in importmap for lazy import
+	'signalizejs/sizes' => [
+		'path' => './node_modules/signalizejs/modules/sizes.js',
+		'entrypoint' => true
+	],
+];
+```
+
+Open `./assets/app.js`:
+```js
+import Signalize from 'signalizejs';
+// We will need these two modules immediately
+import EventModule from 'signalizejs/event';
+import MutationObserverModule from 'signalizejs/mutation-observer';
+
+export const signalize = new Signalize({
+	modules: [
+		// Initiate modules instantly
+		['event', EventModule],
+		['mutation-observer', MutationObserverModule]
+	]
+});
+
+// There will be no request for 'signalizejs/event' because the module is already imported.
+const { on } = await signalize.resolve('event');
+
+// And when we need the preconfigured "signalizejs/sizes" module,
+// we can use the resolve function to import it.
+const { width } = await signalize.resolve('sizes');
+```
+
+## How to import Signalize in different files
+Let's say you have a `homepage.js` and you want to import Signalize from `app.js`.
+You just import it from the prepared record `app` in the importmap.
+
+```js
+import { signalize } from 'app';
+
+const { width } = await signalize.resolve('sizes');
+```
