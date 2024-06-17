@@ -48,13 +48,13 @@ export const modules = {
 	},
 	'directives/if': {
 		name: 'directives/if',
-		slug: 'directives-if',
+		slug: 'directives',
 		dependencies: ['directives'],
 		api: [],
 	},
 	'directives/for': {
 		name: 'directives/for',
-		slug: 'directives-for',
+		slug: 'directives',
 		dependencies: ['directives'],
 		api: [],
 	},

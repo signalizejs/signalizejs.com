@@ -28,41 +28,15 @@ import visibilityUrl from 'signalizejs/visibility?url';
 import { getModulesDependencies, modules } from '@config/config.mjs';
 
 export const createImportMapJson = (selectedModules = Object.keys(modules)) => {
-	const map = {
-		signalizejs: signalizeUrl,
-		ajax: ajaxUrl,
-		bind: bindUrl,
-		component: componentUrl,
-		'dom/ready': domReadyUrl,
-		'dom/traverser': domTraverserUrl,
-		dialog: dialogUrl,
-		directives: directivesUrl,
-		'directives/for': directivesForUrl,
-		'directives/if': directivesIfUrl,
-		evaluator: evaluatorUrl,
-		event: eventUrl,
-		hyperscript: hyperscriptUrl,
-		'intersection-observer': intersectionObserverUrl,
-		logger: loggerUrl,
-		'mutation-observer': mutationObserverUrl,
-		offset: offsetUrl,
-		scope: scopeUrl,
-		signal: signalUrl,
-		sizes: sizesUrl,
-		snippets: snippetsUrl,
-		spa: spaUrl,
-		'strings/cases': dashCaseUrl,
-		task: taskUrl,
-		viewport: viewportUrl,
-		visibility: visibilityUrl
-	};
 
 	let modules = {
-		signalizejs: map.signalizejs
+		signalizejs: 'https://cdn.jsdelivr.net/npm/signalizejs/+esm'
 	};
 
+	const createUrl = (moduleName) =>  `https://cdn.jsdelivr.net/npm/signalizejs/${moduleName}/+esm`;
+
 	for (const module of getModulesDependencies(...selectedModules)) {
-		modules[`signalizejs/${module.name}`] = map[module.name];
+		modules[`signalizejs/${module.name}`] = createUrl(module.name);
 	}
 
 	for (const module of selectedModules) {
@@ -72,7 +46,7 @@ export const createImportMapJson = (selectedModules = Object.keys(modules)) => {
 			continue;
 		}
 
-		modules[moduleName] = map[module];
+		modules[moduleName] = createUrl(module);
 	}
 
 	return JSON.stringify({
