@@ -164,7 +164,7 @@ const organizationSchema = {
 						<h3>Modules</h3>
 						<nav>
 							{Object.values(modules).map(({ name, slug }) => (
-								<a href={`${path('docs', { slug: `modules/${slug}` })}`}>{name}</a>
+								<a href={`${path('docs', { slug: `modules/${slug ?? name}` })}`}>{name}</a>
 							))}
 						</nav>
 					</section>
