@@ -1,11 +1,6 @@
 /** @type {import('../../types/Signalize').Module<undefined, import('../../types/modules/logger').LoggerConfig>} */
 export default async ({ resolve}, options) => {
-	/**
-	 * @type {{
-	 *  ajax: import('../../types/modules/ajax').ajax,
-	 *  dispatch: import('../../types/modules/event').dispatch
-	 * }}
-	 */
+
 	const { ajax, dispatch } = await resolve('ajax', 'event');
 
 	/** @type {import('../../types/modules/logger').Levels[]} */

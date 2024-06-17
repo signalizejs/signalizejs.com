@@ -11,6 +11,7 @@ import { modulesSections } from '@config/config.mjs';
 import MainLayout from '@layouts/main.astro';
 import { Image } from 'astro:assets';
 import { path } from 'src/services/router.mjs';
+import ShowcaseList from '@components/ShowcaseList.astro';
 
 const installationGuides = [
 	{
@@ -174,6 +175,13 @@ const installationGuides = [
 				</div>
 			</playground-tabs>
 			<div class="text-align:center margin-top:24px"><a href={path('docs')} class="button button--solid md:{font-size:24px;padding:24px;line-height:1}">Get Started</a></div>
+		</section>
+
+		<section class="container margin-bottom:180px">
+			<h2 class="font-size:24px md:font-size:48px">Projects using Signalize</h2>
+			<div>
+				<ShowcaseList />
+			</div>
 		</section>
 
 		<section class="container margin-bottom:180px">

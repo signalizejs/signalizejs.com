@@ -1,13 +1,13 @@
 /** Callback for modifying value before setting watcher */
-export type BeforeSetSignalWatcher<T> = (options: SignalWatcherArguments<T>) => {
+export type BeforeSetSignalWatcher = <T>(options: SignalWatcherArguments<T>) => {
 	value: T;
 	settable?: boolean
 } | undefined;
 
 /** Callback for actions after setting watcher */
-export type AfterSetSignalWatcher<T> = (options: SignalWatcherArguments<T>) => void;
+export type AfterSetSignalWatcher = <T>(options: SignalWatcherArguments<T>) => void;
 
-export type OnGetSignalWatcher<T> = (options: SignalWatcherArguments<T>) => void;
+export type OnGetSignalWatcher = <T>(options: SignalWatcherArguments<T>) => void;
 
 /** Available execution options for the watcher  */
 export type SignalWatcherExecutionOption = 'beforeSet' | 'afterSet' | 'onGet';
@@ -38,7 +38,7 @@ export interface SignalWatchers {
 	onGet: Set<CallableFunction>;
 }
 
-export type SetSignalWatcher<T> = (listener: BeforeSetSignalWatcher<T> | AfterSetSignalWatcher<T> | OnGetSignalWatcher<T>, options?: SignalWatcherOptions) => SignalUnwatch;
+export type SetSignalWatcher = <T>(listener: BeforeSetSignalWatcher<T> | AfterSetSignalWatcher<T> | OnGetSignalWatcher<T>, options?: SignalWatcherOptions) => SignalUnwatch;
 
 /** Represents a signal with a specific value and associated watchers. */
 export declare class Signal<T> {
@@ -46,7 +46,7 @@ export declare class Signal<T> {
 	value: T;
 	watchers: SignalWatchers;
 	/** Adds a watcher function to the signal. */
-	watch: SetSignalWatcher<any>;
+	watch: SetSignalWatcher;
 	toString: () => string;
 	valueOf: () => T;
 	toJSON: () => T;

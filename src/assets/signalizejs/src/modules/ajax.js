@@ -5,11 +5,6 @@
  * >}
  */
 export default async ({ resolve }, config) => {
-	/**
-	 * @type {{
-	 *  dispatch: import('../../types/modules/event').dispatch
-	 * }}
-	 */
 	const { dispatch } = await resolve('event');
 
 	/** @type {import('../../types/modules/ajax').ajax} */

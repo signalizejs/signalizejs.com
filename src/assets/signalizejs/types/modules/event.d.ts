@@ -33,7 +33,7 @@ export interface CustomEventListenerArgs {
 /** Custom event listener type (extends for specific events) */
 export interface CustomEventListener extends EventListener { }
 
-export interface CustomEventListeners extends ElementEventMap {
+export interface CustomEventListeners extends HTMLElementEventMap {
 	clickOutside: CustomEventListener;
 	remove: CustomEventListener;
 }
@@ -45,7 +45,7 @@ export type dispatch = (eventName: string, eventData?: any, options?: Record<str
 export type customEvent = (eventName: string, eventData?: any, options?: CustomEventInit) => CustomEvent;
 
 /** Custom event listener creation function type */
-export type customEventListener = (eventName: keyof CustomEventListeners, configOrHandler: CustomEventListenerConfig | CustomEventListenerOnHandler) => void;
+export type customEventListener = (eventName: string, configOrHandler: CustomEventListenerConfig | CustomEventListenerOnHandler) => void;
 
 /** Plugin options type */
 export interface EventConfig {
@@ -61,4 +61,4 @@ export type on = (events: keyof CustomEventListeners, targetOrCallback: CustomEv
 /**
  * Remove event listener from elements or from custom event.
  */
-export type off = (events: keyof CustomEventListener, element: Element|Document, listener: CallableFunction, options: EventListenerOptions) => void;
+export type off = (events: Extract<keyof CustomEventListeners, element: Element|Document, listener: CallableFunction, options: EventListenerOptions) => void;

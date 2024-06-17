@@ -1,21 +1,13 @@
 /** @type {import('../../types/Signalize').Module<import('../../types/modules/spa').SpaModule, import('../../types/modules/spa').SpaConfig>} */
 export default async ({ params, resolve, root }, config) => {
-	/**
-	 * @type {{
-	 *   dispatch: import('../../types/modules/event').dispatch,
-	 *   ajax: import('../../types/modules/ajax').ajax,
-	 *   redrawSnippet: import('../../types/modules/snippets').redrawSnippet,
-	 *   on: import('../../types/modules/event').on,
-	 *   customEventListener: import('../../types/modules/event').customEventListener,
-	 *   customEvent: import('../../types/modules/event').customEvent,
-	 * }}
-	 */
+
 	const { dispatch, ajax, redrawSnippet, on, customEventListener, customEvent } = await resolve(
 		'dom/ready',
 		'event',
 		'ajax',
 		'snippets'
 	);
+
 	const spaAttribute = `${params.attributePrefix}spa`;
 	const spaUrlAttribute = `${spaAttribute}${params.attributeSeparator}url`;
 	const spaIgnoreAttribute = `${spaAttribute}${params.attributeSeparator}ignore`;

@@ -55,14 +55,10 @@ component('code-mirror', {
 			});
 		}
 
+		console.log($props.lazyload());
 		if ($props.lazyload() === false) {
 			loadCodeMirror();
 		}
-
-		const unwatch = code.watch(() => {
-			loadCodeMirror();
-			unwatch()
-		});
 
 		return {
 			loadCodeMirror,

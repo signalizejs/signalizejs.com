@@ -7,16 +7,7 @@
 export default async ($, config) => {
 	const { resolve, params } = $;
 	const { attributePrefix, attributeSeparator } = params;
-	/**
-	 * @type {{
-	 *  on: import('../../types/modules/event').on,
-	 *  scope: import('../../types/modules/scope').scope,
-	 *  traverseDom: import('../../types/modules/dom/traverser').traverseDom,
-	 *  evaluate: import('../../types/modules/evaluator').evaluate,
-	 *  bind: import('../../types/modules/bind').bind,
-	 *  Signal: import('../../types/modules/signal').signal
-	 * }}
-	 */
+
 	const { on, scope, traverseDom, evaluate, bind, Signal } = await resolve(
 		'bind',
 		'dom/traverser',

@@ -4,8 +4,6 @@ export interface ScopeConstrutorParams {
 	node: Node
 }
 
-export type $refs = Record<string, Element | Element[]>;
-
 export type $cleanup = (data?: ScopeCleanupCallback) => void;
 
 export type $data = Record<string, any>;
@@ -23,8 +21,6 @@ export declare class Scope {
 	$data: Record<string, any>;
 	/** Cleanup function initializer */
 	$cleanup: $cleanup;
-	/** References to elements within the scope */
-	$refs: $refs;
 }
 
 /** Interface extending Node with a private property */

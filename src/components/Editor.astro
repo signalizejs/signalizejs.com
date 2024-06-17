@@ -76,7 +76,7 @@ if (hasDefaultCode || hasDefaultSlot) {
 	code={code}
 	ref="codeEditor"
 	data-srdoc-template={`${iframeSrdocTemplate}`}
-	class={`display:flex gap:24px ${direction === 'vertical' ? 'flex-direction:column-reverse' : 'md:display:grid md:grid-template-columns:50%_50%'}`}
+	class={`display:flex gap:24px ${direction === 'vertical' ? 'flex-direction:column-reverse' : 'flex-direction:column-reverse md:display:grid md:grid-template-columns:50%_50%'}`}
 >
 	<CodeMirror code={code} lazyload={lazyload} withBorder={false} />
 	<iframe

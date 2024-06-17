@@ -1,15 +1,7 @@
 /** @type {import('../../types/Signalize').Module<import('../../types/modules/scope').ScopeModule>} */
 export default async ($) => {
-	const { params, resolve } = $;
-
-	/**
-	 * @type {{
-	 *  observeMutations: import('../../types/modules/mutation-observer').observeMutations
-	 * }}
-	 */
-	const { observeMutations } = await resolve('mutation-observer');
+	const { observeMutations } = await $.resolve('mutation-observer');
 	const scopeKey = '__signalizeScope';
-	const refAttribute = `${params.attributePrefix}ref`;
 
 	/** @type {import('../../types/modules/scope').Scope} */
 	class Scope {
@@ -128,33 +120,6 @@ export default async ($) => {
 			cleanChildren(this.$el);
 		};
 
-		/** @type {import('../../types/modules/scope').$refs} */
-		$refs = new Proxy({}, {
-			get: (target, key) => {
-				const refs = [...this.$el.querySelectorAll(`[${refAttribute}=${key}]`)].filter((element) => {
-					const checkParentElement = (el) => {
-						const parentElement = el.parentNode;
-						if (parentElement === this.$el) {
-							return true;
-						}
-
-						if (parentElement.tagName.toLowerCase().includes('-')) {
-							return false;
-						}
-
-						return checkParentElement(parentElement);
-					};
-
-					return checkParentElement(element);
-				});
-
-				if (refs.length === 0) {
-					return null;
-				}
-
-				return refs.length === 1 ? refs[0] : refs;
-			}
-		});
 	}
 
 	/** @type {import('../../types/modules/scope').scope} */

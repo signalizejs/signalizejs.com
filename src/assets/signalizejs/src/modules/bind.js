@@ -1,13 +1,5 @@
 /** @type {import('../../types/Signalize').Module<import('../../types/modules/bind').BindModule>} */
 export default async ({ resolve }) => {
-	/**
-	 * @type {{
-	 *  on: import('../../types/modules/event').on,
-	 *  off: import('../../types/modules/event').off,
-	 *  Signal: import('../../types/modules/signal').signal,
-	 *  scope: import('../../types/modules/scope').scope
-	 * }}
-	 */
 	const { on, off, Signal, scope } = await resolve('event', 'signal', 'scope');
 
 	const reactiveInputAttributes = ['value', 'checked'];

@@ -1,10 +1,6 @@
 /** @type {import('../../types/Signalize').Module<import('../../types/modules/snippets').SnippetsModule>} */
 export default async ({ params, resolve, root }) => {
-	/**
-	 * @type {{
-	 *   dispatch: import('../../types/modules/event').dispatch
-	 * }}
-	 */
+
 	const { dispatch } = await resolve('event');
 	const snippetAttribute = `${params.attributePrefix}snippet`;
 	const snippetAttributeDirective = `${snippetAttribute}${params.attributeSeparator}`;

@@ -92,6 +92,18 @@ table  code{
 .button.button--white{
 	background: #fff!important
 }
+.background\:rgba\(0\,0\,0\,0\.2\){
+	background: rgba(0,0,0,0.2)
+}
+.background\:rgba\(255\,255\,255\,0\.2\){
+	background: rgba(255,255,255,0.2)
+}
+.background\:rgba\(255\,255\,255\,0\.5\){
+	background: rgba(255,255,255,0.5)
+}
+.background\:\#aaa{
+	background: #aaa
+}
 .background-color\:\${
 	background-color: $
 }
@@ -434,6 +446,9 @@ table thead,
 .button__icon{
 	line-height: 20px
 }
+.line-height\:1\!important{
+	line-height: 1!important
+}
 body,
 .\[pre\]\{margin\:0\;border-radius\:8px\;height\:auto\;max-height\:70vh\;overflow\:auto\;width\:100\%\} pre{
 	margin: 0
@@ -546,6 +561,9 @@ article h4,
 }
 .\[section\+section\]\{margin-top\:64px\;lg\:margin-top\:128px\} section+section{
 	margin-top: 64px
+}
+.margin-top\:100px{
+	margin-top: 100px
 }
 .\[pre\]\{margin\:0\;border-radius\:8px\;height\:auto\;max-height\:70vh\;overflow\:auto\;width\:100\%\} pre{
 	max-height: 70vh
@@ -864,6 +882,10 @@ article h1{
 	font-size: 2.4rem;
 	line-height: 4.08rem
 }
+.md\:font-size\:16px{
+	font-size: 1.6rem;
+	line-height: 2.72rem
+}
 .md\:gap\:24px{
 	gap: 24px
 }
@@ -879,6 +901,9 @@ article h1{
 }
 .md\:margin-top\:64px{
 	margin-top: 64px
+}
+.md\:margin-top\:200px{
+	margin-top: 200px
 }
 table td,
 table  th{

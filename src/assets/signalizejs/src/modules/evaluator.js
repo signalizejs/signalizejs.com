@@ -1,10 +1,5 @@
-/** @type {import('../../types/Signalize').Module<import('../../types/modules/evaluator').EvaluateModule>} */
+/** @type {import('../../types/Signalize').Module<import('../../types/modules/evaluator').EvaluatorModule>} */
 export default async ({ resolve, globals }) => {
-	/**
-	 * @type {{
-	 *  Signal: import('../../types/modules/signal').signal
-	 * }}
-	 */
 	const { Signal } = await resolve('signal');
 	const chunkKeywordMap = {
 		undefined,

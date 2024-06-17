@@ -1,4 +1,4 @@
-/** @type {import('../../types/Signalize').Module<import('../../types/modules/intersection-observer').IntersectionObserverModuleEports>} */
+/** @type {import('../../types/Signalize').Module<import('../../types/modules/intersection-observer').IntersectionObserverModule>} */
 export default ({ params }) => ({
 	/** @type {import('../../types/modules/intersection-observer').observeIntersection} */
 	observeIntersection: (element, callback, options) => {

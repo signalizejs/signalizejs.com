@@ -13,7 +13,7 @@ let {
 
 pageTitle = pageTitle + ' | Signalize.js';
 const pageUrl = `${siteUrl}${url.pathname.replace(/\/+$/, '')}`;
-const pageImage = `${siteUrl}/assets/images/og-image.png`;
+const pageImage = `${siteUrl}/images/og-image.png`;
 
 const getStartedLinks = [
 	{ label: 'Introduction', link: path('docs', { slug: 'introduction' })},
@@ -129,7 +129,7 @@ const organizationSchema = {
 			</main>
 		</div>
 
-		<footer class="margin-top:200px margin-bottom:32px container color:$grey [a]{text-decoration:none;color:$grey;hover:color:$red} font-size:14px">
+		<footer class="margin-top:100px md:margin-top:200px margin-bottom:32px container color:$grey [a]{text-decoration:none;color:$grey;hover:color:$red} font-size:14px">
 			<div class="border-bottom:1px_solid_$border padding-bottom:24px margin-bottom:24px display:flex gap:24px tolg:flex-direction:column lg:gap:100px">
 				<div class="max-width:380px">
 					<Image src={'/images/symbol.svg'} width="100" height="100" alt="" />

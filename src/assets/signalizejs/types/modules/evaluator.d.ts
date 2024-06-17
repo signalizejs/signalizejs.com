@@ -5,6 +5,6 @@ export type evaluate = (string: string, content: Record<string, any>, trackSigna
 	detectedSignals: Signal<any>[]
 }
 
-export interface EvaluateModule {
+export interface EvaluatorModule {
 	evaluate: evaluate
 }

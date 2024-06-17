@@ -5,11 +5,7 @@
  * >}
  */
 export default async ({ root, resolve }) => {
-	/**
-	 * @type {{
-	 *  observeMutations: import('../../types/modules/mutation-observer').observeMutations
-	 * }}
-	 */
+
 	const { observeMutations } = await resolve('mutation-observer');
 
 	/** @type {Record<string, import('../../types/modules/event').CustomEventListenerConfig>} */

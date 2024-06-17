@@ -1,11 +1,6 @@
 /** @type {import('../../types/Signalize').Module<import('../../types/modules/hyperscript').HyperscriptModule>} */
 export default async ({ resolve }) => {
-	/**
-	 * @type {{
-	 *   bind: import('../../types/modules/bind').bind,
-	 *   Signal: import('../../types/modules/signal').Signal<any>
-	 * }}
-	 */
+
 	const { bind, Signal } = await resolve('bind', 'signal');
 
 	/**
