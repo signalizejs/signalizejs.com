@@ -109,7 +109,10 @@ export default async ({ params, resolve, root }, config) => {
 			dispatch('spa:request:start', { ...dispatchEventData });
 
 			navigationResponse = await ajax(urlString, {
-				signal: abortNavigationController.signal
+				signal: abortNavigationController.signal,
+				headers: {
+					Accept: 'text/html, application/xhtml+xml'
+				}
 			});
 			const requestIsWithoutErroor = navigationResponse.error === null;
 

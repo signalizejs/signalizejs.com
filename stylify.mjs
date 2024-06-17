@@ -23,7 +23,7 @@ const stylifyConfig = defineConfig({
 			/-{3}([\s\S]+?)-{3}/
 		],
 		variables: {
-			red: '#ff243e',
+			red: '#E42024',
 			shadow: '0 1px 3px 0 rgba(0,0,0,.18)',
 			grey: '#565454',
 			border: '#dddddd',

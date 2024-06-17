@@ -7,9 +7,6 @@ services:
             - ./.:/var/www:delegated
         ports:
             - 4321:4321
-            # Vite Dev Server
-            - 3000:3000
-            - 5000:5000
         environment:
             ENV: dev
         tty: true

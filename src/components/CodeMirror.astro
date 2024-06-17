@@ -1,7 +1,7 @@
 ---
 import { Prism  } from '@astrojs/prism';
 
-const { withBorder = false, lang = 'html', readonly = false, code = '', lazyload = true } = Astro.props
+const { withBorder = false, codeLang = 'html', readonly = false, code = '', lazyload = true } = Astro.props
 
 const prepareCode = (code) => {
 	return code.replace('&amp;', '&')
@@ -22,7 +22,7 @@ const { component } = await $.resolve('component')
 component('code-mirror', {
 	props: {
 		code: '',
-		lang: 'html',
+		codeLang: 'html',
 		lazyload: true,
 		readonly: false,
 	},
@@ -48,14 +48,13 @@ component('code-mirror', {
 			}
 
 			initEditor({
-				lang: $props.lang(),
+				lang: $props.codeLang(),
 				readonly: $props.readonly(),
 				code,
 				element: $el
 			});
 		}
 
-		console.log($props.lazyload());
 		if ($props.lazyload() === false) {
 			loadCodeMirror();
 		}
@@ -78,10 +77,10 @@ component('code-mirror', {
 		${withBorder ? '' : 'border:none'}
 	`}
 	:code="code"
-	lang={lang}
+	codeLang={codeLang}
 	readonly={readonly}
 >
 	<slot>
-		<Prism code={prepareCode(code)} lang={lang} />
+		<Prism code={prepareCode(code)} lang={codeLang} />
 	</slot>
 </code-mirror>

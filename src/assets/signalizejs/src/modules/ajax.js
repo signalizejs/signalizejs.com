@@ -40,6 +40,7 @@ export default async ({ resolve }, config) => {
 
 			requestOptions = { ...options, ...requestOptions, ...customOptions };
 
+			console.log(resource, requestOptions);
 			const request = fetch(resource, requestOptions);
 
 			dispatch('ajax:request:start', { resource, options: requestOptions, request });

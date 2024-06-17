@@ -12,8 +12,9 @@ export default defineConfig({
 		syntaxHighlight: 'prism'
 	},
 	server: {
-		host
+		host,
 	},
 	trailingSlash: 'never',
-	site: siteUrl
+	site: siteUrl,
+	output: "static"
 });
