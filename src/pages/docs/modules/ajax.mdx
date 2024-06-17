@@ -20,9 +20,9 @@ import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 ```js
 const { ajax } = await signalize.resolve('ajax');
-
-// Usage:
-
+```
+## Usage
+```js
 const {
   // Fetch response
   response,
@@ -34,7 +34,7 @@ if (error === null) {
   const json = response.json();
   // Do something with the data...
 }
-
+```
 // Dispatched Events
 
 You can listen to the following events using the `on` function (see the [/docs/modules/event#on](/docs/modules/event#on) documentation):
