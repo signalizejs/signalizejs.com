@@ -1,0 +1,37 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/dom/traverser'
+description: 'Traverse DOM nodes asynchronously.'
+---
+
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
+## Installation
+<ImportMapDependencies module="dom/traverser" />
+
+```js
+const { traverseDom } = await signalize.resolve('dom/traverser');
+```
+
+## traverseDom
+Traverse the DOM for selected element or document and call a callback (can be async). It is also possible to [select node types](https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType#value) that should be processed.
+
+```js
+const { traverseDom } = signalize;
+
+await traverseDom(
+	document.querySelector('#element'),
+	async (processedNode) => {
+		// Do something
+
+		// Stop iterating deeper in the tree of the processdNode
+		if (true) {
+			return false;
+		}
+	},
+	// Optional
+	// Only elements
+	[1]
+)
+```

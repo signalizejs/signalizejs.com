@@ -1,0 +1,27 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/off'
+description: 'Get element coordinates.'
+---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
+## Installation
+<ImportMapDependencies module="offset" />
+
+```js
+const { offset } = await signalize.resolve('offset');
+```
+
+## API
+
+### offset
+Get element coordinates.
+```js
+const {
+	top,
+	left,
+	right,
+	bottom
+} = offset(document.querySelector('#element'));
+```

@@ -1,0 +1,35 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/viewport'
+description: 'Retrieve element information relative to the current viewport.'
+---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
+## Installation
+<ImportMapDependencies module="viewport" />
+
+```js
+const { isInViewport } = await signalize.resolve('viewport');
+```
+
+## API
+
+### isInViewport
+Retrieve information about an element's position relative to the viewport.
+
+```js
+import Signalize from 'signalizejs';
+import widthPlugin from 'signalizejs/width';
+import heightPlugin from 'signalizejs/height';
+import offsetPlugin from 'signalizejs/offset';
+import isInViewportPlugin from 'signalizejs/is-in-viewport';
+
+const { isInViewport } = signalize;
+
+const {
+	top,
+	bottom,
+	whole
+} = isInViewport(document.querySelector('#carousel'));
+```

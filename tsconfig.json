@@ -1,0 +1,51 @@
+{
+  "extends": "astro/tsconfigs/base",
+  "compilerOptions": {
+		"baseUrl": ".",
+		"checkJs": true,
+		"paths": {
+			"@layouts/*": [
+				"src/layouts/*"
+			],
+			"@config/*": [
+				"src/config/*"
+			],
+			"@content/*": [
+				"src/content/*"
+			],
+			"@codeEditor": [
+				"src/components/Editor.astro"
+			],
+			"@mainLayout": [
+				"src/layouts/main.astro"
+			],
+			"@docsLayout": [
+				"src/layouts/docs.astro"
+			],
+			"@examplesLayout": [
+				"src/layouts/examples.astro"
+			],
+			"@serverHelpers": [
+				"src/serverHelpers.ts"
+			],
+			"@clientHelpers": [
+				"src/clientHelpers.ts"
+			],
+			"@components/*": [
+				"src/components/*"
+			],
+			"@public/*": [
+				"public/*"
+			],
+			"@assets/*": [
+				"src/assets/*"
+			],
+			"@images/*": [
+				"public/images/*"
+			],
+			"@services/*": [
+				"src/services/*"
+			]
+		}
+	}
+}

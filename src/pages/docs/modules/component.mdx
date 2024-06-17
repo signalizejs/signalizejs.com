@@ -1,0 +1,220 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/component'
+description: 'Create reusable web components with minimum effort.'
+---
+
+import Editor from '@codeEditor';
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
+
+## Installation
+<ImportMapDependencies module="component" />
+
+```js
+const { component } = await signalize.resolve('component');
+```
+
+## API
+
+## component
+This function is used to **define** a new web component.
+
+To define a web component, you only need to call the `component` function with the name of the element. **All other arguments are optional.**
+
+The simplest definition of a web component can look like this:
+
+```html
+<script>
+component('my-element');
+</script>
+
+<my-element />
+```
+
+This registers `my-element` as a custom element.
+
+### Web Component Options
+
+The setup function receives the following arguments:
+
+* `$el`: The current component element.
+* `$`: The current signalize instance.
+* `$refs`: Returns an element or array of elements based on the `ref` attribute. For example, `$refs.field` would return the element with `ref="field"`.
+* `$parent`: Returns the parent component. You can call it with `$parent()` or specify the parent's name like `$parent('custom-parent')`.
+* `$adopted`: An asynchronous function called in the native web component's `adoptedCallback` hook.
+* `$connected`: An asynchronous function called in the native web component's `connectedCallback` hook.
+* `$disconnected`: An asynchronous function called in the native web component's `disconnectedCallback` hook.
+
+```js
+component('my-element', {
+	/*
+		Props as an Array
+		All props are passed into `$data` and become publicly accessible.
+		Each property becomes a Signal.
+		Configured property names are included in the `observedAttributes` field.
+		This means that when a property attribute's value changes on an element,
+		the new value is automatically passed to the corresponding Signal.
+		For example, a prop named `"some-prop"` will be converted to a camelCase variable named `someProp`.
+	*/
+	props: ['some-prop'],
+	props: {
+		// key: default value
+		someProp: ''
+	},
+	shadow: {
+		// A native shadowRoot options
+		// https://developer.mozilla.org/en-US/docs/Web/API/Web_components#api.shadowroot
+	},
+	// Right before component constructor exits
+	setup({ $props, $el, $adopted, $connected, $disconnected }) {
+		const { someProp } = $props;
+
+		$adopted(() => {});
+		$connected(() => {});
+		$disconnected(() => {});
+
+		return {  /* Public data added to prototype */ }
+	},
+})
+```
+
+<Editor code={`
+<my-form>
+	<form ref="form">
+		<input ref="text">
+		<button>First Form Submit</button>
+	</form>
+</my-form>
+
+<br>
+
+<my-form>
+	<form ref="form">
+		<input ref="text">
+		<button>Second Form Submit</button>
+	</form>
+</my-form>
+
+<script type="importmap">${createImportMapJson(['component'])}</script>
+
+<script type="module">
+import Signalize from 'signalizejs';
+
+const { resolve } = new Signalize();
+const { component } = await resolve('component');
+
+// Because there are two scope="my-form"
+// This defined scope will be inited twice
+// for each matched element
+component('my-form', {
+	setup({ $refs, cleanup  }) {
+		$refs.form.onsubmit = () => {
+			alert($refs.text.value);
+		}
+	}
+});
+</script>
+`} />
+
+## Passing Properties to a Child Component
+
+There are two main ways to pass data down to a child component in Signalize:
+
+1. **Using Hooks:** The parent component can listen to an event **emitted by** the child component when it initializes.
+2. **Using Directives (Optional):** If you plan to use directives for data binding, you can also pass data that way.
+
+### Using Hooks
+
+The parent component can listen to an event **emitted by** the child component when it initializes. This event can be used to pass data from the parent to the child.
+
+<Editor code={`
+<parent-component>
+	<p ref="output"></p>
+
+	<child-component ref="child">
+		<button ref="button">
+			Increment: <span ref="count"></span>
+		</button>
+	</child-component>
+</parent-component>
+
+<script type="importmap">${createImportMapJson(['component', 'directives', 'signal', 'event', 'bind'])}</script>
+
+<script type="module">
+import Signalize from 'signalizejs';
+
+const { resolve } = new Signalize();
+const { component, signal, bind, on } = await resolve(
+	'directives', 'component', 'signal', 'event', 'bind'
+);
+
+component('parent-component', ({ $refs }) => {
+	const count = signal(1);
+
+	on('component:setuped', $refs.child, ({ detail }) => {
+		// 1. Pass initial value
+		detail.count(count());
+
+		// 2. Watch for child component signal change
+		detail.count.watch(({ newValue }) => {
+			count(newValue);
+		});
+	});
+
+	bind($refs.output, { text: [count, () => \`Count affected from child: \${count}\`] });
+});
+
+component('child-component', {
+	props: {
+		count: 0
+	},
+	setup({ $props, $refs }) {
+		const { count } = $props;
+		on('click', $refs.button, () => count(count() + 1));
+		bind($refs.count, { text: count });
+	}
+});
+</script>
+`} />
+
+### Directives
+
+If you choose to bind properties through directives:
+
+* Use `:property-name="js code"` syntax, like `:count="count"`.
+* This method uses two-way data binding, allowing the child component to modify the parent's data.
+
+<Editor code={`
+<parent-component>
+	<p :text="'Count affected from child:' + count"></p>
+
+	<child-component :count="count">
+		<button @click="count(count() + 1)">
+			Increment: <span :text="count"></span>
+		</button>
+	</child-component>
+</parent-component>
+
+<script type="importmap">${createImportMapJson(['component', 'directives', 'signal'])}</script>
+
+<script type="module">
+import Signalize from 'signalizejs';
+
+const { resolve } = new Signalize();
+const { component, signal } = await resolve(
+	'directives', 'component', 'signal'
+);
+
+component('parent-component', () => ({
+	count: signal(1)
+}));
+
+component('child-component', {
+	props: {
+		count: 0
+	}
+});
+</script>
+`} />

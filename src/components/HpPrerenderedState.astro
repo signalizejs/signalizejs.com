@@ -1,0 +1,37 @@
+---
+import Editor from '@components/Editor.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
+
+const importmap = createImportMapJson(['directives', 'component', 'directives/for']);
+
+const code = `
+<custom-list>
+	<button @click="count(count() + 1)">+<span :text="count">3</span></button>
+	<button @click="count(count() - 1)">-<span :text="count">3</span></button>
+	<ul>
+		<template :for="i of count">
+			<li :text="'Rendered - ' + i"></li>
+		</template>
+		<!-- prerendered -->
+			<li>Prerendered - 0</li>
+			<li>Prerendered - 1</li>
+			<li>Prerendered - 2</li>
+		<!-- /prerendered -->
+	</ul>
+</custom-list>
+
+<script type="importmap">${importmap}</script>
+
+<script type="module">
+	import Signalize from 'signalizejs';
+	const { resolve } = new Signalize();
+	// Use the directives plugin
+	const { component, signal } = await resolve('directives', 'component', 'signal');
+	component('custom-list', () => ({
+		count: signal(3)
+	}));
+</script>
+`.trim();
+---
+
+<Editor code={code} />

@@ -1,0 +1,45 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/ajax'
+description: 'A wrapper around the native JavaScript fetch API.'
+---
+
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
+**What it Does:**
+
+* Improves error handling.
+* By default, sets the method to `POST` if a body argument is provided and no method is specified.
+* If the body argument is passed and is not a string, number, or FormData, it automatically converts it using `JSON.stringify()` and sets the `Content-Type` header to `application/json`.
+* Adds the `X-Requested-With` header to the request, allowing you to detect AJAX requests on the server side.
+
+## Installation
+
+<ImportMapDependencies module="ajax" />
+
+```js
+const { ajax } = await signalize.resolve('ajax');
+
+// Usage:
+
+const {
+  // Fetch response
+  response,
+  // Error information (null if no error)
+  error,
+} = await ajax(url, options);
+
+if (error === null) {
+  const json = response.json();
+  // Do something with the data...
+}
+
+// Dispatched Events
+
+You can listen to the following events using the `on` function (see the [/docs/modules/event#on](/docs/modules/event#on) documentation):
+
+* `ajax:request:start`: Dispatched when the request starts.
+* `ajax:request:success`: Dispatched when the request completes successfully (no error).
+* `ajax:request:error`: Dispatched when the request encounters an error.
+* `ajax:request:end`: Dispatched when the request finishes (regardless of success or error).

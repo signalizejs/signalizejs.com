@@ -1,0 +1,33 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/intersection-observer'
+description: "Observe changes in the element intersection with an ancestor element or with the document's viewport."
+---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
+## Installation
+<ImportMapDependencies module="intersection-observer" />
+
+```js
+import Signalize from 'signalizejs';
+
+const { observeIntersection } = await resolve('intersection-observer');
+```
+
+## API
+
+### observeIntersection
+Observe an element's intersection and call a callback.
+- **options**: For modifying [intersection observer options](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#creating_an_intersection_observer).
+
+```js
+const { observeIntersection } = signalize;
+
+// Optional options
+const options = {};
+
+const observer = observeIntersection(document.querySelector('#element'), () => {
+	// Do something
+}, options);
+```

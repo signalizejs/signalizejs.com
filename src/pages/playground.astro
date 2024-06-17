@@ -1,0 +1,75 @@
+---
+import MainLayout from '@layouts/main.astro';
+import Editor from '@components/Editor.astro'
+import { createImportMapJson } from '@services/importmap.mjs';
+
+const code = `
+Hello World! 🚀
+
+<!-- Full Importmap -->
+<script type="importmap">${createImportMapJson()}</script>
+
+<script type="module" defer>
+	import Signalize from 'signalizejs';
+
+	const { resolve } = new Signalize();
+
+	// You code goes here
+	// const { } = await resolve('');
+
+</script>
+`.trim();
+---
+
+<MainLayout
+	pageDescription="Try Signalize in your browser right now."
+	pageTitle="Playground"
+>
+	<script>
+		import { $ } from '@assets/global';
+		const { component, signal } = await $.resolve('component', 'signal', 'event');
+
+		component('playground-editor', {
+			props: ['code'],
+			setup ({ $props }) {
+				let { code }  = $props;
+				const urlParams = new URLSearchParams(window.location.search);
+				const codeFromUrl = urlParams.get('code');
+
+				if (codeFromUrl) {
+					code(decodeURIComponent(codeFromUrl))
+				}
+
+				const showMessage = signal(false);
+
+				return {
+					showMessage,
+					shareCodeUrl: () => {
+						const url = `${window.location.origin}/playground?code=${encodeURIComponent(code())}`;
+						window.navigator.clipboard.writeText(url);
+						showMessage(true);
+						setTimeout(() => {
+							showMessage(false);
+						}, 1000)
+					}
+				}
+			},
+		})
+		</script>
+		<div class="text-align:center"><h2 class="font-size:24px md:font-size:48px">Playground</h2></div>
+		<div>
+
+		<playground-editor code={code}>
+			<div class="js-playground container">
+				<Editor props={{':code': 'code'}} lazyload={false} direction="horizontal" code={code} />
+			</div>
+			<div class="text-align:center margin-top:48px">
+				<input class="js-playground-url" hidden>
+				<a class="button button--solid" @click="shareCodeUrl">
+					<span :hidden="showMessage()">Get shareable URL</span>
+					<span :hidden="!showMessage()">Copied!</span>
+				</a>
+			</div>
+		</playground-editor>
+	</div>
+</MainLayout>

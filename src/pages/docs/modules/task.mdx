@@ -1,0 +1,52 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/task'
+description: 'Schedule tasks to be executed only if there is no pending user input. Used for breaking long tasks into smaller ones.'
+---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
+The `task` function provided can be used to break long-running tasks into smaller ones, which can improve interaction to next paint (INP). This function schedules a queue of tasks passed to it and executes them in the order they were passed, but it postpones their execution if there is any pending user input. It prioritizes user input so that user actions are processed before the scheduled tasks.
+
+Signalize uses this function, for example, to trigger DOM ready events. In the future, it will likely be used in more scenarios.
+
+Resources:
+- [Improve interaction to next paint](https://nitropack.io/blog/post/improve-interaction-to-next-paint-inp)
+- [Optimize long tasks](https://web.dev/optimize-long-tasks)
+
+## Installation
+<ImportMapDependencies module="task" />
+
+```js
+const { task } = await signalize.resolve('task');
+```
+
+## Api
+
+### task
+The task function calls a function provided as an argument only if there is no user input pending.
+
+It is important to note that the task function delays the execution of each function passed as an argument.
+Therefore, it is not suitable for wrapping performance-critical function calls.
+It should be used for non-critical tasks such as:
+- Loading the current amount of favorite products in the background.
+- Breaking the process of opening an image gallery.
+- Sending background tasks to the server.
+- Rendering hidden templates in dropdown menus, and similar tasks.
+
+```js
+const { task } = signalize
+
+let i = 100;
+// Long running while
+// Imagine some DOM operations
+// like appending loaded products/articles
+while(i--) {
+	// Schedule multiple tasks
+	// Execute them instantly
+	// or wait on the user interaction to finish
+	task(() => {
+		// Do something
+	})
+}
+```

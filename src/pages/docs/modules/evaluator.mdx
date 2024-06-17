@@ -1,0 +1,62 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/evaluator'
+description: 'Javascript evaluator without unsafe eval.'
+---
+
+import Editor from '@codeEditor';
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
+## Installation
+<ImportMapDependencies module="evaluator" />
+
+```js
+const { evaluate } = await signalize.resolve('evaluator');
+```
+
+## API
+Evaluator parses and compiles string based on [precedence table](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence) and executes it with provided context.
+It doesn't use any form of unsafe eval (`eval`, `new Function`).
+
+**Trade Offs**
+
+Because evaluator is not using a native javascript evaluator (like new Function or eval), not every syntax is supported.
+The evaluator was created primarily for [directives](/docs/modules/directives) for writting simple logic directly in the html attribute.
+It can process various javascript syntaxes but it wasn't developed for the purpose of evaluating all javascript features.
+
+Some javascript features I don't think are used that much are not implemented in order to decrease the plugin size and complexity and some of them wan't work because of the endless complexity of javascript syntax. You can create an issue on Github if you think, something should be added or fixed:
+- You cannot define anything (let, var, const, variables, functions, objects, arrays...)
+- IIFE won't work
+- Assignment (like `=`, `+=`), bitwise and unary operators (like `&=`, `-x`) are not implemented
+- `spread`, `yield`, `void`, `new`, `=>` (arrow function + operator) operators are not implemented
+- Async wasn't implemented
+- Multiple script steps split by `;` are not implemented
+- The text interpolation is not implemented. Use `+` => `'Text ' + variable`
+
+Simply put, if it doesn't work in the Evaluator, move it directly into the JS and ask on the Discord Channel or make an issue on Github, so we can discuss possible solutions.
+
+### evaluate
+Evaluate function parses string and executes it.
+It expects a function string and context (data). It cannot access anything, that wasn't passes through the context.
+
+Evaluate internally detects used signals and returns them.
+
+```js
+const { evaluate } = signalize;
+
+const {
+	// Evaluated string
+	result,
+	// An array of signals whose values ware used during compilation
+	detectedSignals
+} = evaluate(
+	// String for evaluation
+	'a + b',
+	// Data
+	{
+		a: 1,
+		b: 2
+	}
+);
+```

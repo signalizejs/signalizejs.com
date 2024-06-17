@@ -1,0 +1,52 @@
+---
+import Editor from '@components/Editor.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
+
+const importmap = createImportMapJson(['directives', 'component', 'directives/for']);
+
+const code = `
+<words-list>
+	<form @submit="submit">
+		<!-- Shortcuts for attribute binding -->
+		<input {value} required>
+		<button>Add</button>
+		<br>
+		<!-- Native for of/in loops -->
+		<template :for="item of items">
+			<!-- Iterator feature: count, first, last, odd, even -->
+			<span
+				:text="item + (iterator().last ? '' : ', ')"
+				:style="iterator().odd ? 'color:red': 'color:blue'"
+			></span>
+		</template>
+	</form>
+</words-list>
+
+<script type="importmap">${importmap}</script>
+
+<script type="module">
+	import Signalize from 'signalizejs';
+	const { resolve } = new Signalize();
+
+	// Use the directives plugin
+	const { component, signal } = await resolve('directives', 'signal', 'component');
+
+	component('words-list', () => {
+		const value = signal('');
+		const items = signal([]);
+
+		return {
+			submit: (event) => {
+				event.preventDefault();
+				items([...items(), value().trim()]);
+				value('');
+			},
+			items,
+			value
+		}
+	});
+</script>
+`.trim();
+---
+
+<Editor code={code} />

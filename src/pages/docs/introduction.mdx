@@ -1,0 +1,344 @@
+---
+layout: '@docsLayout'
+title: 'Introduction'
+metaDescription: 'Learn how to use the Signalize JavaScript framework in no time. Signalize is a client-side, module-based, platform-focused, dependency-less JavaScript framework designed for swift web development with minimal JavaScript.'
+---
+
+import ModuleNamesList from '@components/ModuleNamesList.astro';
+
+Signalize in a nutshell:
+- Signalize is a client-side JavaScript framework.
+- It features a small 2 KB gzipped core that includes an ES modules loader.
+- This loader leverages modern [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap).
+- To use Signalize, set up the import map and initialize a new Signalize instance.
+- Each time you need functionality, add necessary module keys to the import map and import them through the loader using the `resolve` function.
+
+The goal of this framework is to provide functionality similar to modern frameworks like Vue, Svelte, Solid, and Qwik, but with minimal JavaScript, the smallest possible learning curve, a simple codebase, no dependencies, and no need for a JavaScript backend.
+
+## Playground
+Signalize docs contain interactive examples. It's a great place to try out Signalize. You can also use the prepared [playground](/playground) that allows you to share your code.
+
+## Setup
+In the simplified example below, you can see Signalize initialization. Check it out, copy it, and then go through each step below to understand what this snippet does.
+
+```html
+<!-- 1. Configure the importmap -->
+<script type="importmap">
+	{
+		"imports": {
+			"signalizejs": "https://cdn.jsdelivr.net/npm/signalizejs@latest/+esm",
+			"signalizejs/mutation-observer": "https://cdn.jsdelivr.net/npm/signalizejs@latest/+esm/mutation-observer"
+			"signalizejs/event": "https://cdn.jsdelivr.net/npm/signalizejs@latest/+esm/event"
+		}
+	}
+</script>
+<script>
+	// 2. Import the Signalize core
+	import Signalize from 'signalizejs';
+
+	// 3. Create a new Signalize instance
+	const { resolve } = new Signalize();
+
+	// 4.1 Resolve the Event module because we need the "on" function
+	// 4.2 The Event module will automatically import the Mutation Observer module
+	const { on } = await resolve('event');
+
+	// 5. Use the on function
+	on('dom:ready', () => alert('Hello World!'));
+</script>
+```
+
+A few notes on the simplified example:
+- The import map maps modules to public paths so they can be imported.
+- The Event module uses an optimized observer for attaching listeners that doesn't affect [INP](https://web.dev/articles/inp).
+- Imported modules are initialized only once and reused afterwards.
+
+### 1. Install Signalize
+
+#### NPM, Yarn, PNPM
+
+To install Signalize locally, use NPM, Yarn, or PNPM:
+```bash
+npm i signalizejs
+
+yarn add signalizejs
+
+pnpm i signalizejs
+```
+
+#### CDN
+Signalize can also be used through CDN as a module. There is no IIFE or UMD export because ES modules are supported in all major browsers:
+- For production purposes, consider using a specific version instead of the `latest` keyword.
+- It is also recommended to download and host the script yourself to prevent CDN connection errors.
+
+```html
+<script type="module">
+	import Signalize from "https://cdn.jsdelivr.net/npm/signalizejs@latest/+esm"
+</script>
+```
+
+### 2. Import Map Configuration
+The Signalize loader requires an [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) to be configured before it is used.
+
+The import map script must always be placed before any JavaScript ES module imports are triggered.
+
+You need to configure paths for every module that you or Signalize needs. If you don't want to update the import map every time you need new functionality, you can copy the[complete import map](#complete-import-map) into your code and you will be ready to go:
+- Official Signalize modules can be resolved using shortcuts like `event` and `signal`.
+- However, during the request, the prefix `signalizejs` is added to prevent naming collisions, so the requested module name is `signalizejs/event` and `signalizejs/signal` (this prefix can be changed by adding `instanceId` in the config during Signalize initialization).
+- Therefore, you always need to configure `signalizejs` modules like `signalizejs/some-module`: `public path to module file`.
+
+```html
+<script type="importmap">
+	{
+		"imports": {
+			"signalizejs/some-module": "public path to module"
+		}
+	}
+</script>
+```
+
+### 3. Create a Signalize Instance
+Multiple instances of Signalize can exist on the same page.
+This can be useful, for example, for external widgets configured differently from the rest of the page:
+- Keep in mind that they must use different roots and cannot be nested.
+- This means if you have a global Signalize instance attached to the `document element`, you cannot create another instance for nested elements.
+- However, you can create another instance of Signalize for custom Web Components like widgets and such.
+- Note that global modules like `SPA` cannot be initialized twice due to functionality collisions.
+
+```js
+// global.js
+import Signalize from 'signalizejs';
+
+const signalize = new Signalize({
+	// Optional - example with defaults
+	root: document,
+	instanceId: 'signalizejs',
+	modules: [],
+	params: {
+		attributeSeparator: '-',
+		attributePrefix: '',
+	},
+	globals: {}
+});
+
+// If you want global variable
+window.signalize = signalize;
+// Or :)
+window.$ = signalize;
+
+// Or if you prefer exports
+export default signalize;
+```
+
+#### Configuration Options
+<div class="overflow:auto">
+
+| Option                 | Info                                                                                                                                                                                                                                                      |
+|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **root**               | Optional. HTML Element | Document. The root for which Signalize will be initialized.                                                                                                                                                                      |
+| **params**             | Optional. Object. Used for configuration purposes. Values are accessed, for example, during module initialization. If `module name` exists as a `key` within `params`, then the value of the key is passed as configuration to the module.                |
+| **instanceId**         | Optional. String. This is used as a prefix during module import. You can configure different internal module versions like signalizejs-next in the import map for different instances.                                                                    |
+| **modules**            | Optional. Array of modules and their configurations. Used for instant module initialization. See below.                                                                                                                                                   |
+| **globals**            | Optional. Object. Global variables for use within the Signalize instance. They are directly injected into directives by the directives plugin, for example.                                                       |
+
+</div>
+
+#### Default Params
+<div class="overflow:auto">
+| Key                    | Info                                                                                                                                                                                                                                                                                      |
+|------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **attributeSeparator** | Optional. String. The separator used within all `attribute` selectors provided by modules. By default, the separator is `-` (dash). For example, `data-attribute`. If set to `:`, you write `data:attribute`.                                                                             |
+| **attributePrefix**    | Optional. String. The prefix before all "attribute" selectors provided by modules. By default, you write `attribute=""`. For `data-` prefix (to have valid HTML), set the prefix to `data-attribute=""`. This can be used for valid attribute selectors.                                  |
+</div>
+
+### 4. Import What You Need
+As mentioned in the import map section, official Signalize modules can be imported without the `signalizejs` prefix.
+The naming of all additional modules you create or want to use is up to you.
+
+Signalize modules can be imported in two ways:
+- **Instantly**: Passed as modules during initialization. Great for modules needed immediately.
+- **Lazily** - Through the `resolve` function.
+
+#### Instant initialization
+When you need some modules to be initialized immediately, pass them directly in the configuration.
+
+All modules initialized this way don't need to be added to the import map because they are already resolved.
+```js
+import Signalize from 'signalizejs';
+import myModule from './path/to/my/module.js';
+
+const signalize = new Signalize({
+	modules: [
+		['my-module', myModule, { /* Direct Config - optional */ }]
+	],
+	params: {
+		// This will be merged with direct config
+		// config = {...paramsConfig, ...directConfig}
+		'my-module': { /* Params Config - optional */ }
+	}
+});
+
+const { myFunction } = await signalize.resolve('my-module');
+```
+
+#### Lazy initialization
+Modules can also be loaded lazily using the `resolve` function.
+
+This can decrease the amount of JavaScript on the page and improve initialization time.
+
+**Example with ES modules exports:**
+```js
+// page.js
+import signalize from '/path/to/global.js';
+
+const { myFunction } = await signalize.resolve('my-module');
+
+// With direct config
+// Every time you pass direct config while lazy loading a module,
+// you will get a new instance of that module with merged configuration
+// from params. This can be useful to have one module on the page
+// with different configuration.
+const { myFunction } = await signalize.resolve([
+	'my-module', { /* Direct Config */}
+]);
+
+// Loading several modules at once
+const {
+	moduleAFunction,
+	moduleBFunction,
+	moduleCFunction
+} = await signalize.resolve(
+	'moduleA',
+	['moduleB', {/* Direct Config */}],
+	'moduleC'
+)
+```
+
+**Example with `window.signalize` variable:**
+```js
+// page.js
+const { /* ... */ } = await window.signalize.resolve(/* ... */);
+```
+
+## Typescript & JSDOC Support
+Signalizejs resolve function has a type support for official packages.
+
+However, if you plan to use your own modules, you will need to set the return types dynamically based on what you import.
+
+If you use bundlers like Webpack, Rollup and Vite (only if the output is not loaded as a module) use `import type` instead of import because it would cause Signalize core and modules to be imported into multiple bundles.
+
+### Typescript
+If you use TypeScript, remember to always `import type`, not the library itself (unless you need to load a module during the initialization as shown above).
+
+```ts
+import type { signalize } from 'global.js';
+import type { on } from 'signalizejs/event';
+
+// Example with the "event" official module,
+// You need to do this only for your own modules.
+const { on } = await signalize.resolve<{
+	on: on
+}>('event');
+```
+
+### JSDOC
+```js
+// Example with the "event" official module,
+// You need to do this only for your own modules.
+
+/**
+ * @type {{
+ * on: import('signalizejs/event').on
+ * }}
+ */
+const { on } = await window.signalize.resolve('event');
+```
+
+In order to get the correct type hints for the global `signalize` variable in JSDoc, you need to define `global.d.ts` so that JavaScript can get correct types.
+
+```ts
+import type { Signalize } from "./packages/signalizejs/src/Signalize";
+
+declare global {
+	interface Window {
+		signalize: Signalize
+	}
+}
+```
+
+## List of all Official Signalize Modules
+below is a list of all modules signalizejs provides.
+
+<ModuleNamesList />
+
+## Complete Import Map
+Below is a prepared snippet with all modules Signalize provides. You just need to add a public path to each module.
+
+This way, you will not have to add internal dependencies to the import map every time you need a new functionality because it will be already prepared.
+```html
+<script type="importmap">
+	{
+		"imports": {
+			"signalizejs": "",
+			"signalizejs/ajax": "",
+			"signalizejs/bind": "",
+			"signalizejs/component": "",
+			"signalizejs/dom/ready": "",
+			"signalizejs/dom/traverser": "",
+			"signalizejs/dialog": "",
+			"signalizejs/directives": "",
+			"signalizejs/directives/for": "",
+			"signalizejs/directives/if": "",
+			"signalizejs/evaluator": "",
+			"signalizejs/event": "",
+			"signalizejs/hyperscript": "",
+			"signalizejs/intersection-observer": "",
+			"signalizejs/logger": "",
+			"signalizejs/mutation-observer": "",
+			"signalizejs/offset": "",
+			"signalizejs/scope": "",
+			"signalizejs/signal": "",
+			"signalizejs/sizes": "",
+			"signalizejs/snippets": "",
+			"signalizejs/spa": "",
+			"signalizejs/strings/cases": "",
+			"signalizejs/task": "",
+			"signalizejs/viewport": "",
+			"signalizejs/visibility": ""
+		}
+	}
+</script>
+```
+
+## Faster loading with modulepreload
+If you want your modules to load quickly, add [modulepreload](https://web.dev/articles/modulepreload) for each module in the import map that will be used immediately on the page.
+
+Preload link elements must be placed before the first import map in the `<head>` element.
+```html
+<link rel="modulepreload" href="public module path">
+```
+
+## Why ES modules, Import Maps and Signalize loader?
+Let's start with an example:
+- You have a website with a layout that includes scripts used across the entire site.
+- You also have pages where scripts are specific to that particular page.
+- When a user loads a page, both the layout and page-specific scripts are loaded.
+
+The above script loading works fine until you encounter the following problems:
+- What if a page has a component whose rendering depends on conditions? If that component also loads scripts, and another nested component on the same page needs the same scripts, loading separate bundles for each can result in duplicated JavaScript on the same page. Adding scripts directly into the page script brings its own set of problems.
+- If your website follows a Single Page Application (SPA) architecture, you might encounter duplicated scripts with the above approach.
+- Additionally, what if you have asynchronously lazy-loaded chunks that need their own dependencies? The above solutions become inadequate and complexities arise.
+
+The problems mentioned above can be effectively solved with import maps and ES modules:
+- ES modules are imported only once and cached, eliminating the need for bundling.
+- Dependency resolution is automatic due to imports combined with import maps.
+- For asynchronous loading, you can leverage the dynamic [import()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import) function and top-level `await`.
+
+If you choose to use ES modules and lazily load them, you would have to manually handle the initialization of dependencies.
+- This is where the Signalize loader automates the process.
+- It chains dependencies and initializes them with the correct configuration automatically.
+
+### Trade offs
+[ES modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) and [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) good browser support, but nothing is without trade-offs:
+- In scenarios where you need to load a large number (e.g., a hundred) of uncached modules, performance might be slightly slower compared to a single large bundle due to increased request overhead.
+- If this applies to your use case, consider testing and optimizing accordingly.

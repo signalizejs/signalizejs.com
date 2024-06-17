@@ -1,0 +1,22 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/strings/cases'
+description: 'A set of utilities for converting strings from one case to another.'
+---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
+## Installation
+<ImportMapDependencies module="strings/cases" />
+
+```js
+const { dashCase } = await signalize.resolve('strings/cases');
+```
+
+## Api
+
+### dashCase
+Convert any case into dash case:
+```js
+dashCase('Hello World!') // hello-world
+```

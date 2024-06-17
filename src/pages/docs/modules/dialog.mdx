@@ -1,0 +1,92 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/dialog'
+description: 'Wrapper around native JavaScript dialog functionality.'
+---
+
+import Editor from '@codeEditor';
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
+
+## Installation
+<ImportMapDependencies module="dialog" />
+
+```js
+const {
+	dialog,
+	openDialog,
+	closeDialog,
+ } = await signalize.resolve('dialog');
+```
+
+## API
+
+### dialog
+```js
+dialog('my-dialog');
+```
+- Get dialog element by id => `dialog="my-dialog"`
+
+### openDialog
+```js
+openDialog('my-dialog');
+```
+- Open dialog by id => `dialog="my-dialog"`
+
+```js
+openDialog('my-dialog', true);
+```
+- Open dialog modelessly by id => `dialog="my-dialog"`
+- Calls [show](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/show) instead of [showModal](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal)
+
+### closeDialog
+```js
+closeDialog('my-dialog');
+```
+- Close dialog by id => `dialog="my-dialog"`
+
+## Directives
+
+The Dialog module comes with the Signalize default installation. You just need to import it.
+
+<Editor code={`
+<dialog dialog="my-dialog">
+	Hello World!<br><br>
+	<button dialog-close="my-dialog">Close</button>
+</dialog>
+
+<button dialog-open="my-dialog">Open Dialog</button>
+
+<script type="importmap">${createImportMapJson(['dialog'])}</script>
+
+<script type="module">
+	import Signalize from 'signalizejs';
+
+	const { resolve } = new Signalize();
+	await resolve('dialog');
+</script>
+`} />
+
+**Available Directives**
+- `dialog`: Is used as an id for dialog
+- `dialog-close`: Is used to close dialog after click `dialog-close="dialog-id"`
+- `dialog-open`: Is used to open dialog after click `dialog-open="dialog-id"`
+- `dialog-modeless`: If this attribute is set, it will open [modeless dialog](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement#instance_methods)
+
+
+Available Directives
+- **dialog**: Used as an ID for the dialog element (replace with id).
+- **dialog-close**: Used to close the dialog after click (dialog-close is enough) => `dialog-close="dialog-id"`
+- **dialog-open**: Used to open the dialog after click (dialog-open="dialog-id" is enough) => `dialog-open="dialog-id"`
+- **dialog-modeless**: If set, opens a [modeless dialog](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement#instance_methods) (link to modeless dialog).
+
+
+## Dispatched Events
+You can listen to the following events through the [on](/docs/modules/event#on) method:
+- `dialog:closed`: Dispatched when a dialog is closed
+- `dialog:opened`: Dispatched when a dialog is opened
+
+## URL Hash
+- The Dialog module watches the URL hash for changes
+- If a dialog with the given URL hash is found (e.g., `example.com#my-dialog`), it will be automatically opened.

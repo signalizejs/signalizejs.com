@@ -1,0 +1,45 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/scope'
+description: 'Add a scope to an element prototype.'
+---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
+The `scope` function is used, for example, inside Signalize bindings, directives, and several other features.
+
+The purpose of this module is to help developers attach encapsulated data to the DOM node prototype without polluting the prototype or causing collisions with existing methods.
+
+## Installation
+<ImportMapDependencies module="scope" />
+
+```js
+const { scope } = await signalize.resolve('scope');
+```
+
+## API
+
+### scope
+```js
+const element = document.querySelector('#element');
+
+// Get element scope
+const elementScope = scope(element);
+
+// Modify or create an element scope
+const elementScope = scope(element, (elementScope) => {
+	elementScope.customProperty = '';
+});
+
+const { $el, $parentScope, $cleanup, $data } = elementScope;
+
+$cleanup(() => {
+	// Add cleanup to a node or element when it is removed from the DOM
+});
+
+// Add custom data
+// Added keys to data are accessible directly from elementScope
+// elementScope.customData
+// If key is removed from data, it is removed from elementScope.
+$data.customData = 'Hello World!';
+```

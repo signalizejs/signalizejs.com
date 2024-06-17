@@ -1,0 +1,32 @@
+---
+import Editor from '@components/Editor.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
+
+const importmap = createImportMapJson(['snippets', 'event']);
+
+const code = `
+<div snippet="snippet-1">Hello ...</div>
+<div snippet="snippet-2"></div>
+
+<button id="button">Redraw</button>
+
+<script type="importmap">${importmap}</script>
+
+<script type="module">
+	import Signalize from 'signalizejs';
+
+	const { resolve } = new Signalize();
+	const { on, redrawSnippet } = await resolve('snippets', 'event');
+
+	on('click', '#button', () => {
+		// Redraw snippets based on HTML input
+		redrawSnippet(\&#96;
+			<div snippet="snippet-1">Hello World!</div>
+			<div snippet="snippet-2">Clicked</div>
+		\&#96;)
+	});
+</script>
+`.replaceAll('&#96;', '`').trim();
+---
+
+<Editor code={code} />

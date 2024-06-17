@@ -1,0 +1,86 @@
+---
+import { Prism  } from '@astrojs/prism';
+
+const { withBorder = false, codeLang = 'html', readonly = false, code = '', lazyload = true } = Astro.props
+
+const prepareCode = (code) => {
+	return code.replace('&amp;', '&')
+		.replace(/\t/g, '    ')
+		.replace(/\s+data-v-\S+=""/g, '')
+		.replace(/&amp;/g, '&')
+		.replace(/&lt;/g, '<')
+		.replace(/&gt;/g, '>')
+		.replace(/\n<div data-netlify-deploy(.|\s)+/, '')
+		.trim();
+};
+---
+
+<script>
+import { $ } from '@assets/global';
+const { component } = await $.resolve('component')
+
+component('code-mirror', {
+	props: {
+		code: '',
+		codeLang: 'html',
+		lazyload: true,
+		readonly: false,
+	},
+	setup({ $el, $props }) {
+		let inited = false;
+		const preEl = $el.querySelector('pre');
+		const { code } = $props;
+
+		if ($props.readonly()) {
+			return;
+		}
+
+		const loadCodeMirror = async (event) => {
+			if (inited) {
+				return;
+			}
+
+			inited = true;
+			const { initEditor } = await import('@assets/codemirror');
+
+			if (code().length === 0) {
+				code(preEl.textContent);
+			}
+
+			initEditor({
+				lang: $props.codeLang(),
+				readonly: $props.readonly(),
+				code,
+				element: $el
+			});
+		}
+
+		if ($props.lazyload() === false) {
+			loadCodeMirror();
+		}
+
+		return {
+			loadCodeMirror,
+		}
+	},
+})
+</script>
+
+<code-mirror
+	ref="codeMirror"
+	lazyload={`${lazyload}`}
+	@click="loadCodeMirror"
+	class={`
+		js-codemirror
+		[pre]{margin:0;border-radius:8px;height:auto;max-height:70vh;overflow:auto;width:100%}
+		[.cm-editor]{min-height:100%;border-radius:8px}
+		${withBorder ? '' : 'border:none'}
+	`}
+	:code="code"
+	codeLang={codeLang}
+	readonly={readonly}
+>
+	<slot>
+		<Prism code={prepareCode(code)} lang={codeLang} />
+	</slot>
+</code-mirror>

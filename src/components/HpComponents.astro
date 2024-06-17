@@ -1,0 +1,54 @@
+---
+import Editor from '@components/Editor.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
+
+const importmap = createImportMapJson(['signal', 'bind', 'component']);
+
+const code = `
+<text-field>
+	<input ref="text" required>
+	<button ref="btn">Submit first</button>
+	<div ref="output"></div>
+</text-field>
+<br>
+<text-field>
+	<input ref="text" required>
+	<button ref="btn">Submit second</button>
+	<div ref="output"></div>
+</text-field>
+
+<script type="importmap">${importmap}</script>
+
+<script type="module">
+	import Signalize from 'signalizejs';
+	// Create a Signalize instance
+	const { resolve } = new Signalize();
+
+	const { component, bind, signal } = await resolve('component', 'bind', 'signal');
+	// Define text-field web component
+	component('text-field', {
+		props: { /* key: default value */ },
+		setup({ $el, $refs }) {
+			// Init signal
+			const text = signal('');
+
+			// Bind signal
+			// Use ref() to get direct component child element
+			bind($refs.text, { value: text });
+			bind($refs.output, { html: text });
+
+			// Handle form submit
+			$refs.btn.onclick = (event) => {
+				event.preventDefault();
+				alert(text());
+			}
+
+			// Return public data
+			return { /* key: value */ }
+		}
+	});
+</script>
+`.trim();
+---
+
+<Editor code={code} />

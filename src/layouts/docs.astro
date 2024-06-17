@@ -1,0 +1,183 @@
+---
+import MainLayout from '@layouts/main.astro';
+import { discordLink, githubLink, modulesSections, twitterLink } from "@config/config.mjs";
+import { path } from '@services/router.mjs';
+import { Image } from 'astro:assets';
+
+let {
+	frontmatter,
+	headings,
+	sections = []
+} = Astro.props;
+
+const version = frontmatter.url.match(/\/docs\/(?<version>[\d.]+)\//)?.groups?.version
+
+if (sections.length === 0) {
+	sections = [
+		{
+			name: 'Getting Started',
+			links: [
+				{
+					label: 'Introduction',
+					link: path('docs', { version })
+				},
+				{
+					label: 'Creating a module',
+					link: path('docs', { slug: 'creating-a-module', version })
+				},
+				{
+					label: 'Tips for writting javascript',
+					link: path('docs', { slug: 'tips-for-writting-javascript', version })
+				}
+			]
+		},
+		{
+			name: 'Installation Guides',
+			links: [
+				{
+					label: 'Astro',
+					icon: 'astro',
+					link: path('docs', { slug: 'installation/astro', version }),
+				},
+				{
+					label: 'Symfony',
+					icon: 'symfony',
+					link: path('docs', { slug: 'installation/symfony', version }),
+				}
+			]
+		},
+		...modulesSections.map(({ name, icon, color, modules, slug }) => {
+			const links = [];
+
+			for (const module of modules) {
+				links.push(...module.api.map(({ label, anchor }) => ({
+					label,
+					link: `${path('docs', { slug: `modules/${module.slug ?? module.name}`, version })}${anchor ? `#${anchor}` : ''}`
+				})))
+			}
+
+   			return {
+				name,
+				link: slug === undefined ? undefined : path('docs', { slug }),
+				icon,
+				color,
+				links
+			}
+		})
+	]
+}
+---
+
+<MainLayout
+	headerVisible={false}
+	pageTitle={frontmatter.title}
+	pageDescription={frontmatter.metaDescription ?? frontmatter.description}
+>
+	<div class="display:flex">
+		<div
+			class="
+				js-docs-sidebar
+				display:flex width:100% max-width:520px background-image:linear-gradient(#f5f5fa_0,#fff_90%) justify-content:flex-end
+				transition:transform_.3s
+				[&.s-visible]{tolg:transform:translateX(0)}
+				tolg:{box-shadow:-1px_1px_12px_rgba(0,0,0,.5);position:fixed;width:260px;top:0;left:0;transform:translateX(-100vw);height:100vh;overflow:auto;flex-direction:column}
+		">
+			<a href="#" class="js-docs-sidebar-toggle display:inline-flex align-self:flex-end text-decoration:none font-size:24px padding:12px position:sticky top:0 right:0 lg:display:none ">
+				<i class="icon-cross"></i>
+			</a>
+			<aside class="display:flex height:100% flex-direction:column gap:12px padding:32px_12px lg:padding:32px_64px">
+				<a href={path('homepage')} aria-label="Homepage" class="display:none lg:display:flex">
+					<Image src="/images/logo-light.svg" alt="" width="200" height="75" class="object-fit:cover">
+				</a>
+				<img loading="lazy" width="80" height="20" alt="NPM Version" src="https://img.shields.io/npm/v/signalizejs?style=flat-square&color=%23E42024" class="tolg:display:none">
+				<div class="tolg:display:none margin:12px_0 [a]{font-size:24px;color:inherit;text-decoration:none;hover:color:$red} display:flex gap:8px">
+					<a href={githubLink} aria-label="Github" target="_blank" rel="noopener" class="with-icon">
+						<i class="icon-github"></i>
+					</a>
+					<a href={discordLink} aria-label="Discord" target="_blank" rel="noopener" class="with-icon">
+						<i class="icon-discord"></i>
+					</a>
+					<a href={twitterLink} aria-label="X" target="_blank" rel="noopener" class="with-icon">
+						<i class="icon-x"></i>
+					</a>
+				</div>
+
+				{sections.map(({ name, icon, color, links, link }) => (
+					<div>
+						{link === undefined ? (
+							<strong>
+								{icon && (
+									<i class={`icon-${icon} color:#fff padding:2px display:inline-flex border-radius:2px`} style={`background-color:${color}`}></i>
+								)}
+								{ name }
+							</strong>
+						) : (
+							<a href={link} class="color:inherit text-decoration:none font-weight:bold hover:color:$red">
+								{icon && (
+									<i class={`icon-${icon} color:#fff padding:2px display:inline-flex border-radius:2px`} style={`background-color:${color}`}></i>
+								)}
+								{ name }
+							</a>
+						)}
+						<nav class="
+							display:flex flex-direction:column
+							[a]{margin-top:12px;padding-left:12px;color:inherit;transition:transform_.3s;text-decoration:none;hover:transform:translateX(8px)}
+							[a.s-active::before]{width:8px;height:8px;background:#ff2c21;border-radius:4px;position:absolute;top:50%;transform:translateY(-50%);left:0}
+						">
+							{links.map(({ label, link, icon }) => (
+								<a href={link} class="display:flex align-items:center gap:4px">
+									{icon && (
+										<i class={`icon-${icon} color:#222 font-size:18px display:inline-flex`} style={`background-color:${color}`}></i>
+									)}
+									{label}
+								</a>
+							))}
+						</nav>
+					</div>
+				))}
+			</aside>
+		</div>
+		<div class="width:100% max-width:900px padding:12px sm:padding:32px_24px lg:padding:32px_96px">
+			<div class="display:flex justify-content:space-between align-items:center border-bottom:1px_solid_$border padding-bottom:12px lg:display:none">
+				<div>
+					<a href={path('homepage')} aria-label="Homepage" class="display:flex">
+						<Image src="/images/logo-light.svg" alt="" width="200" height="75" class="object-fit:cover">
+					</a>
+					<img loading="lazy" width="80" height="20" alt="NPM Version" src="https://img.shields.io/npm/v/signalizejs?style=flat-square&color=%23E42024">
+				</div>
+				<a href="#" aria-label="Menu" class="font-weight:bold font-size:32px text-decoration:none js-docs-sidebar-toggle">
+					<i class="icon-menu"></i>
+				</a>
+			</div>
+			<div>
+				<h1>{frontmatter.title}</h1>
+				<nav class="display:inline-flex flex-direction:column gap:8px margin-bottom:48px">
+					{headings.map((heading) => (
+						<a
+							href={`#${heading.slug}`}
+							class={`color:inherit text-decoration:none hover:color:red ${ heading.depth > 2 ? '' : 'font-weight:bold'}`}
+							style={heading.depth > 2 ? `margin-left:${8 * heading.depth}px` : ''}
+						>
+							<span class="color:$red">#</span>
+							<span>{heading.text}</span>
+						</a>
+					))}
+				</nav>
+				<div>
+					{frontmatter.description}
+				</div>
+				<slot />
+			</div>
+		</div>
+	</div>
+	<script>
+		import { $ } from '@assets/global';
+
+		const { on } = await $.resolve('event');
+
+		on('click', '.js-docs-sidebar-toggle', (event) => {
+			event.preventDefault();
+			document.querySelector('.js-docs-sidebar').classList.toggle('s-visible');
+		});
+	</script>
+</MainLayout>

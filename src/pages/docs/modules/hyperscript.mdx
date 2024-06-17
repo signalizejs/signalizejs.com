@@ -1,0 +1,69 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/hyperscript'
+description: 'Hyperscript: create HTML elements easily with reactive data and attributes.'
+---
+
+import Editor from '@codeEditor';
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
+
+## Installation
+<ImportMapDependencies module="hyperscript" />
+
+```js
+import Signalize from 'signalizejs';
+import hyperscript from 'signalizejs/h';
+
+const { h } = await resolve('hyperscript');
+```
+
+## API
+
+### h
+
+```js
+// Only a tag
+const template = h('div');
+
+// Tag and a string
+const template = h('div', 'Content');
+
+// Tag, attributes, content
+const template = h('div', { class: 'example' }, 'Hello', 'World', '!');
+
+const template = h('div', { class: 'example' },
+	h('p', 'Hello World!'),
+	h('p', 'Another Paragraph!')
+);
+
+// Replacing existing element
+document.querySelector('#app').replaceWith(template);
+```
+
+An example with signals:
+<Editor code={`
+<div id="app"></div>
+
+<script type="importmap">${createImportMapJson(['hyperscript', 'signal'])}</script>
+
+<script type="module">
+	import Signalize from 'signalizejs';
+
+	const { resolve } = new Signalize();
+	const { h, signal } = await resolve('hyperscript', 'signal');
+
+	// Create a text signal
+	const text = signal('Hello World!');
+
+	document.querySelector('#app').replaceWith(
+		// Create elements
+		h('div', { id: 'app' },
+			// Bind text signal to element attributes
+			h('input', { value: text }),
+			h('div', text)
+		)
+	);
+</script>
+`} />

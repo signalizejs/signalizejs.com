@@ -1,0 +1,45 @@
+---
+order: 2
+layout: '@docsLayout'
+title: 'signalizejs/logger'
+description: 'Wrapper around console (log, info, warning, error) for sending JS log info to the server.'
+---
+import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+
+## Installation
+<ImportMapDependencies module="logger" />
+
+```js
+import loggerModule from 'signalizejs/logger';
+
+const signalize = new Signalize({
+	modules: [
+		[
+			'logger',
+			loggerModule,
+			{
+				// URL where the logs will be sent
+				url: 'https://example.com/api/log-client-error',
+				// Optional
+				// What type of info should be sent
+				// Default is "error" only
+				levels: ['log', 'warning', 'error']
+			}
+		]
+	]
+})
+```
+
+## Usage
+The logger plugin starts automatically and doesn't have any API:
+- After the module setup, the logger will automatically start sending requests to the configured endpoint.
+- The default level that is sent is `error` only.
+- You can change it by passing `levels` during initialization.
+
+## Handling errors on the server side
+The logger sends a JSON with the following keys:
+- `message`: Error message text.
+- `file`: File path.
+- `lineNumber`: Line number where the error occured.
+- `columnNumber`: Column numberwhere the error occured.
+- `stack`: Call stack

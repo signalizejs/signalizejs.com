@@ -1,0 +1,88 @@
+---
+import CodeMirror from "@components/CodeMirror.astro";
+
+const { code = '', props = {}, direction = 'vertical', lazyload = true } = Astro.props;
+let previewCode = '';
+let iframeDocument = '';
+
+const iframeSrdocTemplate = `
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<style>
+				* { box-sizing:border-box }
+				html { height:100% }
+				body {
+					min-height:100%;
+					margin: 0;
+					text-align:center;
+					background-color: #f1f1f1;
+					font-family: arial;
+					display:flex;
+					align-items:center;
+					justify-content:center;
+				}
+			</style>
+		</head>
+		<body><div class="js-preview-wrapper preview-wrapper">__CODE__</div></body>
+	</html>
+`.trim();
+
+const setPreviewCode = (code: string) => {
+	try {
+		previewCode = code.replace(/\\([^\\]+)/g, (fullMatch, followingCharacter) => followingCharacter);
+
+		iframeDocument = iframeSrdocTemplate.replace('__CODE__', code);
+	} catch (error) {
+	}
+};
+
+const hasDefaultCode = code.length > 0;
+const hasDefaultSlot = Astro.slots.has('default');
+if (hasDefaultCode || hasDefaultSlot) {
+	if (hasDefaultSlot) {
+		code = await Astro.slots.render('default');
+	}
+
+	setPreviewCode(code)
+}
+---
+
+<script>
+	import { $ } from '@assets/global';
+	const { component } = await $.resolve('component');
+
+	component('code-editor', {
+		props: ['code'],
+		setup({ $refs, $props, $el }) {
+			const { code } = $props;
+			code.watch(({newValue}) => {
+				const editorPreview = $refs.codeEditorPreview;
+				editorPreview.setAttribute(
+					'srcdoc',
+					$el.dataset.srdocTemplate.replace('__CODE__', newValue)
+				);
+				editorPreview.contentWindow.location.reload(true);
+			});
+		}
+	});
+
+</script>
+
+<code-editor
+	{ ...props }
+	code={code}
+	ref="codeEditor"
+	data-srdoc-template={`${iframeSrdocTemplate}`}
+	class={`display:flex gap:24px ${direction === 'vertical' ? 'flex-direction:column-reverse' : 'flex-direction:column-reverse md:display:grid md:grid-template-columns:50%_50%'}`}
+>
+	<CodeMirror code={code} lazyload={lazyload} withBorder={false} />
+	<iframe
+		ref="codeEditorPreview"
+		srcdoc={iframeDocument} frameborder="0"
+		title="Code Editor"
+		class="border-radius:8px width:100% height:100%"
+	></iframe>
+</code-editor>

@@ -1,0 +1,34 @@
+---
+import CodeMirror from '@components/CodeMirror.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
+
+const importmap = createImportMapJson(['spa']);
+
+const code = `
+<a href="/path">Link</a>
+
+<script type="importmap">${importmap}</script>
+
+<script type="module">
+	import Signalize from 'signalizejs'
+
+	const { resolve } = new Signalize();
+	const { on, navigate } = await resolve('spa', 'event');
+
+	// Or send custom visit request
+	navigate({
+		url: '/path',
+		// Optional
+		scrollX: 0,
+		scrollY: 0,
+		// 'push' or 'replace'
+		stateAction: 'push'
+	})
+
+	on('spa:navigation:start', (data) => { // Visit start });
+	on('spa:navigation:end', (data) => { // Visit end });
+</script>
+`;
+---
+
+<CodeMirror code={code} readonly />
