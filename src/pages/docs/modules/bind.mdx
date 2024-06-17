@@ -90,7 +90,7 @@ bind(document.querySelector('#output'), {
     html: [
         firstName,
         lastName,
-        () => \`First name: \<span class="math-inline">\{firstName\(\)\}<br\>Last name\: \\</span>{lastName()}\`
+        () => \`First name: \<span class="math-inline">\${firstName\(\)\}<br\>Last name\: \\</span>\${lastName()}\`
     ],
     style: [
         firstName,
