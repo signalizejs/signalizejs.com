@@ -221,9 +221,11 @@ const { /* ... */ } = await window.signalize.resolve(/* ... */);
 ```
 
 ## Typescript & JSDOC Support
-Because Signalize's `resolve` function can return literally anything, you need to set the return types dynamically based on what you import.
+Signalizejs resolve function has a type support for official packages.
 
-If you use bundlers like Webpack, Rollup and Vite (only if the output is not loaded as a module) use `import type` instead of import because it would cause Signalize to be imported into multiple bundles.
+However, if you plan to use your own modules, you will need to set the return types dynamically based on what you import.
+
+If you use bundlers like Webpack, Rollup and Vite (only if the output is not loaded as a module) use `import type` instead of import because it would cause Signalize core and modules to be imported into multiple bundles.
 
 ### Typescript
 If you use TypeScript, remember to always `import type`, not the library itself (unless you need to load a module during the initialization as shown above).
@@ -232,6 +234,8 @@ If you use TypeScript, remember to always `import type`, not the library itself 
 import type { signalize } from 'global.js';
 import type { on } from 'signalizejs/event';
 
+// Example with the "event" official module,
+// You need to do this only for your own modules.
 const { on } = await signalize.resolve<{
 	on: on
 }>('event');
@@ -239,6 +243,9 @@ const { on } = await signalize.resolve<{
 
 ### JSDOC
 ```js
+// Example with the "event" official module,
+// You need to do this only for your own modules.
+
 /**
  * @type {{
  * on: import('signalizejs/event').on
