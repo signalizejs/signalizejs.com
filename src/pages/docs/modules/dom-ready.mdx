@@ -9,6 +9,10 @@ import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 ## Installation
 <ImportMapDependencies module="dom/ready" />
 
+```js
+await signalize.resolve('dom/ready');
+```
+
 This module doesn't expose any functionality. It only triggers `dom:ready` event. See below.
 
 ## Usage

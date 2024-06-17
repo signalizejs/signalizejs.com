@@ -11,15 +11,13 @@ import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 <ImportMapDependencies module="event" />
 
 ```js
-import Signalize from 'signalizejs';
-
 const {
 	off,
 	on,
 	customEvent,
 	customEventListener,
 	dispatch
-} = new Signalize();
+} = await signalize.resolve('event');
 ```
 
 ## API

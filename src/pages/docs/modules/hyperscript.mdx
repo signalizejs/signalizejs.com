@@ -13,10 +13,7 @@ import { createImportMapJson } from '@services/importmap.mjs';
 <ImportMapDependencies module="hyperscript" />
 
 ```js
-import Signalize from 'signalizejs';
-import hyperscript from 'signalizejs/h';
-
-const { h } = await resolve('hyperscript');
+const { h } = await signalize.resolve('hyperscript');
 ```
 
 ## API
