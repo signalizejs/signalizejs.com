@@ -48,13 +48,13 @@ export const modules = {
 	},
 	'directives/if': {
 		name: 'directives/if',
-		slug: 'directives',
+		slug: 'directives#if',
 		dependencies: ['directives'],
 		api: [],
 	},
 	'directives/for': {
 		name: 'directives/for',
-		slug: 'directives',
+		slug: 'directives#for',
 		dependencies: ['directives'],
 		api: [],
 	},
@@ -68,7 +68,6 @@ export const modules = {
 	},
 	'dom/traverser': {
 		name: 'dom/traverser',
-		slug: 'dom-traverser',
 		api: [
 			{ label: 'traverseDom' },
 		]

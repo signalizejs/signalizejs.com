@@ -4,14 +4,15 @@ import { path } from "@services/router.mjs";
 const { module } = Astro.props;
 
 const dependencies = getModulesDependencies(module);
+console.log(dependencies);
 ---
 
 {dependencies.length !== 0 && (
 	<div>Required <a href={path('docs', {slug: 'introduction'}) + '#2-import-map-configuration'}>import map</a> dependencies:</div>
 	<ul class="margin-top:0">
-		{dependencies.map(({ name, label }) => (
+		{dependencies.map(({ name, slug, label }) => (
 			<li>
-				<a href={path('docs', {slug: `modules/${name}`})}>{name}</a>
+				<a href={path('docs', {slug: `modules/${slug ?? name}`})}>{name}</a>
 			</li>
 		))}
 	</ul>
