@@ -11,6 +11,12 @@ import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 
 ```js
 const { navigate } = await signalize.resolve('spa');
+
+/*
+	If you prefer not to use the "navigate" function but still want to use the SPA,
+	simply resolve it to initialize the module.
+*/
+await signalize.resolve('spa');
 ```
 
 ## API
