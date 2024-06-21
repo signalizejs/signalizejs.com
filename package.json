@@ -29,6 +29,6 @@
     "concurrently": "^8.2.2",
     "normalize.css": "^8.0",
     "sharp": "^0.33",
-    "signalizejs": "^0.1.1"
+    "signalizejs": "^0.1.2"
   }
 }
