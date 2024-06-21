@@ -13,7 +13,7 @@ import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
 const { navigate } = await signalize.resolve('spa');
 
 /*
-	If you prefer not to use the "navigate" function but still want to use the SPA,
+	If you do not want to use any SPA module functions function but still want to torn your page into SPA,
 	simply resolve it to initialize the module.
 */
 await signalize.resolve('spa');
