@@ -5,6 +5,9 @@ title: 'signalizejs/directives'
 description: 'Attribute Directives inspired by Vue and Svelte.'
 ---
 import ImportMapDependencies from '@components/DocsImportmapDependencies.astro';
+import { createImportMapJson } from '@services/importmap.mjs';
+import Editor from '@components/Editor.astro';
+
 
 Directives can be used only within [web components](/docs/modules/component) and are initialized on DOM ready and after the component is constructed.
 
@@ -25,6 +28,36 @@ Directives use javascript [javascript evaluator](/docs/modules/evaluator)
 - This evaluator is able to process only inline javascript.
 - There is no `unsafe eval` (eval, new Function, Async function Prototype).
 - It doesn't support full javascript syntax. Make sure to read about the supported syntax.
+
+## Passing data to directives from Web Components
+To pass data to the directives, return the data from a component `setup`. Any created property will also be passed to the directives as data:
+
+<Editor code={`
+<my-component>
+	<button @click="count(count() + 1)">
+		Click:  <span :html="count"></span>
+	</button>
+</my-component>
+
+<script type="importmap">${createImportMapJson(['component', 'directives'])}</script>
+
+<script type="module">
+	import Signalize from 'signalizejs';
+
+	const { resolve } = new Signalize();
+	const { component, signal } = await resolve('component', 'directives', 'signal');
+
+	component('my-component', () => {
+		const count = signal(0);
+		count.watch(() => {
+			console.log('change');
+		});
+		console.log(count);
+
+		return { count }
+	});
+</script>
+`} />
 
 ## API
 ### directive
