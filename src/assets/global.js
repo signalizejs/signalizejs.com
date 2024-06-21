@@ -70,3 +70,25 @@ component('spa-loader', {
 		})
 	}
 });
+
+component('scroll-to-top-button', ({ $refs }) => {
+	// Adjust this to your needs
+	// It can be for example a height of page header
+	const minScrollTop = 50;
+	const scrollToTopButton = $refs.button;
+
+	on('click', scrollToTopButton, () => window.scrollTo(0,0));
+
+	const toggleScrollToTopButton = () => {
+		let scrollTopPosition = document.documentElement.scrollTop;
+
+		if (scrollTopPosition > minScrollTop) {
+			scrollToTopButton.classList.add('s-visible');
+		} else {
+			scrollToTopButton.classList.remove('s-visible');
+		}
+	}
+
+	document.addEventListener('scroll', toggleScrollToTopButton, { passive: true });
+	document.addEventListener("DOMContentLoaded", toggleScrollToTopButton);
+})

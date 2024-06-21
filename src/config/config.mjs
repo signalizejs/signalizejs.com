@@ -68,6 +68,7 @@ export const modules = {
 	},
 	'dom/traverser': {
 		name: 'dom/traverser',
+		slug: 'dom-traverser',
 		api: [
 			{ label: 'traverseDom' },
 		]

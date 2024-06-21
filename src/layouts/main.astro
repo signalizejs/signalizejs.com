@@ -184,6 +184,37 @@ const organizationSchema = {
 				Copyright © 2024 - today Vladimír Macháček
 			</div>
 		</footer>
+
+		<scroll-to-top-button>
+			<a
+				ref="button"
+				role="button"
+				class="
+					position:fixed bottom:0 right:24px text-decoration:none font-size:32px transform:translateY(100px) width:50px height:50px
+					display:inline-flex align-items:center justify-content:center border-radius:50px font-weight:700 cursor:pointer color:#fff user-select:none text-decoration:none background:$red transition:.3s
+					box-shadow:0_4px_8px_rgba(0,0,0,0.16),0_4px_8px_rgba(0,0,0,0.23) will-change:transform,background-color
+					[&:hover,&:focus]{background:lighten($red,50)}
+					[&.s-visible]{transform:translateY(-24px)}
+				"
+				aria-label="Back to top"
+			>
+				<i class="icon-arrow-right-circle display:inline-flex rotate:-90deg"></i>
+			</a>
+		</scroll-to-top-button>
+
+		<script type="speculationrules">
+			{
+			  "prerender": [
+				{
+				  "where": {
+					"href_matches": "/*"
+				  },
+				  "eagerness": "moderate"
+				}
+			  ]
+			}
+		  </script>
+
 		<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)}></script>
 	</body>
 </html>
