@@ -49,11 +49,6 @@ To pass data to the directives, return the data from a component `setup`. Any cr
 
 	component('my-component', () => {
 		const count = signal(0);
-		count.watch(() => {
-			console.log('change');
-		});
-		console.log(count);
-
 		return { count }
 	});
 </script>
