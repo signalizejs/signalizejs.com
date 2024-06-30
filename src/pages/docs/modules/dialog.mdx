@@ -35,10 +35,14 @@ openDialog('my-dialog');
 - Open dialog by id => `dialog="my-dialog"`
 
 ```js
-openDialog('my-dialog', true);
+openDialog('my-dialog', {
+	modelessly: true,
+	closable: false
+});
 ```
-- Open dialog modelessly by id => `dialog="my-dialog"`
-- Calls [show](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/show) instead of [showModal](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal)
+Options:
+- **modelessly:** Calls [show](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/show) instead of [showModal](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/showModal).
+- **closable:** Prevents a dialog from being closed. Usefull for dialogs like Cookie Overlay.
 
 ### closeDialog
 ```js
