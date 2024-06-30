@@ -21,9 +21,9 @@ await signalize.resolve('spa');
 
 ## How it Works
 By default, the SPA module performs the following actions:
-- It **listens for all clicks** on **anchor elements** (excluding those with the data-spa-ignore attribute) and elements with `data-spa-url`.
+- It **listens for all clicks** on **anchor elements** (excluding those with the `data-spa-ignore` attribute) and elements with `data-spa-url`.
 - If the URL has the same host, scheme, and port, it triggers navigation to that URL.
-- If the only difference between the navigation URL and the current URL in `window.location` is a `hashtag`, it will attempt to select that element and **scroll it into the viewport**.
+- If the only difference between the navigation URL and the current URL in `window.location` is a `hash`, it will attempt to select that element and **scroll it into the viewport**.
 
 ### Redrawing Parts of the Page
 The SPA module uses the Snippets module under the hood. Whenever you trigger navigation by a click or by calling the navigate method, it will send a request, receive a response, and if the response contains any element with the snippet="name" attribute, it will synchronize that snippet with the one on the current page.
