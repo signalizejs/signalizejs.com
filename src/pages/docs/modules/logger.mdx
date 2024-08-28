@@ -43,3 +43,44 @@ The logger sends a JSON with the following keys:
 - `lineNumber`: Line number where the error occured.
 - `columnNumber`: Column numberwhere the error occured.
 - `stack`: Call stack
+
+### Simplified example with the Symfony framework in PHP
+
+```php
+#[Route('/log-client-error')]
+public function clientError(Request $request)
+{
+	$logsDir = $this->kernel->getLogDir();
+	$counterFile = $logsDir . '/js-errors-counter.txt';
+	$logsFile = $logsDir . '/js-errors.log';
+	$counter = 0;
+
+	if (is_file($counterFile)) {
+		$counter = (int) file_get_contents($counterFile);
+	}
+
+	// Set max amount of logs to 50
+	if ($counter === 50) {
+		return new Response('');
+	}
+
+	$counter ++;
+	file_put_contents($counterFile, $counter);
+
+	// Get the request content and the log data
+	// After that, you can work with the keys (like "message", "file") within the log mentioned above
+	$log = json_decode($request->getContent(), false)->log;
+	// Get the current date and time
+	$currentTime = date('Y-m-d H:i:s');
+
+	// Create a DateTime object from the current time
+	$dateTime = new DateTime($currentTime);
+
+	// Format the date and time using desired format specifiers
+	$formattedTime = $dateTime->format('h:i j. n. Y');
+
+	file_put_contents($logsFile, '[' . $formattedTime . '] (' . $log->url . '): ' . preg_replace('/\n/', ' ', $log->message) . PHP_EOL, FILE_APPEND);
+
+	return new Response('');
+}
+```
