@@ -7,7 +7,9 @@ description: 'Learn how to easily and quickly install the Signalize framework in
 ## Asset Mapper
 This tutorial assumes you are using Symfony's [Asset Mapper](https://symfony.com/doc/current/frontend/asset_mapper.html).
 
-### Install Signalize
+You can either install each file from `signalizejs` package manually through asset-mapper command (this takes a while) or use npm (in this case, installation is a matter of a few minutes).
+
+## Install Signalize
 ```
 npm i signalizejs
 
@@ -16,22 +18,52 @@ yarn add signalizejs
 pnpm i signalizejs
 ```
 
+## Configure Asset Mapper
+Edit the `config/packages/asset_mapper.yaml` and att path to node_modules:
+```yaml
+framework:
+    asset_mapper:
+        paths:
+            - assets/
+            # Add path to node modules
+            - node_modules/
+```
+
 ## Configure Importmap
 Open the `importmap.php` file and add the following:
-
 ```php
 // ...
 
 return [
-	'app' => [
-		'path' => './assets/app.js',
-		'entrypoint' => true,
-	],
-	// This module will be prepared in importmap for lazy import
-	'signalizejs/sizes' => [
-		'path' => './node_modules/signalizejs/modules/sizes.js',
-		'entrypoint' => true
-	],
+	'app' => [ 'path' => './assets/app.js', 'entrypoint' => true ],
+	// Signalize
+	// Complete importmap. You might want to remove modules you don't use
+	// and those that might not be needed.
+	'signalizejs' => [ 'path' => './node_modules/signalizejs/src/Signalize.js', 'entrypoint' => true ],
+	'signalizejs/ajax' => [ 'path' => './node_modules/signalizejs/src/modules/ajax.js', 'entrypoint' => true ],
+	'signalizejs/bind' => [ 'path' => './node_modules/signalizejs/src/modules/bind.js', 'entrypoint' => true ],
+	'signalizejs/component' => [ 'path' => './node_modules/signalizejs/src/modules/component.js', 'entrypoint' => true ],
+	'signalizejs/dialog' => [ 'path' => './node_modules/signalizejs/src/modules/dialog.js', 'entrypoint' => true ],
+	'signalizejs/directives' => [ 'path' => './node_modules/signalizejs/src/modules/directives.js', 'entrypoint' => true ],
+	'signalizejs/directives/if' => [ 'path' => './node_modules/signalizejs/src/modules/directives/if.js', 'entrypoint' => true ],
+	'signalizejs/directives/for' => [ 'path' => './node_modules/signalizejs/src/modules/directives/for.js', 'entrypoint' => true ],
+	'signalizejs/dom/ready' => [ 'path' => './node_modules/signalizejs/src/modules/dom/ready.js', 'entrypoint' => true ],
+	'signalizejs/dom/traverser' => [ 'path' => './node_modules/signalizejs/src/modules/dom/traverser.js', 'entrypoint' => true ],
+	'signalizejs/evaluator' => [ 'path' => './node_modules/signalizejs/src/modules/evaluator.js', 'entrypoint' => true ],
+	'signalizejs/event' => [ 'path' => './node_modules/signalizejs/src/modules/event.js', 'entrypoint' => true ],
+	'signalizejs/hyperscript' => [ 'path' => './node_modules/signalizejs/src/modules/hyperscript.js', 'entrypoint' => true ],
+	'signalizejs/intersection-observer' => [ 'path' => './node_modules/signalizejs/src/modules/intersection-observer.js', 'entrypoint' => true ],
+	'signalizejs/logger' => [ 'path' => './node_modules/signalizejs/src/modules/logger.js', 'entrypoint' => true ],
+	'signalizejs/mutation-observer' => [ 'path' => './node_modules/signalizejs/src/modules/mutation-observer.js', 'entrypoint' => true ],
+	'signalizejs/offset' => [ 'path' => './node_modules/signalizejs/src/modules/offset.js', 'entrypoint' => true ],
+	'signalizejs/scope' => [ 'path' => './node_modules/signalizejs/src/modules/scope.js', 'entrypoint' => true ],
+	'signalizejs/signal' => [ 'path' => './node_modules/signalizejs/src/modules/signal.js', 'entrypoint' => true ],
+	'signalizejs/sizes' => [ 'path' => './node_modules/signalizejs/src/modules/sizes.js', 'entrypoint' => true ],
+	'signalizejs/snippets' => [ 'path' => './node_modules/signalizejs/src/modules/snippets.js', 'entrypoint' => true ],
+	'signalizejs/spa' => [ 'path' => './node_modules/signalizejs/src/modules/spa.js', 'entrypoint' => true ],
+	'signalizejs/strings/cases' => [ 'path' => './node_modules/signalizejs/src/modules/strings/cases.js', 'entrypoint' => true ],
+	'signalizejs/task' => [ 'path' => './node_modules/signalizejs/src/modules/task.js', 'entrypoint' => true ],
+	'signalizejs/viewport' => [ 'path' => './node_modules/signalizejs/src/modules/viewport.js', 'entrypoint' => true ]
 ];
 ```
 
