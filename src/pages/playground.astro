@@ -37,8 +37,7 @@ Hello World! 🚀
 			props: ['code'],
 			setup ({ $props }) {
 				let { code }  = $props;
-				const urlParams = new URLSearchParams(window.location.search);
-				const codeFromUrl = urlParams.get('code');
+				const codeFromUrl = window.location.hash.slice(1)
 
 				if (codeFromUrl) {
 					code(decodeURIComponent(codeFromUrl))
@@ -49,7 +48,7 @@ Hello World! 🚀
 				return {
 					showMessage,
 					shareCodeUrl: () => {
-						const url = `${window.location.origin}/playground?code=${encodeURIComponent(code())}`;
+						const url = `${window.location.origin}/playground#${encodeURIComponent(code())}`;
 						window.navigator.clipboard.writeText(url);
 						showMessage(true);
 						setTimeout(() => {
