@@ -43,3 +43,7 @@ You can listen to the following events using the `on` function (see the [/docs/m
 * `ajax:request:success`: Dispatched when the request completes successfully (no error).
 * `ajax:request:error`: Dispatched when the request encounters an error.
 * `ajax:request:end`: Dispatched when the request finishes (regardless of success or error).
+
+# Request Headers
+- `X-Current-Url` - The current url in the browser.
+- `X-Requested-With` - By default, the header is set to `XMLHttpRequest`. This allows the server to detect if the request was made through AJAX..
