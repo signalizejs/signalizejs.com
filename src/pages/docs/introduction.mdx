@@ -27,7 +27,8 @@ In the simplified example below, you can see Signalize initialization. Check it 
 	{
 		"imports": {
 			"signalizejs": "https://cdn.jsdelivr.net/npm/signalizejs@latest/+esm",
-			"signalizejs/mutation-observer": "https://cdn.jsdelivr.net/npm/signalizejs@latest/mutaion-observer/+esm",
+			"signalizejs/mutation-observer": "https://cdn.jsdelivr.net/npm/signalizejs@latest/mutation-observer/+esm",
+			"signalizejs/dom/ready": "https://cdn.jsdelivr.net/npm/signalizejs@latest/dom/ready/+esm",
 			"signalizejs/event": "https://cdn.jsdelivr.net/npm/signalizejs@latest/event/+esm"
 		}
 	}
@@ -41,7 +42,7 @@ In the simplified example below, you can see Signalize initialization. Check it 
 
 	// 4.1 Resolve the Event module because we need the "on" function
 	// 4.2 The Event module will automatically import the Mutation Observer module
-	const { on } = await resolve('event');
+	const { on } = await resolve('event', 'dom/ready');
 
 	// 5. Use the on function
 	on('dom:ready', () => alert('Hello World!'));
