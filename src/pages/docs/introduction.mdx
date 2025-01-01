@@ -27,8 +27,8 @@ In the simplified example below, you can see Signalize initialization. Check it 
 	{
 		"imports": {
 			"signalizejs": "https://cdn.jsdelivr.net/npm/signalizejs@latest/+esm",
-			"signalizejs/mutation-observer": "https://cdn.jsdelivr.net/npm/signalizejs@latest/+esm/mutation-observer"
-			"signalizejs/event": "https://cdn.jsdelivr.net/npm/signalizejs@latest/+esm/event"
+			"signalizejs/mutation-observer": "https://cdn.jsdelivr.net/npm/signalizejs@latest/mutaion-observer/+esm",
+			"signalizejs/event": "https://cdn.jsdelivr.net/npm/signalizejs@latest/event/+esm"
 		}
 	}
 </script>
@@ -305,6 +305,43 @@ This way, you will not have to add internal dependencies to the import map every
 			"signalizejs/task": "",
 			"signalizejs/viewport": "",
 			"signalizejs/visibility": ""
+		}
+	}
+</script>
+```
+
+### CDN
+
+```html
+<script type="importmap">
+	{
+		"imports": {
+			"signalizejs": "https://cdn.jsdelivr.net/npm/signalizejs/+esm",
+			"signalizejs/ajax": "https://cdn.jsdelivr.net/npm/signalizejs/ajax/+esm",
+			"signalizejs/bind": "https://cdn.jsdelivr.net/npm/signalizejs/bind/+esm",
+			"signalizejs/directives": "https://cdn.jsdelivr.net/npm/signalizejs/directives/+esm",
+			"signalizejs/directives/for": "https://cdn.jsdelivr.net/npm/signalizejs/directives/for/+esm",
+			"signalizejs/directives/if": "https://cdn.jsdelivr.net/npm/signalizejs/directives/if/+esm",
+			"signalizejs/dom/ready": "https://cdn.jsdelivr.net/npm/signalizejs/dom/ready/+esm",
+			"signalizejs/dom/traverser": "https://cdn.jsdelivr.net/npm/signalizejs/dom/traverser/+esm",
+			"signalizejs/evaluator": "https://cdn.jsdelivr.net/npm/signalizejs/evaluator/+esm",
+			"signalizejs/event": "https://cdn.jsdelivr.net/npm/signalizejs/event/+esm",
+			"signalizejs/mutation-observer": "https://cdn.jsdelivr.net/npm/signalizejs/mutation-observer/+esm",
+			"signalizejs/offset": "https://cdn.jsdelivr.net/npm/signalizejs/offset/+esm",
+			"signalizejs/scope": "https://cdn.jsdelivr.net/npm/signalizejs/scope/+esm",
+			"signalizejs/signal": "https://cdn.jsdelivr.net/npm/signalizejs/signal/+esm",
+			"signalizejs/sizes": "https://cdn.jsdelivr.net/npm/signalizejs/sizes/+esm",
+			"signalizejs/snippets": "https://cdn.jsdelivr.net/npm/signalizejs/snippets/+esm",
+			"signalizejs/strings/cases": "https://cdn.jsdelivr.net/npm/signalizejs/strings/cases/+esm",
+			"signalizejs/component": "https://cdn.jsdelivr.net/npm/signalizejs/component/+esm",
+			"signalizejs/dialog": "https://cdn.jsdelivr.net/npm/signalizejs/dialog/+esm",
+			"signalizejs/hyperscript": "https://cdn.jsdelivr.net/npm/signalizejs/hyperscript/+esm",
+			"signalizejs/intersection-observer": "https://cdn.jsdelivr.net/npm/signalizejs/intersection-observer/+esm",
+			"signalizejs/logger": "https://cdn.jsdelivr.net/npm/signalizejs/logger/+esm",
+			"signalizejs/spa": "https://cdn.jsdelivr.net/npm/signalizejs/spa/+esm",
+			"signalizejs/task": "https://cdn.jsdelivr.net/npm/signalizejs/task/+esm",
+			"signalizejs/viewport": "https://cdn.jsdelivr.net/npm/signalizejs/viewport/+esm",
+			"signalizejs/visibility": "https://cdn.jsdelivr.net/npm/signalizejs/visibility/+esm"
 		}
 	}
 </script>
