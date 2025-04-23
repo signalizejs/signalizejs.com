@@ -50,52 +50,6 @@ const installationGuides = [
 			</div>
 		</section>
 
-		<section id="modules" class="container">
-			<h2>Installation Guides</h2>
-			<p>
-				Signalize can be used anywhere.
-			</p>
-			<div class="display:flex gap:12px md:gap:24px">
-				{installationGuides.map(({ link, label, icon }) => (
-					<a href={link} class="color:inherit hover:{border-color:$red;color:$red} transition:border-color_.3s,color_.3s font-size:18px font-weight:bold border:1px_solid_$border padding:8px md:padding:12px text-decoration:none display:inline-flex allign-items:center gap:4px">
-						<i class={`icon-${icon} display:inline-flex align-items:center`}></i>
-						<span>{label}</span>
-					</a>
-				))}
-			</div>
-		</section>
-
-		<section id="modules" class="container">
-			<h2>Ecosystem</h2>
-			<p>
-				Signalize functions are split into small modules and you decide what to import and when.
-			</p>
-			<div class="display:grid gap:12px md:gap:24px gap grid-template-columns:repeat(auto-fill,minmax(300px,1fr)) sm:grid-template-columns:repeat(auto-fill,minmax(350px,1fr))">
-				{modulesSections.map(({ name, color, icon, description, modules }) => (
-					<div class="text-decoration:none color:$grey padding:8px md:padding:16px border:1px_solid_$border">
-						<div class="gap:16px display:inline-flex">
-							<div class="flex-shrink:0 width:50px height:50px border-radius:4px background-image:linear-gradient(rgba(255,255,255,.2),rgba(255,255,255,0)) display:flex align-items:center justify-content:center" style={`background-color:${color};`}>
-								<i class={`icon-${icon} font-size:32px text-shadow:0_1px_1px_rgba(0,0,0,0.2) color:#fff`}></i>
-							</div>
-							<div>
-								<h3 class="margin:0_0_4px_0">{name}</h3>
-								<div>{description}</div>
-								<div class="margin-top:8px display:flex flex-wrap:wrap gap:4px">
-									{modules.map(({ name, api }) => (
-										api.map(({ label }) => (
-											<a href={path('docs', {slug: `modules/${name.toLowerCase()}` })} class="button padding:4px!important font-size:12px!important">
-												{label}
-											</a>
-										))
-									))}
-								</div>
-							</div>
-						</div>
-					</div>
-				))}
-			</div>
-		</section>
-
 		<section class="container margin-bottom:180px">
 			<div class="text-align:center">
 				<h2 class="font-size:24px md:font-size:48px">Try Signalize in the Playground</h2>
@@ -175,6 +129,52 @@ const installationGuides = [
 				</div>
 			</playground-tabs>
 			<div class="text-align:center margin-top:24px"><a href={path('docs')} class="button button--solid md:{font-size:24px;padding:24px;line-height:1}">Get Started</a></div>
+		</section>
+
+		<section id="modules" class="container">
+			<h2>Installation Guides</h2>
+			<p>
+				Signalize can be used anywhere.
+			</p>
+			<div class="display:flex gap:12px md:gap:24px">
+				{installationGuides.map(({ link, label, icon }) => (
+					<a href={link} class="color:inherit hover:{border-color:$red;color:$red} transition:border-color_.3s,color_.3s font-size:18px font-weight:bold border:1px_solid_$border padding:8px md:padding:12px text-decoration:none display:inline-flex allign-items:center gap:4px">
+						<i class={`icon-${icon} display:inline-flex align-items:center`}></i>
+						<span>{label}</span>
+					</a>
+				))}
+			</div>
+		</section>
+
+		<section id="modules" class="container">
+			<h2>Ecosystem</h2>
+			<p>
+				Signalize functions are split into small modules and you decide what to import and when.
+			</p>
+			<div class="display:grid gap:12px md:gap:24px gap grid-template-columns:repeat(auto-fill,minmax(300px,1fr)) sm:grid-template-columns:repeat(auto-fill,minmax(350px,1fr))">
+				{modulesSections.map(({ name, color, icon, description, modules }) => (
+					<div class="text-decoration:none color:$grey padding:8px md:padding:16px border:1px_solid_$border">
+						<div class="gap:16px display:inline-flex">
+							<div class="flex-shrink:0 width:50px height:50px border-radius:4px background-image:linear-gradient(rgba(255,255,255,.2),rgba(255,255,255,0)) display:flex align-items:center justify-content:center" style={`background-color:${color};`}>
+								<i class={`icon-${icon} font-size:32px text-shadow:0_1px_1px_rgba(0,0,0,0.2) color:#fff`}></i>
+							</div>
+							<div>
+								<h3 class="margin:0_0_4px_0">{name}</h3>
+								<div>{description}</div>
+								<div class="margin-top:8px display:flex flex-wrap:wrap gap:4px">
+									{modules.map(({ name, api }) => (
+										api.map(({ label }) => (
+											<a href={path('docs', {slug: `modules/${name.toLowerCase()}` })} class="button padding:4px!important font-size:12px!important">
+												{label}
+											</a>
+										))
+									))}
+								</div>
+							</div>
+						</div>
+					</div>
+				))}
+			</div>
 		</section>
 
 		<section class="container margin-bottom:180px">
